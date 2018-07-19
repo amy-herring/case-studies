@@ -40,7 +40,7 @@ Tessa fill in with tableau resources
 
 [Initial description of CIA Factbook Data and Plotting in R: Tessa check and edit where indicated](decks/cs02_1_deck.html)
 
-[Obtaining Tableau Guide: Tessa to create](obtain_tableau.html)
+[Obtaining Tableau Guide](obtain_tableau.html)
 
 [Tableau visualization of Infant Mortality: Tessa to create and document](decks/cs02_3_deck.html)
 
