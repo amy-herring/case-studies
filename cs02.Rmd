@@ -42,7 +42,7 @@ Tessa fill in with tableau resources
 
 [Obtaining Tableau Guide](obtaining_tableau.html)
 
-[Tableau visualization of Infant Mortality: Tessa to create and document](decks/cs02_3_deck.html)
+[Tableau visualization of Infant Mortality](simple_tableau_sheet.html)
 
 [Tableau dashboard visualization of Infant Mortality: Tessa to create and document](decks/cs02_4_deck.html)
 
