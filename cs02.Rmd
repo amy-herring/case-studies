@@ -44,7 +44,7 @@ Tessa fill in with tableau resources
 
 [Tableau visualization of Infant Mortality](simple_tableau_sheet.html)
 
-[Tableau dashboard visualization of Infant Mortality: Tessa to create and document](decks/cs02_4_deck.html)
+[Tableau dashboard visualization of Infant Mortality: Tessa to create and document](dashboard_exp.html)
 
 
 
