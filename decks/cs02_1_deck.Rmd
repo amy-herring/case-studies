@@ -40,11 +40,11 @@ Using data from the World Bank or a complex data source of your own choosing,
 - create an accompanying Tableau dashboard interactive visual presentation of our world in data
 - explain your figures to class in an oral presentation by the group
 
-##Case for Class: Infant Mortality
+## Case for Class: Infant Mortality
 
 *Infant death* is defined as the death of a live-born infant during the first year of life. The *infant mortality rate* is the number of infant deaths per 1000 live births. The infant mortality rate, which is relatively easily measured even in resource-poor settings, is often used as a marker of the overall health of a society because of the overlap in causes of infant mortality and factors that are likely to influence the health of an overall population, such as general living conditions, poverty and socioeconomic status, quality of medical care, and rates of illness. Infant mortality rates can be compared across different areas or across time to evaluate the impact of public health program or to determine where new investments in health are needed.
 
-##Changes in US Infant Mortality over Time
+## Changes in US Infant Mortality over Time
 
 ![Infant Mortality in US, 1915-2007 (NCHS)](figures/infantmortality.png)
 
@@ -54,14 +54,14 @@ What do you think about the way the authors chose to display time in the plot?
 While overall infant mortality rates in the US have declined over time, major disparities in infant mortality rates exist, shown here as a function of race and ethnicity.
 ![Infant Mortality in US by Race/Ethnicity, 2005-2007](figures/infantmortalityrace.png){width=55%}
 
-##Infant Mortality Worldwide
+## Infant Mortality Worldwide
 
 Worldmapper http://archive.worldmapper.org/display.php?selected=261 created a visualization of infant mortality worldwide in 2002, rescaling each country by its contribution to infant deaths worldwide. 
 
 ![2002 Contributions to Worldwide Infant Mortality](figures/mort_scale.png) 
 
 
-##Extracting Latitude and Longitude of Country Centroids
+## Extracting Latitude and Longitude of Country Centroids
 
 First, we'll want to obtain our latitude and longitude information.
 
@@ -69,7 +69,7 @@ First, we'll want to obtain our latitude and longitude information.
 latlonDF <-read.csv("http://dev.maxmind.com/static/csv/codes/country_latlon.csv")
 ```
 
-##Population & Infant Mortality Data
+## Population & Infant Mortality Data
 The data files for population and infant mortality are available on the course website. For those of you interested in how to extract this information from the CIA factbook - see the tutorial on the course website.
 
 ```{r}
@@ -78,7 +78,7 @@ load("infMortDF.RData")
 ```
 
 
-##Merging the Demographic Data
+## Merging the Demographic Data
 
 First we'll combine the demographic data since these come from the same source and consequently should have fewer problems with matching. 
 
@@ -108,7 +108,7 @@ allCtryData = merge(IMPop, latlonDF, by.x = "ctry", by.y = "code", all = FALSE)
 ```
 
 
-##Initial Plot - The Colors
+## Initial Plot - The Colors
 First, we'll begin by selecting the colors for our plot. We'll select only 5 col- ors, and consequently 5 levels of mortality, because it’s difficult for our eyes to distinguish between more than 5 to 7 colors.
 
 ```{r}
@@ -118,7 +118,7 @@ cols = brewer.pal(9, "YlOrRd")[c(1, 2, 4, 6, 7)]
 ```
 
 
-##Initial Plot - Categorizing Infant Mortality
+## Initial Plot - Categorizing Infant Mortality
 Next, we'll need to categorize infant mortality so that it can be connected to a color. 
 ```{r}
 # Equally Divide the Range - too many in the lower range
@@ -133,7 +133,7 @@ InfMortDiscrete = cut(allCtryData$infMort,
                       breaks = c(0, 10, 25, 50, 75, 150))
 ```
 
-##Initial Plot - The Plot
+## Initial Plot - The Plot
 Finally, we're going to create our plot.
 
 ```{r}
@@ -154,7 +154,7 @@ legend(x = -150, y = 0, title = "Infant Mortality",
 
 ```
 
-##Initial Plot - Correcting Radius Size
+## Initial Plot - Correcting Radius Size
 Unfortunately, our choice for the radius has some difficulties because the range of population huge. The small countries have symbols that are so tiny that we can barely see them, if at all, and we certainly can’t see their colors. We will fix this by having a minimum radius, so any country with a population below a certain value is still visible. 
 
 ```{r}
@@ -170,7 +170,7 @@ legend(x = -150, y = 0, title = "Infant Mortality",
        legend = levels(InfMortDiscrete), fill = cols, cex = 0.8)
 ```
 
-##Initial Plot - What's Wrong?
+## Initial Plot - What's Wrong?
 Looking at our plot we can see that something is very wrong! Some European countries have much higher population and mortality rates than we'd expect. In particular,  Switzerland and Great Britain seem abnormal.
 
 ```{r}
@@ -179,7 +179,7 @@ allCtryData[ allCtryData$ctry %in% c("CH","GB"), ]
 
 
 
-##Exercise Q.2: Corrected Data Merging
+## Exercise Q.2: Corrected Data Merging
 
 We will use the codeMapDF to correct the merging issue and create the correct map.
 
