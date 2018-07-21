@@ -23,13 +23,13 @@ Using data from the World Bank or a complex data source of your own choosing,
 # Data
 
 R Tutorial Data Set
-[Population](data/popDF.RData)
-[Infant Mortality](data/infMortDF.RData)
-[Code] (data/codeMapDF.RData)
+- [Population](data/popDF.RData)
+- [Infant Mortality](data/infMortDF.RData)
+- [Code] (data/codeMapDF.RData)
 
 TO DO:
-Full People And Society Data Set
-Obtaining Data from HTML files tutorial
+- Full People And Society Data Set
+- Obtaining Data from HTML files tutorial
 
 # Reports
 
