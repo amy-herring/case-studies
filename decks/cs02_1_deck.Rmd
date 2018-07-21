@@ -50,7 +50,7 @@ Using data from the World Bank or a complex data source of your own choosing,
 
 What do you think about the way the authors chose to display time in the plot?
 
-##Disparities in Infant Mortality Rate
+## Disparities in Infant Mortality Rate
 While overall infant mortality rates in the US have declined over time, major disparities in infant mortality rates exist, shown here as a function of race and ethnicity.
 ![Infant Mortality in US by Race/Ethnicity, 2005-2007](figures/infantmortalityrace.png){width=55%}
 
