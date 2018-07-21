@@ -22,7 +22,14 @@ Using data from the World Bank or a complex data source of your own choosing,
 
 # Data
 
--Tessa provide a link here to the R dataframe version of the CIA Factbook data
+R Tutorial Data Set
+[Population](data/popDF.RData)
+[Infant Mortality](data/infMortDF.RData)
+[Code] (data/codeMapDF.RData)
+
+TO DO:
+Full People And Society Data Set
+Obtaining Data from HTML files tutorial
 
 # Reports
 
@@ -32,13 +39,13 @@ Using data from the World Bank or a complex data source of your own choosing,
 
 Chapter 11 of Data Science in R: A Case Studies Approach to Computational Reasoning and Problem Solving by Nolan and Temple Lang (free e-book through Duke Libraries)
 
-Tessa fill in with tableau resources
+[Introduction to Tableau Video](http://library.capture.duke.edu/Panopto/Pages/Viewer.aspx?id=05708679-00e5-45c3-bb31-fd3724cd8009)
 
 
 # Slides
 
 
-[Initial description of CIA Factbook Data and Plotting in R: Tessa check and edit where indicated](decks/cs02_1_deck.html)
+[Initial description of CIA Factbook Data and Plotting in R](decks/cs02_1_deck.html)
 
 [Obtaining Tableau Guide](obtaining_tableau.html)
 
