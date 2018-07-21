@@ -73,8 +73,8 @@ latlonDF <-read.csv("http://dev.maxmind.com/static/csv/codes/country_latlon.csv"
 The data files for population and infant mortality are available on the course website. For those of you interested in how to extract this information from the CIA factbook - see the tutorial on the course website.
 
 ```{r}
-load("popDF.RData")
-load("infMortDF.RData")
+load("data/popDF.RData")
+load("data/infMortDF.RData")
 ```
 
 
@@ -185,7 +185,7 @@ We will use the codeMapDF to correct the merging issue and create the correct ma
 
 ```{r}
 # Fix Data Merging
-load("codeMapDF.RData")
+load("data/codeMapDF.RData")
 latlonCtry = merge(latlonDF, codeMapDF, by.x = "code", by.y = "iso", all = FALSE)
 IMpopCtry = merge(IMPop, codeMapDF, by.x="ctry", by.y = "cia", all=FALSE)
 allCtryData <- merge(latlonCtry, IMpopCtry, by="name")
