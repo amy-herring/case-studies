@@ -28,7 +28,7 @@ R Tutorial Data Set
 - [codeMapDF.RData](data/codeMapDF.RData)
 
 Full People And Society Data Set:
--[full.RData](data/full.RData)
+- [full.RData](data/full.RData)
 
 How To Obtain Data from Factbook:
 - [Factbook Tutorial](data/data_file.html)
