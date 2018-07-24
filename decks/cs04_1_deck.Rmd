@@ -1,0 +1,26 @@
+---
+title: "Basics of Election Prediction"
+output:
+  html_document:
+    df_print: paged
+---
+
+### Introduction
+
+These are some simple approaches you may consider when designing your own prediction strategy. Each approach can be used as a starting point, and then expanded upon or combined with another approach, to obtain the best possible prediction.
+
+### Approach 1: Using Current Polling Data
+
+One strategy for predicting the winner in an election would be to use the latest aggregate polling data from a reputable source, e.g. FiveThirtyEight or The New York times. You could either use this data on its own, or combine data from various to sources, to create your prediction. On its own, you could predict that the individual (or party) with the highest probability of winning will likely win. If you choose to combine data from different sources - you could do something similar to choosing the winner of each state based on how the majority of the sources project the outcome. One drawback of these polls is they may be subject to bias, e.g. nonresponse bias, so their predictions should be compared with other methods such as our next strategy to confirmed their plausibility. (Also, don't forget about the margin of error in these polls!)
+
+### Approach 2: Using Historical Results
+
+Another straetegy is to use historical data from past elections to predict the outcome. There are resources such as the [NC Voter Record](https://dl.ncsbe.gov/?prefix=data/) that would be used for this strategy. You can look into historical trend in each state, or county, and use this to predict the outcome of the election. This strategy is especially useful for states that historically almost always vote for the same party, e.g. Texas usually votes Republican, but for swing states this strategy is less useful since there is not a clear trend in the voting history.
+
+### Approach 3: Using Voter Turnout Data
+
+A more complex strategy involves looking at voter turnout data. You could use this data to project what voter participation might be like in each state for the election and make predictions based on those projections. This strategy is similar to Approach 2 because it uses historical data, but instead of studying the trends of the voters, you use to determine how many people are likely to vote in each location. This is helpful because locations with low voter turnout are more likely to result in more surprising results since each individual vote counts more.
+
+### Approach 4: Using Correlated Data
+
+Finally, another more complication strategy is to look at information that is related to the election. Looking at voter demographics, voter results for other elections, e.g. looking at Senate results when predicting the presidental election, and other factors may be helpful when predicting results.
