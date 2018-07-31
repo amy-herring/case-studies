@@ -8,7 +8,7 @@ output: html_document
 In this document, we'll be recreating the visualization from the book using tableau. We will be using the data we created earlier during the R visualization with the already merged data sets.
 
 ### Importing & Opening the Data 
-To begin, open Tableau desktop.
+To begin, open Tableau desktop - you should see a screen similar to the below.
 ![](IM_simple_figures/open.png)
 
 Then we will want to connect to our data set. On the left-hand side there is a blue panel with options for different kinds of data - recall that our file is an RData file, so select the option for "Statistical File". This should allow you to select the correct file from your computer. (If you didn't rename the file from the R tutorial, it'll be called "allCtryData.RData".)
@@ -29,11 +29,11 @@ To begin, along the left-hand side there are two sections labeled "Dimensions" a
 
 ![](IM_simple_figures/dim.png)
 
-This should automatically create a map with dots overlayed on the countries in our data set.
+This should automatically create a map with dots overlayed on the countries in our data set. (Note: If the map doesn't automatically appear, go to the map drop-down windown and select "Background Maps" and then "Offline".)
 
 ![](IM_simple_figures/ctry.png)
 
-Then edit our dots to reflect the infant mortality and population size, we will first drag and drop the population variable onto the "Size" button under the "Marks" section. This will scale the circles by population size. Then we'll drag and drop the Infant Mortality variable onto the "Color" button under "Marks". 
+Then to edit our dots to reflect the infant mortality and population size, we will first drag and drop the population variable onto the "Size" button under the "Marks" section. This will scale the circles by population size. Then we'll drag and drop the Infant Mortality variable onto the "Color" button under "Marks". 
 
 ![](IM_simple_figures/color_size.png)
 
