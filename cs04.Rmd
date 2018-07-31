@@ -46,7 +46,7 @@ Goals of this case study are (1) to predict whether the US House of Representati
 
 [Basics of Election Prediction](decks/cs04_1_deck.html)
 
-[Mr. P Tutorial](decks/cs04_2_deck.html)
+[MRP Tutorial](decks/cs04_2_deck.html)
 
 
 
