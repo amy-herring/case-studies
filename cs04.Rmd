@@ -23,7 +23,7 @@ Goals of this case study are (1) to predict whether the US House of Representati
 
 # Data
 
-+ NC voter files at https://dl.ncsbe.gov/?prefix=data/ or somewhere related (Tessa to locate)
++ NC voter files at https://dl.ncsbe.gov/?prefix=data/
 + Cooperative Congressional Election Study https://cces.gov.harvard.edu/pages/welcome-cooperative-congressional-election-study 
 
 # Reports
@@ -44,9 +44,9 @@ Goals of this case study are (1) to predict whether the US House of Representati
 # Slides
 
 
-[Basics of Election Prediction: Tessa to do based on https://www.nytimes.com/2016/10/05/learning/lesson-plans/and-the-winner-is-predicting-the-2016-presidential-election.html](decks/cs04_1_deck.html)
+[Basics of Election Prediction](decks/cs04_1_deck.html)
 
-[Mr. P Tutorial: Tessa based on http://www.princeton.edu/~jkastell/mrp_primer.html](decks/cs04_2_deck.html)
+[Mr. P Tutorial](decks/cs04_2_deck.html)
 
 
 
