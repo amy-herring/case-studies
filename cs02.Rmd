@@ -50,11 +50,11 @@ Chapter 11 of Data Science in R: A Case Studies Approach to Computational Reason
 
 [Initial description of CIA Factbook Data and Plotting in R](decks/cs02_1_deck.html)
 
-[Obtaining Tableau Guide](obtaining_tableau.html)
+[Obtaining Tableau Guide](decks/cs02_2_deck.html)
 
-[Tableau visualization of Infant Mortality](simple_tableau_sheet.html)
+[Tableau visualization of Infant Mortality](decks/cs02_3_deck.html)
 
-[Tableau dashboard visualization of Infant Mortality](dashboard_exp.html)
+[Tableau dashboard visualization of Infant Mortality](decks/cs02_4_deck.html)
 
 
 
