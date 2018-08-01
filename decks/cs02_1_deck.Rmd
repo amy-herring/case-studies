@@ -11,8 +11,6 @@ output:
     reveal_options:
       progress: true
       slideNumber: true
-      
-  
 ---
 
 ```{r setup, include=FALSE}
@@ -124,10 +122,18 @@ Next, we'll need to categorize infant mortality so that it can be connected to a
 # Equally Divide the Range - too many in the lower range
 newInfMort = cut(allCtryData$infMort, breaks = 5)
 summary(newInfMort)
+```
 
-# Set cut-points based on distrbution - colors more evenly divided
+## Initial Plot Continued
+We want our colors to be more evenly distributed than they are based on the default. So, we'll create a histogram and set cut-points based on it.
+```{r, fig.asp=0.5}
 hist(allCtryData$infMort, breaks = 20, main = "",
      xlab = "Infant Mortality per 1000 Live Births")
+```
+
+## Initial Plot Continued
+Now, we can finially make our cuts.
+```{r}
 quantile(allCtryData$infMort, probs = seq(0, 1, by = 0.2))
 InfMortDiscrete = cut(allCtryData$infMort,
                       breaks = c(0, 10, 25, 50, 75, 150))
@@ -136,31 +142,59 @@ InfMortDiscrete = cut(allCtryData$infMort,
 ## Initial Plot - The Plot
 Finally, we're going to create our plot.
 
-```{r}
+```{r, eval=FALSE}
 # Create map
 library(maps)
 world = map(database = "world", fill = TRUE, col="light grey")
 
 # Add discs
-
 symbols(allCtryData$longitude, allCtryData$latitude, add = TRUE,
         circles= sqrt(allCtryData$pop)/4000, inches = FALSE,
         fg = cols[InfMortDiscrete], bg = cols[InfMortDiscrete])
 
 # Add legend
-
 legend(x = -150, y = 0, title = "Infant Mortality",
        legend = levels(InfMortDiscrete), fill = cols, cex = 0.8)
+```
 
+## Initial Plot - The Plot
+
+```{r, echo=FALSE, warning=FALSE}
+# Create map
+library(maps)
+world = map(database = "world", fill = TRUE, col="light grey")
+
+# Add discs
+symbols(allCtryData$longitude, allCtryData$latitude, add = TRUE,
+        circles= sqrt(allCtryData$pop)/4000, inches = FALSE,
+        fg = cols[InfMortDiscrete], bg = cols[InfMortDiscrete])
+
+# Add legend
+legend(x = -150, y = 0, title = "Infant Mortality",
+       legend = levels(InfMortDiscrete), fill = cols, cex = 0.8)
 ```
 
 ## Initial Plot - Correcting Radius Size
 Unfortunately, our choice for the radius has some difficulties because the range of population huge. The small countries have symbols that are so tiny that we can barely see them, if at all, and we certainly can’t see their colors. We will fix this by having a minimum radius, so any country with a population below a certain value is still visible. 
 
-```{r}
+```{r, eval=FALSE}
 # Set minimum radius size
 rads = pmax(sqrt(allCtryData$pop)/4000, 1)
 
+# Fix Discs
+world = map(database = "world", fill = TRUE, col="light grey")
+symbols(allCtryData$longitude, allCtryData$latitude, add = TRUE,
+        circles= rads, inches = FALSE,
+        fg = cols[InfMortDiscrete], bg = cols[InfMortDiscrete])
+legend(x = -150, y = 0, title = "Infant Mortality",
+       legend = levels(InfMortDiscrete), fill = cols, cex = 0.8)
+```
+
+## Initial Plot - Correcting Radius Size
+
+```{r, echo=FALSE}
+# Set minimum radius size
+rads = pmax(sqrt(allCtryData$pop)/4000, 1)
 # Fix Discs
 world = map(database = "world", fill = TRUE, col="light grey")
 symbols(allCtryData$longitude, allCtryData$latitude, add = TRUE,
@@ -195,7 +229,7 @@ allCtryData[allCtryData$ctry %in% c("CH", "SZ", "GB", "UK"), ]
 
 ```
 ## Fixing Map 
-```{r}
+```{r, eval=FALSE}
 # Redo Map
 world = map(database = "world", fill = TRUE, col="light grey")
 rads = pmax(sqrt(allCtryData$pop)/4000, 1)
@@ -206,7 +240,18 @@ legend(x = -150, y = 0, title = "Infant Mortality",
        legend = levels(InfMortDiscrete), fill = cols, cex = 0.8)
 ```
 
+## Fixing Map 
+```{r, echo=FALSE}
 
+# Redo Map
+world = map(database = "world", fill = TRUE, col="light grey")
+rads = pmax(sqrt(allCtryData$pop)/4000, 1)
+symbols(allCtryData$longitude, allCtryData$latitude, add = TRUE,
+        circles= rads, inches = FALSE,
+        fg = cols[InfMortDiscrete], bg = cols[InfMortDiscrete])
+legend(x = -150, y = 0, title = "Infant Mortality",
+       legend = levels(InfMortDiscrete), fill = cols, cex = 0.8)
+```
 
 ## Bonus: Exercise Q.3
 Remake the map in Figure 11.6 to include the countries for which there is latitude and longitude, even if there is no demographic information. 
