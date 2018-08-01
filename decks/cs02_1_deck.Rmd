@@ -3,7 +3,7 @@ title: Infant Mortality Around the World
 output: 
   revealjs::revealjs_presentation:
     theme: night
-    highlight: tango
+    highlight: espresso
     center: true
     transition: none
     css: styles.css
