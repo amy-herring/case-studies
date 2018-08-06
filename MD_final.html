@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <title>Missing Data Presentation</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="MD_final_files/reveal.js-3.3.0.1/css/reveal.css"/>
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; background-color: #f8f8f8; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+pre, code { background-color: #f8f8f8; }
+code > span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code > span.dt { color: #204a87; } /* DataType */
+code > span.dv { color: #0000cf; } /* DecVal */
+code > span.bn { color: #0000cf; } /* BaseN */
+code > span.fl { color: #0000cf; } /* Float */
+code > span.ch { color: #4e9a06; } /* Char */
+code > span.st { color: #4e9a06; } /* String */
+code > span.co { color: #8f5902; font-style: italic; } /* Comment */
+code > span.ot { color: #8f5902; } /* Other */
+code > span.al { color: #ef2929; } /* Alert */
+code > span.fu { color: #000000; } /* Function */
+code > span.er { color: #a40000; font-weight: bold; } /* Error */
+code > span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #000000; } /* Constant */
+code > span.sc { color: #000000; } /* SpecialChar */
+code > span.vs { color: #4e9a06; } /* VerbatimString */
+code > span.ss { color: #4e9a06; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #000000; } /* Variable */
+code > span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code > span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code > span.ex { } /* Extension */
+code > span.at { color: #c4a000; } /* Attribute */
+code > span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code > span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="MD_final_files/reveal.js-3.3.0.1/css/theme/night.css" id="theme">
+
+<style type="text/css">
+.reveal section img {
+  background: rgba(255, 255, 255, 0.85);
+}
+</style>
+
+  <!-- some tweaks to reveal css -->
+  <style type="text/css">
+    .reveal h1 { font-size: 2.0em; }
+    .reveal h2 { font-size: 1.5em;  }
+    .reveal h3 { font-size: 1.25em;	}
+    .reveal h4 { font-size: 1em;	}
+
+    .reveal .slides>section,
+    .reveal .slides>section>section {
+      padding: 0px 0px;
+    }
+
+
+
+    .reveal table {
+      border-width: 1px;
+      border-spacing: 2px;
+      border-style: dotted;
+      border-color: gray;
+      border-collapse: collapse;
+      font-size: 0.7em;
+    }
+
+    .reveal table th {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      font-weight: bold;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+    .reveal table td {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+
+  </style>
+
+    <style type="text/css">code{white-space: pre;}</style>
+
+    <link rel="stylesheet" href="styles.css"/>
+
+<!-- Printing and PDF exports -->
+<script id="paper-css" type="application/dynamic-css">
+
+/* Default Print Stylesheet Template
+   by Rob Glazebrook of CSSnewbie.com
+   Last Updated: June 4, 2008
+
+   Feel free (nay, compelled) to edit, append, and
+   manipulate this file as you see fit. */
+
+
+@media print {
+
+	/* SECTION 1: Set default width, margin, float, and
+	   background. This prevents elements from extending
+	   beyond the edge of the printed page, and prevents
+	   unnecessary background images from printing */
+	html {
+		background: #fff;
+		width: auto;
+		height: auto;
+		overflow: visible;
+	}
+	body {
+		background: #fff;
+		font-size: 20pt;
+		width: auto;
+		height: auto;
+		border: 0;
+		margin: 0 5%;
+		padding: 0;
+		overflow: visible;
+		float: none !important;
+	}
+
+	/* SECTION 2: Remove any elements not needed in print.
+	   This would include navigation, ads, sidebars, etc. */
+	.nestedarrow,
+	.controls,
+	.fork-reveal,
+	.share-reveal,
+	.state-background,
+	.reveal .progress,
+	.reveal .backgrounds {
+		display: none !important;
+	}
+
+	/* SECTION 3: Set body font face, size, and color.
+	   Consider using a serif font for readability. */
+	body, p, td, li, div {
+		font-size: 20pt!important;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		color: #000;
+	}
+
+	/* SECTION 4: Set heading font face, sizes, and color.
+	   Differentiate your headings from your body text.
+	   Perhaps use a large sans-serif for distinction. */
+	h1,h2,h3,h4,h5,h6 {
+		color: #000!important;
+		height: auto;
+		line-height: normal;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		text-shadow: 0 0 0 #000 !important;
+		text-align: left;
+		letter-spacing: normal;
+	}
+	/* Need to reduce the size of the fonts for printing */
+	h1 { font-size: 28pt !important;  }
+	h2 { font-size: 24pt !important; }
+	h3 { font-size: 22pt !important; }
+	h4 { font-size: 22pt !important; font-variant: small-caps; }
+	h5 { font-size: 21pt !important; }
+	h6 { font-size: 20pt !important; font-style: italic; }
+
+	/* SECTION 5: Make hyperlinks more usable.
+	   Ensure links are underlined, and consider appending
+	   the URL to the end of the link for usability. */
+	a:link,
+	a:visited {
+		color: #000 !important;
+		font-weight: bold;
+		text-decoration: underline;
+	}
+	/*
+	.reveal a:link:after,
+	.reveal a:visited:after {
+		content: " (" attr(href) ") ";
+		color: #222 !important;
+		font-size: 90%;
+	}
+	*/
+
+
+	/* SECTION 6: more reveal.js specific additions by @skypanther */
+	ul, ol, div, p {
+		visibility: visible;
+		position: static;
+		width: auto;
+		height: auto;
+		display: block;
+		overflow: visible;
+		margin: 0;
+		text-align: left !important;
+	}
+	.reveal pre,
+	.reveal table {
+		margin-left: 0;
+		margin-right: 0;
+	}
+	.reveal pre code {
+		padding: 20px;
+		border: 1px solid #ddd;
+	}
+	.reveal blockquote {
+		margin: 20px 0;
+	}
+	.reveal .slides {
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 0 !important;
+		zoom: 1 !important;
+
+		overflow: visible !important;
+		display: block !important;
+
+		text-align: left !important;
+		-webkit-perspective: none;
+		   -moz-perspective: none;
+		    -ms-perspective: none;
+		        perspective: none;
+
+		-webkit-perspective-origin: 50% 50%;
+		   -moz-perspective-origin: 50% 50%;
+		    -ms-perspective-origin: 50% 50%;
+		        perspective-origin: 50% 50%;
+	}
+	.reveal .slides section {
+		visibility: visible !important;
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+		display: block !important;
+		overflow: visible !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 60px 20px !important;
+		z-index: auto !important;
+
+		opacity: 1 !important;
+
+		page-break-after: always !important;
+
+		-webkit-transform-style: flat !important;
+		   -moz-transform-style: flat !important;
+		    -ms-transform-style: flat !important;
+		        transform-style: flat !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+
+		-webkit-transition: none !important;
+		   -moz-transition: none !important;
+		    -ms-transition: none !important;
+		        transition: none !important;
+	}
+	.reveal .slides section.stack {
+		padding: 0 !important;
+	}
+	.reveal section:last-of-type {
+		page-break-after: avoid !important;
+	}
+	.reveal section .fragment {
+		opacity: 1 !important;
+		visibility: visible !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+	}
+	.reveal section img {
+		display: block;
+		margin: 15px 0px;
+		background: rgba(255,255,255,1);
+		border: 1px solid #666;
+		box-shadow: none;
+	}
+
+	.reveal section small {
+		font-size: 0.8em;
+	}
+
+}  
+</script>
+
+
+<script id="pdf-css" type="application/dynamic-css">
+    
+/**
+ * This stylesheet is used to print reveal.js
+ * presentations to PDF.
+ *
+ * https://github.com/hakimel/reveal.js#pdf-export
+ */
+
+* {
+	-webkit-print-color-adjust: exact;
+}
+
+body {
+	margin: 0 auto !important;
+	border: 0;
+	padding: 0;
+	float: none !important;
+	overflow: visible;
+}
+
+html {
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+}
+
+/* Remove any elements not needed in print. */
+.nestedarrow,
+.reveal .controls,
+.reveal .progress,
+.reveal .playback,
+.reveal.overview,
+.fork-reveal,
+.share-reveal,
+.state-background {
+	display: none !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	text-shadow: 0 0 0 #000 !important;
+}
+
+.reveal pre code {
+	overflow: hidden !important;
+	font-family: Courier, 'Courier New', monospace !important;
+}
+
+ul, ol, div, p {
+	visibility: visible;
+	position: static;
+	width: auto;
+	height: auto;
+	display: block;
+	overflow: visible;
+	margin: auto;
+}
+.reveal {
+	width: auto !important;
+	height: auto !important;
+	overflow: hidden !important;
+}
+.reveal .slides {
+	position: static;
+	width: 100%;
+	height: auto;
+
+	left: auto;
+	top: auto;
+	margin: 0 !important;
+	padding: 0 !important;
+
+	overflow: visible;
+	display: block;
+
+	-webkit-perspective: none;
+	   -moz-perspective: none;
+	    -ms-perspective: none;
+	        perspective: none;
+
+	-webkit-perspective-origin: 50% 50%; /* there isn't a none/auto value but 50-50 is the default */
+	   -moz-perspective-origin: 50% 50%;
+	    -ms-perspective-origin: 50% 50%;
+	        perspective-origin: 50% 50%;
+}
+
+.reveal .slides section {
+	page-break-after: always !important;
+
+	visibility: visible !important;
+	position: relative !important;
+	display: block !important;
+	position: relative !important;
+
+	margin: 0 !important;
+	padding: 0 !important;
+	box-sizing: border-box !important;
+	min-height: 1px;
+
+	opacity: 1 !important;
+
+	-webkit-transform-style: flat !important;
+	   -moz-transform-style: flat !important;
+	    -ms-transform-style: flat !important;
+	        transform-style: flat !important;
+
+	-webkit-transform: none !important;
+	   -moz-transform: none !important;
+	    -ms-transform: none !important;
+	        transform: none !important;
+}
+
+.reveal section.stack {
+	margin: 0 !important;
+	padding: 0 !important;
+	page-break-after: avoid !important;
+	height: auto !important;
+	min-height: auto !important;
+}
+
+.reveal img {
+	box-shadow: none;
+}
+
+.reveal .roll {
+	overflow: visible;
+	line-height: 1em;
+}
+
+/* Slide backgrounds are placed inside of their slide when exporting to PDF */
+.reveal section .slide-background {
+	display: block !important;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: -1;
+}
+
+/* All elements should be above the slide-background */
+.reveal section>* {
+	position: relative;
+	z-index: 1;
+}
+
+/* Display slide speaker notes when 'showNotes' is enabled */
+.reveal .speaker-notes-pdf {
+	display: block;
+	width: 100%;
+	max-height: none;
+	left: auto;
+	top: auto;
+	z-index: 100;
+}
+
+/* Display slide numbers when 'slideNumber' is enabled */
+.reveal .slide-number-pdf {
+	display: block;
+	position: absolute;
+	font-size: 14px;
+}
+
+</script>
+
+
+<script>
+var style = document.createElement( 'style' );
+style.type = 'text/css';
+var style_script_id = window.location.search.match( /print-pdf/gi ) ? 'pdf-css' : 'paper-css';
+var style_script = document.getElementById(style_script_id).text;
+style.innerHTML = style_script;
+document.getElementsByTagName('head')[0].appendChild(style);
+</script>
+
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section>
+    <h1 class="title">Missing Data Presentation</h1>
+</section>
+
+<section id="introduction" class="slide level2">
+<h1>Introduction</h1>
+</section>
+<section id="motivating-example-pregnancy-infection-nutrition-pin-study" class="slide level2">
+<h1>Motivating Example: Pregnancy, Infection, &amp; Nutrition (PIN) Study</h1>
+<ul>
+<li>Prospective study of risk factors for adverse birth outcomes in central NC prenatal care clinics</li>
+<li>We would like to study how cocaine use relates to small-for-gestational-age (SGA) births</li>
+<li>Covariates: maternal age, race, income, parity, and education</li>
+<li>Cocaine measured on questionnaire, in urine, and in hair</li>
+</ul>
+</section>
+<section id="mathematical-notation" class="slide level2">
+<h1>Mathematical Notation</h1>
+<ul>
+<li>Let <span class="math inline">\(Y\)</span> = <span class="math inline">\((Y_{obs},Y_{mis})\)</span></li>
+<li><span class="math inline">\(r_i = 1\)</span> if data for unit <span class="math inline">\(i\)</span> is missing, <span class="math inline">\(r_i = 0\)</span> otherwise</li>
+<li><span class="math inline">\(R = (r_1,..., r_n)\)</span></li>
+<li><span class="math inline">\(\theta\)</span> denote the parameters associated with <span class="math inline">\(Y\)</span></li>
+<li><span class="math inline">\(\psi\)</span> denote the parameters associated with <span class="math inline">\(R\)</span></li>
+</ul>
+</section>
+<section id="types-of-missing-data" class="slide level2">
+<h1>Types of Missing Data</h1>
+</section>
+<section id="missing-completely-at-random-mcar" class="slide level2">
+<h1>Missing Completely at Random (MCAR)</h1>
+<ul>
+<li>Subjects with missing data are a complete random sample of study subjects</li>
+<li>e.g. hair cocaine missing for subset of women who were never asked to provide it for study logistical reasons</li>
+<li><span class="math inline">\(f(R|Y,\theta, \psi) = f(R|\psi)\)</span></li>
+</ul>
+</section>
+<section id="missing-at-random-mar" class="slide level2">
+<h1>Missing at Random (MAR)</h1>
+<ul>
+<li>Missingness may depend on observed variables, but not on the missing values themselves</li>
+<li>e.g., hair samples missing more often for older women</li>
+<li><span class="math inline">\(f(R|Y,\theta, \psi) = f(R|Y_{obs},\psi)\)</span></li>
+</ul>
+</section>
+<section id="missing-not-at-randomnonignorable-mnar" class="slide level2">
+<h1>Missing not at Random/Nonignorable (MNAR)</h1>
+<ul>
+<li>Missingness may depend on the missing values themselves and may also depend on observed values</li>
+<li>e.g., women who have used cocaine recently are less likely to provide biospecimens for drug testing</li>
+<li><span class="math inline">\(f(R|Y,\theta, \psi) = f(R|Y_{obs},Y_{mis},\psi)\)</span></li>
+</ul>
+</section>
+<section id="methods-of-handling-missing-data" class="slide level2">
+<h1>Methods of Handling Missing Data</h1>
+</section>
+<section id="complete-case-anlysis" class="slide level2">
+<h1>Complete Case Anlysis</h1>
+<ul>
+<li>Use only the set of observations with no missing values</li>
+<li>When missingness is MCAR, then the complete case estimator is unbiased</li>
+<li>Good approach when percentage of data missing is small (<span class="math inline">\(&lt;\)</span> 5-10%)</li>
+<li>If there are many different variables with missing values, a large fraction of the observations may be dropped, resulting in inefficient use of information</li>
+</ul>
+</section>
+<section id="ad-hoc-methods" class="slide level2">
+<h1>“Ad-hoc” Methods</h1>
+<ul>
+<li>Creation of an indicator of missingness as a new variable</li>
+<li>Simple imputation with mean of observed values, or prediction from regression model</li>
+<li>Last value carried forward</li>
+<li>Hot deck imputation: replace missing value with an observed response from a “similar” subject</li>
+<li>Easy to implement, but have the potential to induce bias, not recommended</li>
+</ul>
+</section>
+<section id="multiple-imputation" class="slide level2">
+<h1>Multiple Imputation</h1>
+<ul>
+<li>Generate <span class="math inline">\(p\)</span> possible values for each missing observation (typically 5-10 imputated datasets are created)</li>
+<li>Each of these datasets is analyzed using complete-data methods</li>
+<li>Combine the results of <span class="math inline">\(p\)</span> separate analyses, this allows the uncertainty regarding the imputation to be taken into account</li>
+<li>Often the easiest solution for MCAR or MAR data</li>
+<li>One approach can be the Conditional Gaussian approach, alternatively, multiple imputation with chained equations (MICE) is used in most software</li>
+</ul>
+</section>
+<section id="mice" class="slide level2">
+<h1>MICE</h1>
+<ul>
+<li>Also known as “fully conditional specification” or “sequential regression multiple imputation”</li>
+<li>Involve a variable-by-variable approach</li>
+<li>Imputation model is specified separately for each variable, using the other variables as predictors</li>
+<li>At each stage of the algorithm, an imputation is generated for the missing variable, then this imputed value is used in the imputation of the next variable</li>
+<li>Repeat this process for several cycles to obtain one imputed dataset</li>
+<li>May perform simple imputation for every missing value in the dataset in the initializing step, then set back simple imputation values to missing for the variable to be imputated at each stage</li>
+</ul>
+</section>
+<section id="mice-in-r" class="slide level2">
+<h1>MICE in R</h1>
+</section>
+<section id="section" class="slide level2 smaller">
+<h1></h1>
+<p>We’ll walk through a simple MICE example in R with NHANES dataset. It contains 25 obs and four variables: age (age groups: 20-39, 40-59, 60+), bmi (body mass index), hyp (hypertension status) and chl (cholesterol level).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># required libraries</span>
+<span class="kw">library</span>(mice)
+<span class="kw">library</span>(VIM)
+<span class="kw">library</span>(lattice)
+<span class="kw">library</span>(NHANES)
+
+<span class="co"># load data</span>
+<span class="kw">data</span>(nhanes)
+<span class="kw">str</span>(nhanes)</code></pre></div>
+<pre><code>## &#39;data.frame&#39;:    25 obs. of  4 variables:
+##  $ age: num  1 2 1 3 1 3 1 1 2 2 ...
+##  $ bmi: num  NA 22.7 NA NA 20.4 NA 22.5 30.1 22 NA ...
+##  $ hyp: num  NA 1 1 NA 1 NA 1 1 1 NA ...
+##  $ chl: num  NA 187 187 NA 113 184 118 187 238 NA ...</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nhanes$age &lt;-<span class="st"> </span><span class="kw">factor</span>(nhanes$age)</code></pre></div>
+</section>
+<section id="section-1" class="slide level2 smaller">
+<h1></h1>
+<p>Look at the pattern of missing data (in mice package)</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">md.pattern</span>(nhanes)</code></pre></div>
+<p><img src="MD_final_files/figure-revealjs/unnamed-chunk-2-1.png" /><!-- --></p>
+<pre><code>##    age hyp bmi chl   
+## 13   1   1   1   1  0
+## 3    1   1   1   0  1
+## 1    1   1   0   1  1
+## 1    1   0   0   1  2
+## 7    1   0   0   0  3
+##      0   8   9  10 27</code></pre>
+<p>There are 5 patterns observed from <span class="math inline">\(2^3\)</span> possible patterns. For example, there are 3 cases where chl is missing whereas all the other variables are observed.</p>
+</section>
+<section id="section-2" class="slide level2 smaller">
+<h1></h1>
+<p>Visualize missingness pattern in VIM package: This plot gives the frequencies for different combination of variables missing. Blue refers to observed data and red to the missing data.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nhanes_aggr &lt;-<span class="st"> </span><span class="kw">aggr</span>(nhanes,<span class="dt">col=</span><span class="kw">mdc</span>(<span class="dv">1</span>:<span class="dv">2</span>),<span class="dt">numbers=</span><span class="ot">TRUE</span>,<span class="dt">sortVars=</span><span class="ot">TRUE</span>,
+                    <span class="dt">labels=</span><span class="kw">names</span>(nhanes),<span class="dt">cex.axis=</span>.<span class="dv">7</span>, <span class="dt">gap=</span><span class="dv">3</span>,
+                    <span class="dt">ylab=</span><span class="kw">c</span>(<span class="st">&quot;Proportion of missingness&quot;</span>,<span class="st">&quot;Missingness Pattern&quot;</span>))</code></pre></div>
+<p><img src="MD_final_files/figure-revealjs/unnamed-chunk-3-1.png" width="50%" /></p>
+<pre><code>## 
+##  Variables sorted by number of missings: 
+##  Variable Count
+##       chl  0.40
+##       bmi  0.36
+##       hyp  0.32
+##       age  0.00</code></pre>
+</section>
+<section id="section-3" class="slide level2 smaller">
+<h1></h1>
+<p>The margin plot of the pairs using VIM package</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">marginplot</span>(nhanes[, <span class="kw">c</span>(<span class="st">&quot;chl&quot;</span>, <span class="st">&quot;bmi&quot;</span>)], <span class="dt">col =</span> <span class="kw">mdc</span>(<span class="dv">1</span>:<span class="dv">2</span>), <span class="dt">cex.numbers =</span> <span class="fl">1.2</span>, <span class="dt">pch =</span> <span class="dv">19</span>)</code></pre></div>
+<p><img src="MD_final_files/figure-revealjs/unnamed-chunk-4-1.png" width="80%" /></p>
+<p>Blue box plots summarise the distribution of observed data given the other variable is observed, and red box plots summarise the distribution of observed data given the other variable is missing.</p>
+</section>
+<section id="section-4" class="slide level2 smaller">
+<h1></h1>
+<p>Imputation &amp; Analyzing imputated datasets</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">imp &lt;-<span class="st"> </span><span class="kw">mice</span>(nhanes, <span class="dt">m=</span><span class="dv">5</span>, <span class="dt">printFlag=</span><span class="ot">FALSE</span>, <span class="dt">maxit =</span> <span class="dv">40</span>, <span class="dt">seed=</span><span class="dv">2525</span>) 
+<span class="co"># The output imp contains m=5 completed datasets</span>
+
+fit.mi &lt;-<span class="st"> </span><span class="kw">with</span>(<span class="dt">data=</span>imp, <span class="dt">exp =</span> <span class="kw">lm</span>(chl ~<span class="st"> </span>age +<span class="st"> </span>bmi))
+<span class="co">#Each dataset can be analysed using function with()</span>
+
+combFit &lt;-<span class="st"> </span><span class="kw">pool</span>(fit.mi) <span class="co"># Combine all the results of the 5 imputed datasets</span>
+
+<span class="kw">round</span>(<span class="kw">summary</span>(combFit),<span class="dv">2</span>)</code></pre></div>
+<pre><code>##             estimate std.error statistic    df p.value
+## (Intercept)    11.30     59.66      0.19 10.61    0.85
+## age2           43.00     17.94      2.40 13.47    0.03
+## age3           54.51     19.99      2.73 10.93    0.02
+## bmi             5.82      2.03      2.87 11.52    0.01</code></pre>
+</section>
+<section id="section-5" class="slide level2 smaller">
+<h1></h1>
+<p>Increase the number of imputations to <span class="math inline">\(m=20\)</span> to see whether we get similar results</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">imp20 &lt;-<span class="st"> </span><span class="kw">mice</span>(nhanes, <span class="dt">m=</span><span class="dv">20</span>, <span class="dt">printFlag=</span><span class="ot">FALSE</span>, <span class="dt">maxit =</span> <span class="dv">30</span>, <span class="dt">seed=</span><span class="dv">2525</span>)
+fit.mi20 &lt;-<span class="st"> </span><span class="kw">with</span>(<span class="dt">data=</span>imp20, <span class="dt">exp =</span> <span class="kw">lm</span>(chl ~<span class="st"> </span>age +<span class="st"> </span>bmi))
+combFit &lt;-<span class="st"> </span><span class="kw">pool</span>(fit.mi20)
+<span class="kw">round</span>(<span class="kw">summary</span>(combFit),<span class="dv">2</span>)</code></pre></div>
+<pre><code>##             estimate std.error statistic    df p.value
+## (Intercept)    12.21     58.37      0.21 14.34    0.84
+## age2           47.56     18.70      2.54 13.34    0.02
+## age3           64.69     22.21      2.91 10.62    0.01
+## bmi             5.69      1.99      2.86 14.93    0.01</code></pre>
+<p>The results are not much changed. MI works for as low as <span class="math inline">\(m=5\)</span> for this example.</p>
+</section>
+<section id="section-6" class="slide level2 smaller">
+<h1></h1>
+<p>Examine imputations created by MICE</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Extract the imputations for bmi</span>
+imp$imp$bmi</code></pre></div>
+<pre><code>##       1    2    3    4    5
+## 1  35.3 27.2 20.4 29.6 22.0
+## 3  35.3 27.2 30.1 30.1 22.0
+## 4  27.4 22.7 27.5 27.4 27.4
+## 6  27.4 22.7 22.7 27.4 22.7
+## 10 22.5 27.5 22.7 22.7 27.4
+## 11 35.3 35.3 22.0 22.0 22.0
+## 12 25.5 26.3 22.5 27.2 28.7
+## 16 33.2 27.2 29.6 27.2 30.1
+## 21 29.6 22.5 28.7 29.6 30.1</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Extract the second complete dataset</span>
+imp_2 &lt;-<span class="st"> </span><span class="kw">complete</span>(imp, <span class="dv">2</span>)
+<span class="kw">head</span>(imp_2)</code></pre></div>
+<pre><code>##   age  bmi hyp chl
+## 1   1 27.2   1 238
+## 2   2 22.7   1 187
+## 3   1 27.2   1 187
+## 4   3 22.7   1 187
+## 5   1 20.4   1 113
+## 6   3 22.7   1 184</code></pre>
+</section>
+<section id="section-7" class="slide level2 smaller">
+<h1></h1>
+<p>Checking imputations visually</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># scatterplot (of chl and bmi) for each imputed dataset</span>
+<span class="kw">xyplot</span>(imp, bmi ~<span class="st"> </span>chl |<span class="st"> </span>.imp, <span class="dt">pch =</span> <span class="dv">20</span>, <span class="dt">cex =</span> <span class="fl">1.4</span>)</code></pre></div>
+<p><img src="MD_final_files/figure-revealjs/unnamed-chunk-8-1.png" width="70%" /></p>
+<p>We expect the red points (imputed data) have almost the same shape as blue points. Blue points are constant across imputed datasets, but red points differ from each other, which represents our uncertainty about the true values of missing data.</p>
+</section>
+<section id="section-8" class="slide level2 smaller">
+<h1></h1>
+<p>Checking imputations visually</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># To detect interesting differences in distribution between observed and imputed data</span>
+<span class="kw">densityplot</span>(imp)</code></pre></div>
+<p><img src="MD_final_files/figure-revealjs/unnamed-chunk-9-1.png" /><!-- --></p>
+</section>
+<section id="section-9" class="slide level2 smaller">
+<h1></h1>
+<p>What if we only know BMI as a binary indicator?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Create an indicator variable of BMI, coded as 1 if BMI &gt;= 25, 0 if BMI&lt;25, </span>
+<span class="co"># NA if BMI is missing</span>
+nhanes$obese &lt;-<span class="st"> </span><span class="kw">ifelse</span>(<span class="kw">is.na</span>(nhanes$bmi),<span class="ot">NA</span>,<span class="kw">ifelse</span>(nhanes$bmi&lt;<span class="dv">25</span>,<span class="dv">0</span>,<span class="dv">1</span>))
+nhanes_new &lt;-<span class="st"> </span>nhanes[,-<span class="kw">which</span>(<span class="kw">names</span>(nhanes) %in%<span class="st"> &quot;bmi&quot;</span>)]
+nhanes_new$obese &lt;-<span class="st"> </span><span class="kw">as.factor</span>(nhanes_new$obese)
+
+<span class="co"># MICE</span>
+imp_new &lt;-<span class="st"> </span><span class="kw">mice</span>(nhanes_new, <span class="dt">m=</span><span class="dv">5</span>, <span class="dt">printFlag=</span><span class="ot">FALSE</span>, <span class="dt">maxit =</span> <span class="dv">40</span>, <span class="dt">seed=</span><span class="dv">2525</span>) 
+fit.mi_new &lt;-<span class="st"> </span><span class="kw">with</span>(<span class="dt">data=</span>imp_new, <span class="dt">exp =</span> <span class="kw">lm</span>(chl ~<span class="st"> </span>age +<span class="st"> </span>obese))
+combFit_new &lt;-<span class="st"> </span><span class="kw">pool</span>(fit.mi_new)
+<span class="kw">round</span>(<span class="kw">summary</span>(combFit_new),<span class="dv">2</span>)</code></pre></div>
+<pre><code>##             estimate std.error statistic   df p.value
+## (Intercept)   147.84     20.90      7.07 6.48    0.00
+## age2           33.66     23.22      1.45 7.38    0.18
+## age3           44.49     26.17      1.70 6.01    0.13
+## obese1         32.84     19.63      1.67 8.44    0.13</code></pre>
+</section>
+<section id="section-10" class="slide level2 smaller">
+<h1></h1>
+<p>How mice() actually imputes values</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># See the univariate imputation model for each incomplete variable that mice() used</span>
+<span class="co"># for your data as default</span>
+imp_new$meth</code></pre></div>
+<pre><code>##      age      hyp      chl    obese 
+##       &quot;&quot;    &quot;pmm&quot;    &quot;pmm&quot; &quot;logreg&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Possible imputation models provided by mice()</span>
+<span class="kw">methods</span>(mice)</code></pre></div>
+<pre><code>##  [1] mice.impute.2l.bin       mice.impute.2l.lmer     
+##  [3] mice.impute.2l.norm      mice.impute.2l.pan      
+##  [5] mice.impute.2lonly.mean  mice.impute.2lonly.norm 
+##  [7] mice.impute.2lonly.pmm   mice.impute.cart        
+##  [9] mice.impute.jomoImpute   mice.impute.lda         
+## [11] mice.impute.logreg       mice.impute.logreg.boot 
+## [13] mice.impute.mean         mice.impute.midastouch  
+## [15] mice.impute.norm         mice.impute.norm.boot   
+## [17] mice.impute.norm.nob     mice.impute.norm.predict
+## [19] mice.impute.panImpute    mice.impute.passive     
+## [21] mice.impute.pmm          mice.impute.polr        
+## [23] mice.impute.polyreg      mice.impute.quadratic   
+## [25] mice.impute.rf           mice.impute.ri          
+## [27] mice.impute.sample       mice.mids               
+## [29] mice.theme              
+## see &#39;?methods&#39; for accessing help and source code</code></pre>
+</section>
+<section id="section-11" class="slide level2 smaller">
+<h1></h1>
+<p>Change the default imputation methods</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Since hyp is binary, we want to change the default imputation method</span>
+meth=imp_new$meth
+meth =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;&quot;</span>, <span class="st">&quot;logreg&quot;</span>, <span class="st">&quot;pmm&quot;</span>,<span class="st">&quot;logreg&quot;</span>)
+nhanes_new$hyp &lt;-<span class="st"> </span><span class="kw">as.factor</span>(nhanes_new$hyp)
+imp_new2 &lt;-<span class="st"> </span><span class="kw">mice</span>(nhanes_new, <span class="dt">m=</span><span class="dv">5</span>, <span class="dt">printFlag=</span><span class="ot">FALSE</span>, <span class="dt">maxit =</span> <span class="dv">40</span>, <span class="dt">seed=</span><span class="dv">2525</span>,<span class="dt">method =</span> meth) 
+imp_new2$method</code></pre></div>
+<pre><code>##      age      hyp      chl    obese 
+##       &quot;&quot; &quot;logreg&quot;    &quot;pmm&quot; &quot;logreg&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Visiting sequence</span>
+imp_new2$vis</code></pre></div>
+<pre><code>## [1] &quot;age&quot;   &quot;hyp&quot;   &quot;chl&quot;   &quot;obese&quot;</code></pre>
+</section>
+<section id="section-12" class="slide level2 smaller">
+<h1></h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Predictor matrix: Which variables does mice() use as predictors </span>
+<span class="co"># for imputation of each incomplete variable?</span>
+imp_new2$pred</code></pre></div>
+<pre><code>##       age hyp chl obese
+## age     0   1   1     1
+## hyp     1   0   1     1
+## chl     1   1   0     1
+## obese   1   1   1     0</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># We can specify relevant predictors as follows:</span>
+<span class="co"># Suppose that hyp is considered irrelevant as a predictor for obese and chl!</span>
+pred=imp_new2$pred;
+pred[, <span class="st">&quot;hyp&quot;</span>] =<span class="st"> </span><span class="dv">0</span>
+pred</code></pre></div>
+<pre><code>##       age hyp chl obese
+## age     0   0   1     1
+## hyp     1   0   1     1
+## chl     1   0   0     1
+## obese   1   0   1     0</code></pre>
+</section>
+    </div>
+  </div>
+
+  <script src="MD_final_files/reveal.js-3.3.0.1/lib/js/head.min.js"></script>
+  <script src="MD_final_files/reveal.js-3.3.0.1/js/reveal.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Vertical centering of slides
+        center: true,
+        // Transition style
+        transition: 'none', // none/fade/slide/convex/concave/zoom
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
+
+
+
+        // Optional reveal.js plugins
+        dependencies: [
+        ]
+      });
+    </script>
+  <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+
+<script>
+  (function() {
+    if (window.jQuery) {
+      Reveal.addEventListener( 'slidechanged', function(event) {  
+        window.jQuery(event.previousSlide).trigger('hidden');
+        window.jQuery(event.currentSlide).trigger('shown');
+      });
+    }
+  })();
+</script>
+
+
+  </body>
+</html>
