@@ -1,0 +1,143 @@
+---
+title: Avoiding the Fire Swamp of Small Samples
+output: 
+  revealjs::revealjs_presentation:
+    theme: night
+    highlight: espresso
+    center: true
+    transition: none
+    css: styles.css
+    fig_caption: true
+    reveal_options:
+      progress: true
+      slideNumber: true
+      
+  
+---
+
+
+## Introduction
+
+
+## Links
+
+http://www.greo.ca/en/greo-resource/resources/Documents/Bondy-Quantitative-Methods-for-Small-Samples-.pdf
+
+https://measuringu.com/small-n/
+
+Maybe qualitative research instead?  Motivate by typical interval estimate coverage in a small sample, so people can think about design, what they want to learn, etc?
+
+Talk about central limit theorem? Nice bit on that in old 600 notes and also see 
+http://www.ucl.ac.uk/~uctqiax/PUBLG100/2016/optional/clt.html
+
+Carl Morris example on which result should be more encouraging to a candidate?  Maybe start there in the election example for my class -- have them think about what should encourage me more as a warmer-upper/quiz that takes an entire class period?  Could do that for the undergraduate course but not for global health (really need to be Bayesian)
+
+Play with https://gallery.shinyapps.io/CLT_mean/ shiny app showing the sampling distribution of the mean
+
+## Motivating Example: FIND ONE
+
+## Types of "small" data
+
+- Small sample sizes (expense, time, other considerations)
+- Rare events (small numerators), e.g. ebola cases
+- Small subgroups, e.g. rare genotypes of interest, associations in underrepresented groups
+
+## Resources and Methods of Note
+
+- Sampling and design solutions
+- Statistical methods for small samples
+
+## Sampling and Design Solutions
+
+Simple random samples often not desirable when rare events or subgroups are of interest
+
+FIND EXAMPLE of something of interest in developing country in which we don't want to take simple random sample (maybe studying nonbinary gender identification and subgroups thereof?)
+
+Take the prevalence and show how many people we'd need to sample to get decent power
+
+Talk about case-control design or stratified random sampling
+
+
+
+## Motivating Example: Pregnancy, Infection, & Nutrition (PIN) Study
+- Prospective study of risk factors for adverse birth outcomes in central NC prenatal care clinics
+- We would like to study how cocaine use relates to small-for-gestational-age (SGA) births
+- Covariates: maternal age, race, income, parity, and education
+- Cocaine measured on questionnaire, in urine, and in hair
+
+## Mathematical Notation
+- Let $Y$ = $(Y_{obs},Y_{mis})$
+- $r_i = 1$ if data for unit $i$ is missing, $r_i = 0$ otherwise
+- $R = (r_1,..., r_n)$
+- $\theta$ denote the parameters associated with $Y$
+- $\psi$ denote the parameters associated with $R$
+
+## Types/Mechanisms of Missing Data
+## Missing Completely at Random (MCAR)
+- Subjects with missing data are a complete random sample of study subjects
+- e.g. hair cocaine missing for subset of women who were never asked to provide it for study logistical reasons
+- $f(R|Y,\theta, \psi) = f(R|\psi)$
+
+## Missing at Random (MAR)
+- Missingness may depend on observed variables, but not on the missing values themselves
+- e.g., hair samples missing more often for older women
+- $f(R|Y,\theta, \psi) = f(R|Y_{obs},\psi)$
+
+## Missing Not at Random/Nonignorable (MNAR)
+- Missingness may depend on the missing values themselves and may also depend on observed values
+- e.g., women who have used cocaine recently are less likely to provide biospecimens for drug testing
+- $f(R|Y,\theta, \psi) = f(R|Y_{obs},Y_{mis},\psi)$
+
+## Methods of Handling Missing Data
+## Complete Case Anlysis
+- Use only the set of observations with no missing values
+- When missingness is MCAR, then the complete case estimator is unbiased
+- Good approach when percentage of data missing is small ($<$ 5-10\%)
+- If there are many different variables with missing values, a large fraction of the observations may be dropped, resulting in inefficient use of information
+
+## "Ad-hoc" Methods
+- Creation of an indicator of missingness as a new variable
+- Simple imputation with mean of observed values, or prediction from regression model
+- Last value carried forward
+- Hot deck imputation: replace missing value with an observed response from a "similar" subject
+- Easy to implement, but have the potential to induce bias, not recommended
+
+## Maximum Likelihood
+- Involves specification of model for any variables subject to missing data
+- Then one can integrate the likelihood over the missing values, obtaining the likelihood of the observed data (observed data likelihood)
+- Then we maximize the observed data likelihood
+- Can be quite computationally intensive
+
+## Multiple Imputation
+- Generate $p$ possible values for each missing observation (typically 5-10 imputated datasets are created)
+- Each of these datasets is analyzed using complete-data methods
+- Combine the results of $p$ separate analyses, allowing the uncertainty regarding the imputation to be taken into account
+- Often the easiest solution 
+- Software implementations offer a variety of choices for models from which to impute data (many flavors of MI are available, and MI can be used for any missing data mechanism, though software may restrict this)
+- Bayesian inference can easily accommodate ``imputation'' directly in sampling algorithms when distribution of variables subject to missingness specified (treat missing data as parameters to estimate)
+
+## MICE
+- Multiple Imputation using Chained Equations
+- Also known as "fully conditional specification" or "sequential regression multiple imputation"
+- Involves a variable-by-variable approach for a set of variables $(Y_1,\ldots,Y_q)$ for each participant
+- Imputation model is specified separately for each variable, using the other variables as predictors, e.g. specify $f(Y_j|Y_{(-j)})$, where $Y_{(-j)}=(Y_1,Y_2, ... ,Y_{j-1},Y_{j+1}, ... ,Y_q)$
+- At each stage of the algorithm, an imputation is generated for the missing variable, then this imputed value is used in the imputation of the next variable
+- Repeat this process for several cycles to obtain one imputed dataset
+
+
+## Example
+## {.smaller }
+We'll walk through a small example in R with the NHANES dataset. It contains 25 obs and four variables: age (age groups: 1=20-39, 2=40-59, 3=60+), bmi (body mass index, in kg/m^2), hyp (hypertension status, 1=no, 2=yes) and chl (total cholesterol, in mg/dL).
+```{r,librarydata,warning=FALSE,message=FALSE}
+# required libraries
+library(mice)
+library(VIM)
+library(lattice)
+
+
+# load data
+data(nhanes)
+str(nhanes)
+nhanes$age <- factor(nhanes$age)
+```
+

@@ -458,12 +458,12 @@ document.getElementsByTagName('head')[0].appendChild(style);
 </section>
 
 <section id="case-study-1-birthweight" class="slide level2">
-<h2>Case Study 1: Birthweight</h2>
+<h1>Case Study 1: Birthweight</h1>
 <p>Birthweight is a commonly-used indicator of a newborn infant’s health status. Because this indicator is easily obtained, it is a critical component of population health reporting by the World Health Organization and governments around the globe.</p>
 <p>Can we learn whether a factor may <em>cause</em> the increase or decrease in birthweight?</p>
 </section>
 <section id="correlation-does-not-imply-causation" class="slide level2">
-<h2>Correlation does not imply causation</h2>
+<h1>Correlation does not imply causation</h1>
 <ul>
 <li>A lot of research questions in statistics/machine learning are causal in nature</li>
 <li>Standard statistical analysis aims to infer ‘associations’ among variables</li>
@@ -472,7 +472,7 @@ document.getElementsByTagName('head')[0].appendChild(style);
 </ul>
 </section>
 <section id="confounding" class="slide level2">
-<h2>Confounding</h2>
+<h1>Confounding</h1>
 <ul>
 <li>Confounding is main complication between association and causation</li>
 <li>Let <span class="math inline">\(W\)</span> denote treatment, <span class="math inline">\(Y\)</span> outcome, and <span class="math inline">\(X\)</span> the observed covariates</li>
@@ -484,7 +484,7 @@ document.getElementsByTagName('head')[0].appendChild(style);
 </ul>
 </section>
 <section id="frameworks-for-causal-inference" class="slide level2">
-<h2>Frameworks for Causal Inference</h2>
+<h1>Frameworks for Causal Inference</h1>
 <ul>
 <li><p>Potential outcome framework also known as counterfactual framework or Neyman-Rubin Causal Model (RCM)</p></li>
 <li>3 Integral components to RCM:
@@ -497,7 +497,7 @@ document.getElementsByTagName('head')[0].appendChild(style);
 </ul>
 </section>
 <section id="causal-assumptions" class="slide level2">
-<h2>Causal Assumptions</h2>
+<h1>Causal Assumptions</h1>
 <p>To identify causal effects from observed data, we must make assumptions:</p>
 <ol type="1">
 <li>SUTVA - Stable Unit Treatment Value Assumption (often referred to as consistency)
@@ -515,7 +515,7 @@ document.getElementsByTagName('head')[0].appendChild(style);
 </ul>
 </section>
 <section id="causal-assumptions-cont." class="slide level2">
-<h2>Causal Assumptions cont.</h2>
+<h1>Causal Assumptions cont.</h1>
 <ul>
 <li><p><strong>Assignment mechanism</strong>: the probabilistic rule that decides which unit gets assigned to which treatment</p>
 <ul>
@@ -537,7 +537,7 @@ document.getElementsByTagName('head')[0].appendChild(style);
 </ul>
 </section>
 <section id="quick-start-to-causal-inference" class="slide level2">
-<h2>Quick start to causal inference:</h2>
+<h1>Quick start to causal inference:</h1>
 <p>The assumptions are needed to infer causal estimands in observational studies. Some estimands that are of interest:</p>
 <ol type="1">
 <li>Average Treatment Effect (ATE): <span class="math display">\[ \tau = E[Y_i(1) - Y_i(0)]\]</span></li>
