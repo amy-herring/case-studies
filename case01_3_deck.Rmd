@@ -1,0 +1,127 @@
+---
+title: Birthweight - Robust Regression
+output: 
+  revealjs::revealjs_presentation:
+    theme: night
+    highlight: espresso
+    center: true
+    transition: none
+    css: styles.css
+    fig_caption: true
+    reveal_options:
+      progress: true
+      slideNumber: true
+      
+  
+---
+  
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,fig.width=6, fig.height=5)
+```
+
+
+
+## Case Study 1: Birthweight
+
+Birthweight is a commonly-used indicator of a newborn infant's health status. Because this indicator is easily obtained, it is a critical component of population health reporting by the World Health Organization and governments around the globe. The distribution of birthweight has often been described as approximately normal, though the left tail in particular is inflated relative to that from a Gaussian distribution.
+
+## Dealing with heavy-tailed distributions
+Birthweight has heavy tails, or more observations in the tail than a typical normal distribution.
+
+Fitting an OLS model assumes the data follows a normal distribution. Instead we may want to consider a parametric family that has heavier tails and therefore better fits to the outliers in the data.
+
+Let's first start by fitting the model with a linear regression.
+
+
+## Read data into R
+We will use the birth data here, and measure whether there is a relationship between the response, birthweight, and the explanatory variables, gestational age and sex.
+
+* Check for NAs in data - appear as 99, 9999
+* For now, remove the rows with missing values
+```{r}
+#Read in birth data
+o_data <- read.csv("~/Documents/case-studies/data/2011-2016 Vital Files Duke_Herring/Yr1116Birth.csv", na.strings=c("99", "9999"))
+
+birth_data <- na.omit(o_data)
+```
+
+## Is birthweight normally distributed?
+* Compare histogram of birthweight to a normal distribution parameterized with a mean and variance that is set based on birthweight variable, `BWTG`.
+* Do the distributions align?
+  
+```{r, echo=FALSE}
+par(mfrow=c(1,2))
+hist(birth_data$BWTG, xlab="Birthweight (g)", main="Birthweight Histogram", prob=TRUE, breaks=50)
+curve(dnorm(x, mean=mean(birth_data$BWTG), sd=sd(birth_data$BWTG)),
+      col="darkblue", lwd=2, add=TRUE, yaxt="n")
+hist(birth_data$BWTG, xlab="Birthweight (g)", main="Birthweight Histogram", prob=TRUE, xlim=c(0, 4000), breaks=30)
+curve(dnorm(x, mean=mean(birth_data$BWTG), sd=sd(birth_data$BWTG)),
+      col="darkblue", lwd=2, add=TRUE, yaxt="n")
+```
+
+
+## Fit regression to data
+Let's fit a linear model using OLS with function `lm`. 
+```{r}
+model1 = lm(BWTG~GEST+SEX, data=birth_data)
+summary(model1)
+```
+
+## Look at residuals
+What do the residuals tell us about model fit
+```{r}
+par(mfrow=c(2,2))
+plot(model1)
+```
+
+
+## Diagnosing the problem
+Diagnostic plots of the model are essential for checking model fit. 
+* Heavy-tailed data leads to large residuals and large deviations on the QQplot
+
+A few tools for heavy-tailed data:
+
+* Transformations (e.g. sqrt(BTWG)) - transforming outcome may fix the skewness, but can make interpretting the model more difficult
+* Bayesian robust regression - change parametric assumption (e.g. t-distribution)
+* Frequentist robust regression - weigh observations differently based on how well behaved these observations are (a form of weighted and reweighted regression)
+
+## Bayesian robust regression in R
+Consider the Bayesian approach for robust regression using package `brms`.
+
+* We specify the model using the family, student-t, to describe the response distribution
+    + Student-t has heavier tails compared to the normal distribution. 
+    + The heaviness of the tails are specified with the parameter, degrees of freedom, where the larger the degrees of freedom, the closer to normal the distribution becomes
+```{r, eval=FALSE}
+install.packages("brms", dependencies=TRUE)
+require(brms)
+fit1 <- brm(formula = BWTG ~ GEST+SEX ,
+            data = birth_data, family = student(), cores = 2)
+```
+
+
+## Robust regression in R
+We will explore the frequentist version of robust regression using the function, `rlm`, in `MASS` package. 
+
+```{r}
+library(MASS)
+fit2 <- rlm(BWTG ~ GEST+SEX, data = birth_data)
+summary(fit2)
+```
+
+## Understanding resulting weights
+`rlm` works by reweighting the observations with large residuals. Let's look at the observations with the largest and smallest weights. What do you notice about the data and the residuals?
+
+```{r}
+fit2_weights = data.frame(bwt = birth_data$BWTG, gest = birth_data$GEST, resid=fit2$resid, weight=fit2$w)
+fit2_weights[order(fit2$w)[c(1:5, (length(fit2$w)-5):length(fit2$w))],]
+```
+
+
+
+## Class Exercises:
+* Evaluate the observations with largest residuals/weights and discuss possible reasons for the large residual.
+* Continue model-fitting with `rlm` exploring the remaining covariates
+* Create a test set of observations and measure how well we can predict those values
+    + Use mean squared error to measure prediction accuracy
+* What are the top predictors of birthweight?
+* With extra time, try the `brms` package fitting the data using the student-t distribution
