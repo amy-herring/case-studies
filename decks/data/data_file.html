@@ -136,96 +136,13 @@ $(document).ready(function () {
 <pre class="r"><code>setwd(&quot;~/Desktop/factbook/rankorder&quot;)
 
 pop_dta &lt;- read.delim(&quot;rawdata_2119.txt&quot;, header = FALSE, col.names = c(&quot;&quot;, &quot;country&quot;,&quot;pop&quot;))
-pop_dta &lt;- pop_dta[,-1]
-pop_dta$pop &lt;- as.numeric(gsub(&quot;,&quot;, &quot;&quot;, pop_dta$pop))
+pop_dta &lt;- pop_dta[,-1] # remove blank column
+pop_dta$pop &lt;- as.numeric(gsub(&quot;,&quot;, &quot;&quot;, pop_dta$pop)) #remove commas, so it can be converted to numeric
 save(pop_dta, file=&quot;pop_data.RData&quot;)
-
-pop_rate_dta &lt;- read.delim(&quot;rawdata_2002.txt&quot;, header = FALSE, col.names = c(&quot;&quot;, &quot;country&quot;,&quot;popRate&quot;, &quot;&quot;))
-pop_rate_dta &lt;- pop_rate_dta[,-c(1,4)]
-
-people_and_society &lt;- merge(pop_dta, pop_rate_dta, by = &quot;country&quot;, all = TRUE)
-
-birth_rate_dta &lt;- read.delim(&quot;rawdata_2054.txt&quot;, header = FALSE, col.names = c(&quot;&quot;, &quot;country&quot;,&quot;birthRate&quot;, &quot;&quot;))
-birth_rate_dta &lt;- birth_rate_dta[,-c(1,4)]
-
-people_and_society &lt;- merge(people_and_society, birth_rate_dta, by = &quot;country&quot;, all = TRUE)
-
-death_rate_dta &lt;- read.delim(&quot;rawdata_2066.txt&quot;, header = FALSE, col.names = c(&quot;&quot;, &quot;country&quot;,&quot;deathRate&quot;, &quot;&quot;))
-death_rate_dta &lt;- death_rate_dta[,-c(1,4)]
-
-people_and_society &lt;- merge(people_and_society, death_rate_dta, by = &quot;country&quot;, all = TRUE)
-
-netMig_rate_dta &lt;- read.delim(&quot;rawdata_2112.txt&quot;, header = FALSE, col.names = c(&quot;&quot;, &quot;country&quot;,&quot;netMigRate&quot;, &quot;&quot;))
-netMig_rate_dta &lt;- netMig_rate_dta[,-c(1,4)]
-
-people_and_society &lt;- merge(people_and_society, netMig_rate_dta, by = &quot;country&quot;, all = TRUE)
-
-MM_dta &lt;- read.delim(&quot;rawdata_2223.txt&quot;, header = FALSE, col.names = c(&quot;&quot;, &quot;country&quot;,&quot;matMort&quot;, &quot;&quot;))
-MM_dta &lt;- MM_dta[,-c(1,4)]
-MM_dta$matMort &lt;- as.numeric(gsub(&quot;,&quot;, &quot;&quot;, MM_dta$matMort))
-
-people_and_society &lt;- merge(people_and_society, MM_dta, by = &quot;country&quot;, all = TRUE)
 
 IM_dta &lt;- read.delim(&quot;rawdata_2091.txt&quot;, header = FALSE, col.names = c(&quot;&quot;, &quot;country&quot;,&quot;infMort&quot;, &quot;&quot;))
 IM_dta &lt;- IM_dta[,-c(1,4)]
-save(IM_dta, file=&quot;IM_data.RData&quot;)
-
-people_and_society &lt;- merge(people_and_society, IM_dta, by = &quot;country&quot;, all = TRUE)
-
-life_exp_dta &lt;- read.delim(&quot;rawdata_2102.txt&quot;, header = FALSE, col.names = c(&quot;&quot;, &quot;country&quot;,&quot;lifeExp&quot;, &quot;&quot;))
-life_exp_dta &lt;- life_exp_dta[,-c(1,4)]
-
-people_and_society &lt;- merge(people_and_society, life_exp_dta, by = &quot;country&quot;, all = TRUE)
-
-tot_fert_dta &lt;- read.delim(&quot;rawdata_2127.txt&quot;, header = FALSE, col.names = c(&quot;&quot;, &quot;country&quot;,&quot;childrenPerWoman&quot;, &quot;&quot;))
-tot_fert_dta &lt;- tot_fert_dta[,-c(1,4)]
-
-people_and_society &lt;- merge(people_and_society,  tot_fert_dta, by = &quot;country&quot;, all = TRUE)
-
-health_exp_dta &lt;- read.delim(&quot;rawdata_2225.txt&quot;, header = FALSE, col.names = c(&quot;&quot;, &quot;country&quot;,&quot;healthPercGDP&quot;, &quot;&quot;))
-health_exp_dta &lt;- health_exp_dta[,-c(1,4)]
-
-people_and_society &lt;- merge(people_and_society,  health_exp_dta, by = &quot;country&quot;, all = TRUE)
-
-HIV_rate_dta &lt;- read.delim(&quot;rawdata_2155.txt&quot;, header = FALSE, col.names = c(&quot;&quot;, &quot;country&quot;,&quot;HIV_adult_rate&quot;, &quot;&quot;))
-HIV_rate_dta &lt;- HIV_rate_dta[,-c(1,4)]
-
-people_and_society &lt;- merge(people_and_society,  HIV_rate_dta, by = &quot;country&quot;, all = TRUE)
-
-HIV_ppl_dta &lt;- read.delim(&quot;rawdata_2156.txt&quot;, header = FALSE, col.names = c(&quot;&quot;, &quot;country&quot;,&quot;Num_ppl_with_HIV&quot;, &quot;&quot;))
-HIV_ppl_dta &lt;- HIV_ppl_dta[,-c(1,4)]
-HIV_ppl_dta$Num_ppl_with_HIV &lt;- as.numeric(gsub(&quot;,&quot;, &quot;&quot;, HIV_ppl_dta$Num_ppl_with_HIV))
-
-people_and_society &lt;- merge(people_and_society,  HIV_ppl_dta, by = &quot;country&quot;, all = TRUE)
-
-HIV_death_dta &lt;- read.delim(&quot;rawdata_2157.txt&quot;, header = FALSE, col.names = c(&quot;&quot;, &quot;country&quot;,&quot;Num_death_HIV&quot;, &quot;&quot;))
-HIV_death_dta &lt;- HIV_death_dta[,-c(1,4)]
-HIV_death_dta$Num_death_HIV &lt;- as.numeric(gsub(&quot;,&quot;, &quot;&quot;, HIV_death_dta$Num_death_HIV))
-
-people_and_society &lt;- merge(people_and_society,  HIV_death_dta, by = &quot;country&quot;, all = TRUE)
-
-obs_rate_dta &lt;- read.delim(&quot;rawdata_2228.txt&quot;, header = FALSE, col.names = c(&quot;&quot;, &quot;country&quot;,&quot;obesityRate&quot;, &quot;&quot;))
-obs_rate_dta &lt;- obs_rate_dta[,-c(1,4)]
-
-people_and_society &lt;- merge(people_and_society,  obs_rate_dta, by = &quot;country&quot;, all = TRUE)
-
-child_underweight_rate_dta &lt;- read.delim(&quot;rawdata_2224.txt&quot;, header = FALSE, col.names = c(&quot;&quot;, &quot;country&quot;,&quot;childrenUnderweightRate&quot;, &quot;&quot;))
-child_underweight_rate_dta &lt;- child_underweight_rate_dta[,-c(1,4)]
-
-people_and_society &lt;- merge(people_and_society,  child_underweight_rate_dta, by = &quot;country&quot;, all = TRUE)
-
-educ_exp_dta &lt;- read.delim(&quot;rawdata_2206.txt&quot;, header = FALSE, col.names = c(&quot;&quot;, &quot;country&quot;,&quot;educPercGDP&quot;, &quot;&quot;))
-educ_exp_dta &lt;- educ_exp_dta[,-c(1,4)]
-
-people_and_society &lt;- merge(people_and_society,  educ_exp_dta, by = &quot;country&quot;, all = TRUE)
-
-unemployment_rate_dta &lt;- read.delim(&quot;rawdata_2229.txt&quot;, header = FALSE, col.names = c(&quot;&quot;, &quot;country&quot;,&quot;unemploymentRate&quot;, &quot;&quot;))
-unemployment_rate_dta &lt;- unemployment_rate_dta[,-c(1,4)]
-
-people_and_society &lt;- merge(people_and_society,  unemployment_rate_dta, by = &quot;country&quot;, all = TRUE)
-
-setwd(&quot;~/Desktop&quot;)
-save(people_and_society, file=&quot;people_and_society.RData&quot;)</code></pre>
+save(IM_dta, file=&quot;IM_data.RData&quot;)</code></pre>
 </div>
 <div id="option-2-field-html-files" class="section level2">
 <h2>Option 2: Field HTML Files</h2>
