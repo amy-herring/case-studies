@@ -20,18 +20,19 @@ Using data from the World Bank or a complex data source of your own choosing,
 - create a Shiny app in R to illustrate an aspect of our world in data
 - create an accompanying Tableau dashboard interactive visual presentation of our world in data
 
-# Data
+# Data 
 
 R Tutorial Data Set
 - [popDF.RData](data/popDF.RData)
 - [infMortDF.RData](data/infMortDF.RData)
 - [codeMapDF.RData](data/codeMapDF.RData)
+- [countries.csv](data/countries.csv)
 
 Full People And Society Data Set:
 - [full.RData](data/full.RData)
 
 How To Obtain Data from Factbook:
-- [Factbook Tutorial](data/data_file.html)
+- [Factbook Tutorial](data/data_file_2014.html)
 
 
 # Reports
