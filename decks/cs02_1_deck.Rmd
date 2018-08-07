@@ -230,6 +230,8 @@ allCtryData[allCtryData$ctry %in% c("CH", "SZ", "GB", "UK"), ]
 ```
 ## Fixing Map 
 ```{r, eval=FALSE}
+InfMortDiscrete = cut(allCtryData$infMort,
+                      breaks = c(0, 10, 25, 50, 75, 150))
 # Redo Map
 world = map(database = "world", fill = TRUE, col="light grey")
 rads = pmax(sqrt(allCtryData$pop)/4000, 1)
@@ -242,7 +244,8 @@ legend(x = -150, y = 0, title = "Infant Mortality",
 
 ## Fixing Map 
 ```{r, echo=FALSE}
-
+InfMortDiscrete = cut(allCtryData$infMort,
+                      breaks = c(0, 10, 25, 50, 75, 150))
 # Redo Map
 world = map(database = "world", fill = TRUE, col="light grey")
 rads = pmax(sqrt(allCtryData$pop)/4000, 1)
