@@ -127,23 +127,60 @@ A few tools for heavy-tailed data:
 * **Bayesian robust regression** - change parametric assumption (e.g. t-distribution)
 * **Frequentist robust regression** - weigh observations differently based on how well behaved these observations are (a form of weighted and reweighted regression)
 
-## Bayesian robust regression in R
-(Will add more on this..)
-Consider the Bayesian approach for robust regression using package `brms`.
+## Bayesian Robust Regression
+Under the Bayesian approach to robust regression, we change the parametric assumptions of the errors. 
 
-* We specify the model using the family, student-t, to describe the response distribution
-    + Student-t has heavier tails compared to the normal distribution.
-    + The heaviness of the tails are specified with the parameter, degrees of freedom, where the larger the degrees of freedom, the closer to normal the distribution becomes
+* For a OLS estimate, the conditional distribution of individual response, $y_i$, given $X_i$:
+
+$$ p(y_i|X_i\beta, \sigma^2) = N(y_i|X_i\beta, \sigma^2) $$
+
+* For robust regression, the errors follow a student-t distribution, where conditional distribution looks like:
+
+$$ p(y_i|X_i\beta, \sigma^2) = t_\nu(y_i|X_i\beta, \sigma^2) $$
+    
+  + Student-t has heavier tails compared to the normal distribution.
+  + Degrees of freedom, $\nu$, controls the heaviness of the tails, where the larger the degrees of freedom, the closer to normal the distribution becomes
+  + Fitting this model is not very different from a linear regression, due to the scale mixture relationship between student-t and normal
+  
+  
+## Bayesian robust regression in R
+Consider the Bayesian approach for robust regression using package `brms`. We specify the family as `student()` to tell 'brm' to use a different distribution for the errors.
+
+  + `brms` fits this model using Hamiltonian Monte-Carlo through `stan`
+
+```{r, echo=FALSE, message=FALSE}
+require(brms)
+#This should work as long as you are in the case-studies/decks directory..
+load("bayes_rob_reg.RData")
+```
+
 ```{r, eval=FALSE}
 install.packages("brms", dependencies=TRUE)
 require(brms)
+#Specify family as student(). 
+#We also set chains=2 for faster computation and tell the computer to split work over 2 cores.
 fit1 <- brm(formula = BWTG ~ GEST+SEX ,
-            data = birth_data_2016, family = student(), cores = 2)
+            data = birth_data_2016, family = student(), cores = 2, chains=2)
 ```
 
+## Checking model fit with `brms`
+How do the coefficient estimates compare?
+```{r}
+summary(fit1)
+```
+Rhat in the table measures convergence of the chains, where 1 means convergence occurred. 
 
-## Robust regression in R
-We explore robust regression with `rlm` in `MASS` package.
+
+## Checking model fit with `brms`
+We can also check convergence through looking at trace plots:
+```{r}
+plot(fit1)
+```
+
+* Chains intersect (may want to try more than 2) and appear stationary 
+
+## Alternative robust regression in R
+We explore a Frequentist version of robust regression with `rlm` in `MASS` package.
 
 *  This is a form of reweighted least squares - specifically the M-estimation with Huber weighting.
 *  The model estimation becomes:
@@ -174,14 +211,17 @@ summary(fit2)
 
 ## Visualizing model fits
 Does `rlm` seem to improve the model fit?
+  
   * `rlm` adjusts for outliers, but will not fix the non-constant variance
 
 ```{r, warning=FALSE}
 #Plot data with regression fits on top - 
-#will only select first two coefficients that correspond to intercept and gestational age
-plot(y=birth_data_2016$BWTG, x=birth_data_2016$GEST)
+#using only first two coefficients that correspond to intercept and gestational age (ignoring SEX)
+par(mfrow=c(1,1))
+plot(y=birth_data_2016$BWTG, x=birth_data_2016$GEST, main="LM vs RLM Fits")
 abline(model1, lty=2, col=2, lwd=2)
 abline(fit2, lty=3, col=3, lwd=2)
+legend("topleft", c("LM", "RLM"), lty=c(2,3), col=c(2,3), lwd=2)
 ```
 
 
