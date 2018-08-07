@@ -16,7 +16,7 @@ output:
 ---
   
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE,fig.width=6, fig.height=5)
+knitr::opts_chunk$set(echo = TRUE,fig.width=5, fig.height=4)
 ```
 
 
@@ -38,11 +38,13 @@ We will use the birth data here, and measure whether there is a relationship bet
 
 * Check for NAs in data - appear as 99, 9999
 * For now, remove the rows with missing values
+* Only look at most recent year, 2016
 ```{r}
 #Read in birth data
 o_data <- read.csv("~/Documents/case-studies/data/2011-2016 Vital Files Duke_Herring/Yr1116Birth.csv", na.strings=c("99", "9999"))
 
 birth_data <- na.omit(o_data)
+birth_data_2016 <- birth_data[which(birth_data$YOB==2016),]
 ```
 
 ## Is birthweight normally distributed?
@@ -51,68 +53,143 @@ birth_data <- na.omit(o_data)
   
 ```{r, echo=FALSE}
 par(mfrow=c(1,2))
-hist(birth_data$BWTG, xlab="Birthweight (g)", main="Birthweight Histogram", prob=TRUE, breaks=50)
-curve(dnorm(x, mean=mean(birth_data$BWTG), sd=sd(birth_data$BWTG)),
+hist(birth_data_2016$BWTG, xlab="Birthweight (g)", main="Birthweight Histogram", prob=TRUE, breaks=50)
+curve(dnorm(x, mean=mean(birth_data_2016$BWTG), sd=sd(birth_data_2016$BWTG)),
       col="darkblue", lwd=2, add=TRUE, yaxt="n")
-hist(birth_data$BWTG, xlab="Birthweight (g)", main="Birthweight Histogram", prob=TRUE, xlim=c(0, 4000), breaks=30)
-curve(dnorm(x, mean=mean(birth_data$BWTG), sd=sd(birth_data$BWTG)),
+hist(birth_data_2016$BWTG, xlab="Birthweight (g)", main="Birthweight Histogram", prob=TRUE, xlim=c(0, 4000), breaks=30)
+curve(dnorm(x, mean=mean(birth_data_2016$BWTG), sd=sd(birth_data_2016$BWTG)),
       col="darkblue", lwd=2, add=TRUE, yaxt="n")
 ```
+
+## Review of linear regression
+Let $y_i$ denote the observed response, 'BWTG', for observation $i$, and $x_i$ the observed covariates, 'GEST' and 'SEX'. Then we aim to learn the model:
+
+$$ y_i = \beta_0 + \beta_1 \text{GEST}_i + \beta_2 \text{SEX}_i + \epsilon_i $$
+
+When we fit the line, we estimate the coefficients $\mathbf{\hat{\beta}}= \{\hat{\beta_0}, \hat{\beta_1}, \hat{\beta_2}\}$, where $\hat{\beta} = (X^\prime X)^{-1} X^\prime Y$.
+
+$$ y_i = \hat{\beta_0} + \hat{\beta_1} \text{GEST}_i + \hat{\beta_2} \text{SEX}_i + \epsilon_i $$
+We denote residuals, $e_i = y_i - \hat{y_i}$ where $\hat{y_i}$ is the estimated predicted value for observation $i$.
+
+## Model Assumptions
+To make inference on the model parameters, $\beta$, we check four assumptions for the linear regression model:
+
+1. The mean of the response, $E(Y_i) = \beta_0 + \beta_1 \text{GEST}_i + \beta_2 \text{SEX}_i$ is **linear function** of the $x_i$ at each value of the predictors $x_i$.
+2. The errors, $\epsilon_i$, are **independent**.
+3. The errors, $\epsilon_i$, at each value of the predictor, $x_i$, are **normally distributed**.
+4. The errors, $\epsilon_i$, at each value of the predictor, $x_i$, have **equal variances**.
+
+Or in summary, we assume the errors, $\epsilon_i$, are independent, normally distributed with zero mean and constant variance:
+$$\epsilon_i \sim \text{Normal}(0, \sigma^2)$$
 
 
 ## Fit regression to data
-Let's fit a linear model using OLS with function `lm`. 
+Let's fit a linear model using OLS with function `lm`.
 ```{r}
-model1 = lm(BWTG~GEST+SEX, data=birth_data)
+model1 = lm(BWTG~GEST+SEX, data=birth_data_2016)
 summary(model1)
 ```
 
-## Look at residuals
-What do the residuals tell us about model fit
+## Model diagnostics: Residual vs. Fitted
+First we compare the residuals versus fitted values. This plot shows a few violations of the assumptions:
+
+1. The mean, $E[Y_i]$ does not follows a linear relationship. The plot shows evidence of a possible quadratic relationship - residuals make a curved shape.
+2. The variance changes for different fitted values, creates a cone-like shape signifying increasing variance.
+3. There are multiple outliers detected in the plot with residuals greater than 2000!
 ```{r}
-par(mfrow=c(2,2))
-plot(model1)
+plot(model1, which=1)
+```
+
+
+## Model diagnostics: Residual vs. Order
+
+Next we look at the residuals versus order, which gives us a view into the independence assumption. Here the assumption holds. For violations of this assumption, look for a linear trend or some systematic pattern that would suggest non independence.
+
+```{r}
+plot(model1$residuals)
+```
+
+## More residual plots
+We use a qqplot to determine if the residuals are normally-distributed. 
+
+* The large tail on the upper right of the plot shows that the tails of our data are heavier than that of a normal distribution - confirming what we saw in EDA.
+```{r}
+plot(model1, which=2)
 ```
 
 
 ## Diagnosing the problem
-Diagnostic plots of the model are essential for checking model fit. 
-* Heavy-tailed data leads to large residuals and large deviations on the QQplot
+Diagnostic plots of the model are essential for checking model fit. We see that a linear model may not be appropriate for our data. What are our options?
 
 A few tools for heavy-tailed data:
 
-* Transformations (e.g. sqrt(BTWG)) - transforming outcome may fix the skewness, but can make interpretting the model more difficult
-* Bayesian robust regression - change parametric assumption (e.g. t-distribution)
-* Frequentist robust regression - weigh observations differently based on how well behaved these observations are (a form of weighted and reweighted regression)
+* **Transformations** (e.g. sqrt(BTWG)) - transforming outcome may fix the skewness, but can make interpretting the model more difficult
+* **Bayesian robust regression** - change parametric assumption (e.g. t-distribution)
+* **Frequentist robust regression** - weigh observations differently based on how well behaved these observations are (a form of weighted and reweighted regression)
 
 ## Bayesian robust regression in R
+(Will add more on this..)
 Consider the Bayesian approach for robust regression using package `brms`.
 
 * We specify the model using the family, student-t, to describe the response distribution
-    + Student-t has heavier tails compared to the normal distribution. 
+    + Student-t has heavier tails compared to the normal distribution.
     + The heaviness of the tails are specified with the parameter, degrees of freedom, where the larger the degrees of freedom, the closer to normal the distribution becomes
 ```{r, eval=FALSE}
 install.packages("brms", dependencies=TRUE)
 require(brms)
 fit1 <- brm(formula = BWTG ~ GEST+SEX ,
-            data = birth_data, family = student(), cores = 2)
+            data = birth_data_2016, family = student(), cores = 2)
 ```
 
 
 ## Robust regression in R
-We will explore the frequentist version of robust regression using the function, `rlm`, in `MASS` package. 
+We explore robust regression with `rlm` in `MASS` package.
+
+*  This is a form of reweighted least squares - specifically the M-estimation with Huber weighting.
+*  The model estimation becomes:
+ 
+ $$ \sum_{i=1}^n w_i(y_i–x_i^\prime \beta)x_i^\prime=0 $$
+ where $w_i$ are the weights that depend on residuals.
+ 
+ $$ w_i = 
+ \begin{cases}
+ 1 & |e_i| <= k\\
+ \frac{k}{|e_i|} &  |e_i| > k
+ \end{cases}
+ $$
+
+ * We therefore solve this model with Iteratively Reweighted Least Squares (IRLS), where the coefficients at each iteration $j$ are: 
+ 
+$B_j=[X^\prime W_{j−1}X]^{-1} X^\prime W_{j-1} Y$
+ 
+## Robust regression in R 
+We fit the same regression using the `rlm` function. How do the estimated coefficients compare to the linear model?
 
 ```{r}
 library(MASS)
-fit2 <- rlm(BWTG ~ GEST+SEX, data = birth_data)
+fit2 <- rlm(BWTG ~ GEST+SEX, data = birth_data_2016)
 summary(fit2)
+
 ```
+
+## Visualizing model fits
+Does `rlm` seem to improve the model fit?
+  * `rlm` adjusts for outliers, but will not fix the non-constant variance
+
+```{r, warning=FALSE}
+#Plot data with regression fits on top - 
+#will only select first two coefficients that correspond to intercept and gestational age
+plot(y=birth_data_2016$BWTG, x=birth_data_2016$GEST)
+abline(model1, lty=2, col=2, lwd=2)
+abline(fit2, lty=3, col=3, lwd=2)
+```
+
 
 ## Understanding resulting weights
 `rlm` works by reweighting the observations with large residuals. Let's look at the observations with the largest and smallest weights. What do you notice about the data and the residuals?
 
 ```{r}
-fit2_weights = data.frame(bwt = birth_data$BWTG, gest = birth_data$GEST, resid=fit2$resid, weight=fit2$w)
+fit2_weights = data.frame(bwt = birth_data_2016$BWTG, gest = birth_data_2016$GEST, resid=fit2$resid, weight=fit2$w)
 fit2_weights[order(fit2$w)[c(1:5, (length(fit2$w)-5):length(fit2$w))],]
 ```
 

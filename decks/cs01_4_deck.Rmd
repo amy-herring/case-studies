@@ -83,3 +83,10 @@ The assumptions are needed to infer causal estimands in observational studies. S
 
  1. Average Treatment Effect (ATE):   $$ \tau = E[Y_i(1) - Y_i(0)]$$
  2. Average Treatment Effect of the Treated (ATT): $$ \tau = E[Y_i(1) - Y_i(0)| W_i=1]$$
+
+
+## Quick start to using causal inference
+In oberservational studies, we must adjust for the measured confounding. Propensity score methods are the most commonly used tools that include:
+  1. Regression
+  2. Matching
+  3. Weighting
