@@ -5,7 +5,6 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-setwd("~/Desktop/factbook/rankorder")
 ```
 
 # How to Obtain Data Frames From CIA Factbook
@@ -13,7 +12,7 @@ First, you will need to obtain the factbook from https://www.cia.gov/library/pub
 
 ## Option 1: Rank Order Txt Files
 Your first option is using the rank order section of the factbook which has txt files for each variable. However, the significant drawnback of this is that it only has one value for each country, i.e. you cannot use it to obtain a variable such as population structure since it has multiple values for each country. 
-
+`
 - Remember to give your columns names.
 - To find the corresponding number for each variable, e.g. 2119 for population, you use the "rankorderguide.html" and click on your desired variable. Then in the address bar at the top of the screen you can see the correct number for it.
 - You may need to delete columns/clean the data to obtain the correct format.
@@ -21,23 +20,24 @@ Your first option is using the rank order section of the factbook which has txt 
 Note: You will need to iterate this process for all desired variables & merge the data sets to replicate the full.RData file. 
  
 ```{r}
+library(tidyverse) # We will be importing our data using the tidyverse library
+
 # insert country codes
 cia_ctr <- read.csv("countries.csv", header = TRUE)
 cia_ctr <- cia_ctr[,1:2]
 
 # population Data
-popDF <- read.delim("factbook/rankorder/rawdata_2119.txt", header = FALSE, col.names = c("", "country","pop"))
+popDF <- read_delim("factbook/rankorder/rawdata_2119.txt", delim = "\t", col_names = c("X1", "country","pop"), col_types = list(col_integer(), col_character(), col_number()))
+# Hint: you may want to also explore the read_table function for your homework
 popDF <- popDF[,-1] # remove blank column
-popDF$pop <- as.numeric(gsub(",", "", popDF$pop))
-popDF <- merge(cia_ctr, popDF, by.x="Entity", by.y = "country") #remove commas, so it can be converted to numeric
+popDF <- merge(cia_ctr, popDF, by.x="Entity", by.y = "country") 
 popDF <- popDF[,2:3]
 names(popDF) <- c("ctry", "pop")
 save(popDF, file="popDF.RData")
 
 # Infant Mortality Data 
-infMortDF <- read.delim("factbook/rankorder/rawdata_2091.txt", header = FALSE, col.names = c("", "country","infMort", ""))
-infMortDF <- infMortDF[,-c(1,4)]
-save(infMortDF, file="infMortDF.RData")
+infMortDF <- read_delim("factbook/rankorder/rawdata_2091.txt", delim = "\t", col_names = c("X1", "country","infMort"), col_types = list(col_integer(), col_character(), col_number()))
+infMortDF <- infMortDF[,-1]
 infMortDF <- merge(cia_ctr, infMortDF, by.x="Entity", by.y = "country")
 infMortDF <- infMortDF[,2:3]
 names(infMortDF) <- c("ctry", "infMort")

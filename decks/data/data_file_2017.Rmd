@@ -5,7 +5,7 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-setwd("~/Desktop/factbook/rankorder")
+setwd("~/Desktop/factbook")
 ```
 
 # How to Obtain Data Frames From CIA Factbook
@@ -22,13 +22,12 @@ Your first option is using the rank order section of the factbook which has txt 
 
 setwd("~/Desktop/factbook/rankorder")
 
-pop_dta <- read.delim("rawdata_2119.txt", header = FALSE, col.names = c("", "country","pop"))
-pop_dta <- pop_dta[,-1] # remove blank column
-pop_dta$pop <- as.numeric(gsub(",", "", pop_dta$pop)) #remove commas, so it can be converted to numeric
+pop_dta <- read_table("rawdata_2119.txt", col_names = c("X1", "country","X3", "X4", "pop"))
+pop_dta <- pop_dta[,-c(1,3,4)] # remove blank columns
 save(pop_dta, file="pop_data.RData")
 
-IM_dta <- read.delim("rawdata_2091.txt", header = FALSE, col.names = c("", "country","infMort", ""))
-IM_dta <- IM_dta[,-c(1,4)]
+IM_dta <- read_table("rawdata_2091.txt", col_names = c("X1", "country","X3", "X4", "infMort"))
+IM_dta <- IM_dta[,-c(1,3,4)]
 save(IM_dta, file="IM_data.RData")
 ```
 ## Option 2: Field HTML Files
