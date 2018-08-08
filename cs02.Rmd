@@ -16,7 +16,7 @@ library(tidyverse)
 - create interactive visual presentations using Tableau
 
 # Case Study Goals
-Using data from the World Bank or a complex data source of your own choosing, 
+Using data from the World Bank, CIA Factbook, or a complex data source of your own choosing, 
 - create a Shiny app in R to illustrate an aspect of our world in data
 - create an accompanying Tableau dashboard interactive visual presentation of our world in data
 
