@@ -81,10 +81,10 @@ Your final grade will be comprised of the following:
 
 |Component | % of Grade |
 | ----------    | -----------------  |     
-|Individual exercises      | 5% |
-|Group exercises       | 10% |
+|Individual exercises      | 10% |
+|Group exercises       | 15% |
 |Group case studies            | 60% |
-|Individual case study        | 25% |
+|Individual case study        | 15% |
 
 Class attendance is a firm expectation; frequent absences or late arrivals are a legitimate cause for grade reduction.
 

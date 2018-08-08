@@ -108,7 +108,7 @@ Census$cp.relig.full <- Census$cp.evang.full + Census$cp.mormon.full
 Census$cp.kerry.full <-  Statelevel$kerry.04[Census$cstate.initnum]
 ```
 
-### Step 6: Fitting our individual-level regression model.
+## Step 6: Fitting Individual-level Regression Model
 
 Now we are ready to fit a regression model for an individual survey response on gay marriage rights given demographics and geography, i.e. each individual's response will be a function of their demographics and state. We'll denote each individual as *i* with indices *j, k, l, m, s,* and *p* for race-gender combination, age category, education category, region, state, and poll respectively, and including an age-education interaction. More specifically, we denote $y_i$ as 1 for supporters of same-sex marriage and 0 for opponents and those with no opinion. Remember that since we're modeling a binary variables we ought to use logistic regression, and thus our model will be as follows:
 
@@ -153,7 +153,7 @@ state.ranefs[,1][is.na(state.ranefs[,1])] <- 0 #set states with missing REs (b/c
 
 This logistic regression gives the probability that any adult will support same-sex marriage given the person’s sex, race, age, education, and state.
 
-### Step 7: Poststatify the demographic-geographic types
+### Step 7: Poststatify the Demographic-Geographic Types
 
 To complete this method, we need to compute a weighted average of the probabilities from the logistic regression to estimate the proportin of same-sex marriage supporters in each state. First, need to create a prediction for each demographic-state combination (each cell in Census data):
 
@@ -191,7 +191,7 @@ statepred
 
 This result is a set a state-level opinion estimates that you could use to help make predictions regarding the election. 
 
-### Bayesian Model
+## Bayesian Model
 We could also implement this model using Stan which allows for quantifying model uncertainity. The model specification will be the same our other section, except for some weakly informative priors on the standard deviations of the varying intercepts useful for convergence.
 
 ```{r, eval=FALSE, cache = TRUE}
