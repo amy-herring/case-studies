@@ -213,11 +213,33 @@ We can estimate causal effects using stratification of the propensity score (sim
  $$ \hat{\tau}^{\text{ATE}} = \sum_{k=1}^K \{(\bar{Y}_{k,1} - \bar{Y}_{k,0})\}\frac{N_{k,1}+N_{k,0}}{N} $$
  where $N_{k,1}, N_{k,0}$ are the number of units in class $k$ under treated and control.
 
+Variance Estimation:
+$$ \mathbb{V}(\hat{\tau}) = \sum_{k=1}^K \{\mathbb{V}(\bar{Y}_{k,1}) - \mathbb{V}(\bar{Y}_{k,0})\}(\frac{N_{k,1}+N_{k,0}}{N})^2 $$
+ 
+
 ## Stage 2: Matching
 In propensity score matching, the distance metric between observations is the estimated propensity score.
 
-We can use the `Matching` package in R.
-```{r, }
+  * Idea is to find a treated and control patient with very similar propensity scores 
+  * do this for all treated patients and then find the average difference of their outcome
+
+We can use the `Matching` package in R. Just input the outcome, treated variable, and estimated propensity score. 
+```{r, message=FALSE}
 library(Matching)
+match1 <- Match(Y=birth_data_overlap$BWTG, Tr = birth_data_overlap$smoke_LT, X = ps_overlap, version='fast', estimand="ATE")
+summary(match1)
+```
+
+We then can check the resulting balance between treated and control across covariates with `MatchBalance`
+```{r, eval=FALSE}
+mb <- MatchBalance(smoke_LT ~ PARITY+GEST+MAGE+as.factor(MRACER)+ as.factor(MHISP), data= birth_data_overlap,match.out=match1)
 ```
  
+ 
+## Exercises:
+1. Estimate the ATE and variance using stratification.
+
+  * Be sure to check balance after fitting propensity score model
+2. How does that compare to the ATE from Matching?
+3. What conclusions can we draw from 3rd trimester smoking?
+4. Redo analysis with treatment defined as any trimester smoking.
