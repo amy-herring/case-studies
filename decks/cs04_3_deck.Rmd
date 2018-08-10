@@ -1,0 +1,44 @@
+---
+title: Poststratification
+output: 
+  revealjs::revealjs_presentation:
+    theme: night
+    highlight: espresso
+    center: true
+    transition: none
+    css: styles.css
+    fig_caption: true
+    reveal_options:
+      progress: true
+      slideNumber: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Why Use Poststratification?
+
+- Sometimes we would like to stratify on a key variable, e.g. gender, but cannot place the units into their correct strata until the units are sampled. For example, in aggregate polling data we cannot determine if an individual is male or female until after they've been polled. 
+- So, we'll use poststratification, or stratification after the selection of a sample, to handle this type of data
+- We can also use poststratification if the sample is not representative of the population such as when we have nonresponse bias. 
+- In general poststratification is used to obtain more precise estimates of sample statistics in survey data.
+
+## How It Works - Population Distribution
+The first step in poststratification is knowing the ratio of the candidate stratum. In more simple terms, we want to know the distribution of our variable within the population, e.g. what proportion of individuals in North Carolina are African American. We will denote this as $\frac{N_h}{N}$ where $N_h$ is the number of individuals in that stratum, and N is the totally number of individuals in the populations.
+
+## How It Works - Poststratifying
+Once we know the distribution of the candidate stratum, we can move onto poststratifying. Essentially, what we are going to do is a weighted sum where the weights are the population proportions. For example, suppose our variable of interest is gender:
+
+\[
+\bar{y}_{poststrat.} = \frac{N_{female}}{N}\cdot \bar{y}_{female} + \frac{N_{male}}{N}\cdot \bar{y}_{male}
+\]
+
+which would yield our new sample mean of the stratified data. 
+
+## Example With Code
+See the end of the Multi-Level Regression and Poststratification Tutorial for a more concrete example with code included.
+
+## Further Reading & Resources
+- https://msu.edu/~barbozag/Web/poststrat.pdf
+- https://onlinecourses.science.psu.edu/stat506/node/29/ 
