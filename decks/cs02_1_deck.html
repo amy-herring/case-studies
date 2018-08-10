@@ -652,10 +652,13 @@ world =<span class="st"> </span><span class="kw">map</span>(<span class="dt">dat
 latlonCtry =<span class="st"> </span><span class="kw">merge</span>(latlonDF, codeMapDF, <span class="dt">by.x =</span> <span class="st">&quot;code&quot;</span>, <span class="dt">by.y =</span> <span class="st">&quot;iso&quot;</span>, <span class="dt">all =</span> <span class="ot">FALSE</span>)
 IMpopCtry =<span class="st"> </span><span class="kw">merge</span>(IMPop, codeMapDF, <span class="dt">by.x=</span><span class="st">&quot;ctry&quot;</span>, <span class="dt">by.y =</span> <span class="st">&quot;cia&quot;</span>, <span class="dt">all=</span><span class="ot">FALSE</span>)
 allCtryData &lt;-<span class="st"> </span><span class="kw">merge</span>(latlonCtry, IMpopCtry, <span class="dt">by=</span><span class="st">&quot;name&quot;</span>)
+<span class="kw">names</span>(allCtryData)[<span class="dv">1</span>] &lt;-<span class="st"> &quot;Country&quot;</span>
+<span class="kw">save</span>(allCtryData, <span class="dt">file =</span> <span class="st">&quot;data/allCtryData.RData&quot;</span>)
+
 
 <span class="co"># Check Data</span>
 allCtryData[allCtryData<span class="op">$</span>ctry <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;CH&quot;</span>, <span class="st">&quot;SZ&quot;</span>, <span class="st">&quot;GB&quot;</span>, <span class="st">&quot;UK&quot;</span>), ]</code></pre></div>
-<pre><code>##               name code iso.3166.country latitude longitude cia ctry
+<pre><code>##            Country code iso.3166.country latitude longitude cia ctry
 ## 43           China   CN               CN       35    105.00  CH   CH
 ## 70           Gabon   GA               GA       -1     11.75  GB   GB
 ## 186    Switzerland   CH               CH       47      8.00  SZ   SZ

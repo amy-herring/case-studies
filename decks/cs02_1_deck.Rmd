@@ -223,6 +223,9 @@ load("data/codeMapDF.RData")
 latlonCtry = merge(latlonDF, codeMapDF, by.x = "code", by.y = "iso", all = FALSE)
 IMpopCtry = merge(IMPop, codeMapDF, by.x="ctry", by.y = "cia", all=FALSE)
 allCtryData <- merge(latlonCtry, IMpopCtry, by="name")
+names(allCtryData)[1] <- "Country"
+save(allCtryData, file = "data/allCtryData.RData")
+
 
 # Check Data
 allCtryData[allCtryData$ctry %in% c("CH", "SZ", "GB", "UK"), ]
