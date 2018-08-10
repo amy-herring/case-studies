@@ -59,18 +59,25 @@ Worldmapper http://archive.worldmapper.org/display.php?selected=261 created a vi
 ![2002 Contributions to Worldwide Infant Mortality](figures/mort_scale.png) 
 
 
+##Mapping Infant Mortality
+
+In order to create our map of infant mortality around the world, we will need to identify the following data.
+
+- Infant mortality data for time period of interest by country
+- Country mapping information and link to infant mortality data
+
 ## Extracting Latitude and Longitude of Country Centroids
 
-First, we'll want to obtain our latitude and longitude information.
+First, we will obtain latitude and longitude information for the center of each country. We can then link that to infant mortality rates for each country.
 
-```{r}
+```{r readlatlong}
 latlonDF <-read.csv("http://dev.maxmind.com/static/csv/codes/country_latlon.csv")
 ```
 
 ## Population & Infant Mortality Data
-The data files for population and infant mortality are available on the course website. For those of you interested in how to extract this information from the CIA factbook - see the tutorial on the course website.
+The data files for population and infant mortality in 2014 are available on the course website. For those of you interested in how to extract this information from the CIA factbook - see the tutorial on the course website. (Hint, hint: you may want to extract 2017 data soon!)
 
-```{r}
+```{r loadpopmort}
 load("data/popDF.RData")
 load("data/infMortDF.RData")
 ```
@@ -78,38 +85,43 @@ load("data/infMortDF.RData")
 
 ## Merging the Demographic Data
 
-First we'll combine the demographic data since these come from the same source and consequently should have fewer problems with matching. 
+First we'll combine the demographic data on infant mortality and population size because these come from the same source and consequently should have fewer problems with matching. 
 
-```{r}
+```{r mergepopmort}
 IMPop = merge(infMortDF, popDF, by = "ctry", all = FALSE)
 ```
 
 
-## Exercise Q.1
+## Missed Merges
 
-In the merge of infMortDF and popDF in Section 11.3 some rows in each data frame were excluded from the resulting data frame. Determine which rows in each data frame did not find a match in the other. 
+In the merge of infMortDF and popDF, some rows were excluded from the resulting data frame. Determine which rows in one data frame did not find a match in the other. 
 
-All the countries in infant mortality are also in the population data set.
-```{r}
+Check to see if all countries in the infant mortality dataset are also in the population size dataset:
+```{r mortinpop}
 which((!infMortDF$ctry %in% popDF$ctry))
 ```
-The following countries were in the population data set, but not the infant mortality data set:
-```{r}
+
+## Missed Merges
+
+Which countries are in the population data set but not the infant mortality data set?
+```{r popinmort}
 popDF$ctry[which((!popDF$ctry %in% infMortDF$ctry))]
 ```
+<small>Appendix D of the CIA World Factbook contains country codes: AX (Akrotiri, a special UK overseas territory near Cyprus), KT (Christmas Island), CK (Cocos/Keeling Islands), UC (Curacao), DX (Dhekelia, see AX), FK (Falkland Islands), VT (Vatican City) , KV (Kosovo), MJ (Montenegro), NE (Niue), NF (Norfolk Island), PC (Pitcairn Islands), TB (St. Barthelemy), RN (St. Martin), SV (Svalbard), TL (Tokelau)</small>
 
 ## Merging the geographic and demographic data sets
 
-```{r}
+```{r mergegeodemo}
 latlonDF$code <- latlonDF$iso.3166.country
 allCtryData = merge(IMPop, latlonDF, by.x = "ctry", by.y = "code", all = FALSE)
 ```
 
 
-## Initial Plot - The Colors
-First, we'll begin by selecting the colors for our plot. We'll select only 5 col- ors, and consequently 5 levels of mortality, because it’s difficult for our eyes to distinguish between more than 5 to 7 colors.
 
-```{r}
+## Initial Plot - The Colors
+First, we'll begin by selecting the colors for our plot. We'll select only 5 colors, and consequently 5 levels of mortality, because it’s difficult for our eyes to distinguish among more than 5 to 7 colors.
+
+```{r pickcolors}
 library(RColorBrewer)
 #display.brewer.all()
 cols = brewer.pal(9, "YlOrRd")[c(1, 2, 4, 6, 7)]
@@ -117,32 +129,60 @@ cols = brewer.pal(9, "YlOrRd")[c(1, 2, 4, 6, 7)]
 
 
 ## Initial Plot - Categorizing Infant Mortality
-Next, we'll need to categorize infant mortality so that it can be connected to a color. 
-```{r}
-# Equally Divide the Range - too many in the lower range
+Next, we'll need to categorize infant mortality rate so that it can be connected to a color. 
+```{r splitmortequalwidth}
+# Equally Divide the Range by Width 
 newInfMort = cut(allCtryData$infMort, breaks = 5)
 summary(newInfMort)
 ```
+Hmm, the good news is that the right tail is not very fat. However, this may not be a great choice for displaying the data.
 
-## Initial Plot Continued
-We want our colors to be more evenly distributed than they are based on the default. So, we'll create a histogram and set cut-points based on it.
-```{r, fig.asp=0.5}
+## Categorizing Mortality Rate
+We want our colors to be more evenly distributed than they are based on the default. One option is to put 20% of the data in each color group, though that may lead to cutpoints at odd locations. 
+```{r quintiles}
+quantile(allCtryData$infMort, probs = seq(0, 1, by = 0.2))
+
+```
+Another drawback of quintiles is that we may not want to focus on countries with lower rates, instead isolating the very high risk countries.
+
+## Categorizing Mortality Rate
+ Another option is to look at a histogram and pick cutpoints based on easy references that further isolate the right tail.
+```{r hist, out.width='55%'}
 hist(allCtryData$infMort, breaks = 20, main = "",
      xlab = "Infant Mortality per 1000 Live Births")
 ```
 
-## Initial Plot Continued
-Now, we can finially make our cuts.
-```{r}
-quantile(allCtryData$infMort, probs = seq(0, 1, by = 0.2))
+## Categorizing Mortality Rate
+```{r newcut}
 InfMortDiscrete = cut(allCtryData$infMort,
-                      breaks = c(0, 10, 25, 50, 75, 150))
+                      breaks = c(0, 10, 25, 50, 75, 125))
+summary(InfMortDiscrete)
 ```
 
-## Initial Plot - The Plot
-Finally, we're going to create our plot.
+## Communicating Affected Lives
 
-```{r, eval=FALSE}
+The infant mortality rate is not the only factor in decision-making. We are more likely to intervene when more lives are at risk. Let's examine population size.
+
+```{r pophist, out.width='55%'}
+hist(allCtryData$pop, breaks = 20, main = "",
+     xlab = "Population Size")
+```
+There's a high variance!  Let's try scaling by taking the square root.
+
+
+## Population Size
+
+```{r pophistsqrt, out.width='55%'}
+hist(sqrt(allCtryData$pop), breaks = 20, main = "",
+     xlab = "sqrt(Population Size)")
+```
+
+That's much better. We'll work with some transformation of square root of population size (further scalng to be sure the radius of each point is not too large for our plot).
+
+## Initial Plot 
+Now we are ready to plot the mortality rates around the world. Size of the points will be a function of population size, while color will be a function of the mortality rate (darker=higher).
+
+```{r showcode, eval=FALSE}
 # Create map
 library(maps)
 world = map(database = "world", fill = TRUE, col="light grey")
@@ -157,9 +197,9 @@ legend(x = -150, y = 0, title = "Infant Mortality",
        legend = levels(InfMortDiscrete), fill = cols, cex = 0.8)
 ```
 
-## Initial Plot - The Plot
+## Infant Mortality Worldwide
 
-```{r, echo=FALSE, warning=FALSE}
+```{r showplot, out.width='70%',echo=FALSE, warning=FALSE}
 # Create map
 library(maps)
 world = map(database = "world", fill = TRUE, col="light grey")
@@ -174,10 +214,15 @@ legend(x = -150, y = 0, title = "Infant Mortality",
        legend = levels(InfMortDiscrete), fill = cols, cex = 0.8)
 ```
 
-## Initial Plot - Correcting Radius Size
-Unfortunately, our choice for the radius has some difficulties because the range of population huge. The small countries have symbols that are so tiny that we can barely see them, if at all, and we certainly can’t see their colors. We will fix this by having a minimum radius, so any country with a population below a certain value is still visible. 
+<small>Hmm, what's wrong with this picture?</small>
 
-```{r, eval=FALSE}
+
+
+
+## Correcting Radius Size
+The small countries have symbols that are so tiny that we can barely see them, if at all, and we certainly can’t see their colors (check out the Caribbean).  We will fix this by having a minimum radius, so any country with a population below a certain value is still visible. 
+
+```{r radiustweakcode, eval=FALSE}
 # Set minimum radius size
 rads = pmax(sqrt(allCtryData$pop)/4000, 1)
 
@@ -190,9 +235,9 @@ legend(x = -150, y = 0, title = "Infant Mortality",
        legend = levels(InfMortDiscrete), fill = cols, cex = 0.8)
 ```
 
-## Initial Plot - Correcting Radius Size
+## Correcting Radius Size
 
-```{r, echo=FALSE}
+```{r radiustweakplot, echo=FALSE}
 # Set minimum radius size
 rads = pmax(sqrt(allCtryData$pop)/4000, 1)
 # Fix Discs
@@ -204,18 +249,32 @@ legend(x = -150, y = 0, title = "Infant Mortality",
        legend = levels(InfMortDiscrete), fill = cols, cex = 0.8)
 ```
 
-## Initial Plot - What's Wrong?
-Looking at our plot we can see that something is very wrong! Some European countries have much higher population and mortality rates than we'd expect. In particular,  Switzerland and Great Britain seem abnormal.
+## Further Corrections
+Looking at our plot we can see that something is still very wrong! Some European country has a huge radius. China's population size is also incorrect, and does Russia really have no infant mortality?
 
-```{r}
-allCtryData[ allCtryData$ctry %in% c("CH","GB"), ]
+We probably made an error in the merge step somehow. Here was our code.
+
+```{r mergeshow,  eval=FALSE}
+latlonDF$code <- latlonDF$iso.3166.country
+allCtryData = merge(IMPop, latlonDF, by.x = "ctry", by.y = "code", all = FALSE)
 ```
 
+For the latitude/longitude files, we used ISO 3166 country codes, set by the International Organization for Standardization. Did the CIA Factbook use the same codes?
 
 
-## Exercise Q.2: Corrected Data Merging
+## Merging by Country Name
 
-We will use the codeMapDF to correct the merging issue and create the correct map.
+```{r mergecheck}
+allCtryData[ allCtryData$ctry %in% c("CH","GB","RS","NI"), ]
+```
+
+- See any problems?  You can check lat/long by entering the coordinates in Google Maps
+- Also, you can see the crosswalk at https://www.cia.gov/library/publications/the-world-factbook/appendix/appendix-d.html 
+
+
+## Corrected Data Merging
+
+The R data frame codeMapDF (extracted from the CIA factbook) contains the crosswalk between the CIA and ISO country coding and can be used to conduct a corrected merge of the data.
 
 ```{r}
 # Fix Data Merging
@@ -224,11 +283,11 @@ latlonCtry = merge(latlonDF, codeMapDF, by.x = "code", by.y = "iso", all = FALSE
 IMpopCtry = merge(IMPop, codeMapDF, by.x="ctry", by.y = "cia", all=FALSE)
 allCtryData <- merge(latlonCtry, IMpopCtry, by="name")
 names(allCtryData)[1] <- "Country"
-save(allCtryData, file = "data/allCtryData.RData")
-
+save(allCtryData, file="data/allCtryData.RData") # save for Tableau tutorial
 
 # Check Data
-allCtryData[allCtryData$ctry %in% c("CH", "SZ", "GB", "UK"), ]
+allCtryData[allCtryData$ctry %in% c("CH", "SZ", "GB", "UK", "NU","NI","RI","RS"), 
+            c(1,6,10,4,5,8,9)]
 
 ```
 ## Fixing Map 
@@ -259,9 +318,9 @@ legend(x = -150, y = 0, title = "Infant Mortality",
        legend = levels(InfMortDiscrete), fill = cols, cex = 0.8)
 ```
 
-## Bonus: Exercise Q.3
-Remake the map in Figure 11.6 to include the countries for which there is latitude and longitude, even if there is no demographic information. 
-```{r}
+## In case you're curious!
+This map includes the countries for which there is latitude and longitude, even if there is no demographic information. 
+```{r newmap1}
 # Remerge the data
 allCtryData <- merge(latlonCtry, IMpopCtry, by="name", all.x=TRUE, all.y =FALSE)
 
@@ -279,8 +338,8 @@ for(i in 1:length(rads)){
 
 ```
 
-## Q.3: The New Map
-```{r}
+## Revised Map
+```{r newmap2, out.width='60%'}
 world = map(database = "world", fill = TRUE, col="light grey")
 symbols(allCtryData$longitude, allCtryData$latitude, add = TRUE,
         circles= rads, inches = FALSE,
@@ -288,6 +347,5 @@ symbols(allCtryData$longitude, allCtryData$latitude, add = TRUE,
 legend(x = -150, y = 0, title = "Infant Mortality",
        legend = levels(InfMortDiscrete), fill = cols, cex = 0.8)
 ```
-
 
 
