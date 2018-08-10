@@ -36,6 +36,8 @@ Cheating or plagiarism on assignments, lying about an illness or absence and oth
 
 Please review the Academic Dishonesty policies <a href="https://studentaffairs.duke.edu/conduct">here</a>. 
 
+- Several datasets we are privileged to use in class are confidential and cannot be distributed more broadly. Further dissemination of such datasets, made available on Sakai, will be considered a violation of the Duke Community Standard. If you are unsure whether you can use a dataset for purposes beyond STA 440, please ask me.
+
 - Much of the work assigned in class is collaborative. The individual case study must be completed independently. In addition, regular assessments must be completed individually before they are tackled by the group. 
 
 **Referencing code:** The web contains an enormous volume of code that you may find useful. You are welcome to make use of any online resources (e.g. StackOverflow), but you must explicitly cite your sources. Any recycled code that is discovered and is not explicitly cited will be treated as plagiarism. On the individual case study you may not directly share code with another student in this class, and on team assignments you may not share code with another team in this class (you are welcome to discuss the problems together and ask for advice, but you may not send or make use of code from another team). 
@@ -79,14 +81,14 @@ Your final grade will be comprised of the following:
 
 |Component | % of Grade |
 | ----------    | -----------------  |     
-|Individual exercises      | 5% |
-|Group exercises       | 10% |
+|Individual exercises      | 10% |
+|Group exercises       | 15% |
 |Group case studies            | 60% |
-|Individual case study        | 25% |
+|Individual case study        | 15% |
 
 Class attendance is a firm expectation; frequent absences or late arrivals are a legitimate cause for grade reduction.
 
-Cumulative numerical averages of 90 - 100 are guaranteed at least an A-, 80 - 89 at least a B-, and 70 - 79 at least a C-, however the exact ranges for letter grades will be determined at the end of the semester. The more evidence there is that the class is performing at the highest level, the more generous the curve will be.
+Cumulative numerical averages of 90 - 100 are guaranteed at least an A-, 80 - 89 at least a B-, and 70 - 79 at least a C-; however, the exact ranges for letter grades will be determined at the end of the semester. The more evidence there is that the class is performing at the highest level, the higher the grade distribution will be.
 
 The grade for each group case study submission will be based on two components: (1) an overall score assigned to the work submitted, and (2) individual contribution to the work (as assessed by team members on Spliddit). Each team member's grade on each submission $s=1,\ldots,S$ will be determined by taking the total number of team points available (points $P_s$ available for the assignment multiplied by $N$, the number of team members) and assigning them proportionately to team members' assessments of the division of work.  
 

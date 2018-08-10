@@ -1,6 +1,18 @@
 ---
-title: "Multi-Level Regression and Poststratification Tutorial"
-output: html_document
+title: Multilevel Regression and Poststratification
+output: 
+  revealjs::revealjs_presentation:
+    theme: night
+    highlight: espresso
+    center: true
+    transition: none
+    css: styles.css
+    fig_caption: true
+    reveal_options:
+      progress: true
+      slideNumber: true
+      
+  
 ---
 
 ```{r setup, include=FALSE}
@@ -13,18 +25,18 @@ library(rstan)
 #library(cowplot)
 ```
 
-### Introduction
+## Introduction
 
-It is often of interest to researchers to look into state-level opinion, in addition to or instead of national-level opinions prior to elections. However, finding surveys that are uniform across all or most states is extremely challenging. One method of estimating state-level opinion using national survey data is called **multilevel modeling with poststratification**. This method begins by using multilevel regression to model individual survey responses as a function of demographic and geographic predictors. Then doing poststratification, in which the estimates for each demographic-geographic respondent type are weighted (poststratified) by the percentages of each type in the actual state populations.
+It is often of interest to researchers to consider state-level opinion, in addition to/instead of national-level opinion. Finding surveys that are uniform across all or most states is extremely challenging. One method of estimating state-level opinion using national survey data is called **multilevel modeling with poststratification**. This method begins by using multilevel regression to model individual survey responses as a function of demographic and geographic predictors. Then doing poststratification, in which the estimates for each demographic-geographic respondent type are weighted (poststratified) by the percentages of each type in the actual state populations.
+
+## Tutorial
+
+This tutorial draws heavily on Jonathan Kastellec's [MrP primer](http://www.princeton.edu/~jkastell/mrp_primer.html). You may find the paper at their website useful in addition to the shorter version presented here.  First, download all three datasets at the link.
+
+## Add a Few More R Packages
 
 
-In this tutorial, we will be going to through a tutorial for implementing this method, and then explore a Bayesian version of it.
-
-### The Data
-
-Obtain the three data sets from the following link: [MRP Primer](http://www.princeton.edu/~jkastell/mrp_primer.html)
-
-```{r}
+```{r morepackages}
 # importing packages
 
 library("arm")
@@ -32,48 +44,49 @@ library("foreign")
 ```
 
 
-### Step 1: Gather National Opinion Poll(s)
+## Step 1: Gather National Opinion Poll(s)
 
-These polls should include some respondent demographic information and some type of geographic indicator such as state. In this tutorial we'll be using the "gay_marriage_megapoll.dta" set which contains five national polls that were conducted in 2004.
+These polls should include some respondent demographic information and some type of geographic indicator such as state. In this tutorial we'll be using the "gay_marriage_megapoll.dta" data, which contain results from five national polls that were conducted in 2004.
 
-### Step 2: If necessary, recode these polls so that they can be combined into a single internally-consistent dataset.
+## Step 2: Create a Single Internally-consistent Dataset.
 
 For this step, you may rename columns so that the data sets can be merged properly. For our dataset this has already been completed.
 
-```{r}
+```{r gaymarrdata}
 #read in megapoll and attach
 # Note: replace with the location of the file on your local computer
 marriage.data <- read.dta("data/gay_marriage_megapoll.dta",
-          convert.underscore = TRUE) #convert variables names with underscores to periods
+          convert.underscore = TRUE)
+#(convert variables names with underscores to periods)
 
 ```
 
-### Step 3: Create A Separate Dataset of State-Level Predictors
+## Step 3: Create Dataset of State-Level Predictors
 
-We may wish to model state-level effects in our multilevel regression. To do this we will use state-level predictiors, e.g. region/state-level demographics. This will reduce the unexplained group level variation. In this tutorial, we already have a data set with state-level information in it.
+We may wish to model state-level effects in our multilevel regression. To do this we will use state-level predictiors, e.g. demographics. This will reduce the unexplained group level variation. In this tutorial, we already have a data set with state-level information in it.
 
-```{r}
+```{r statedata}
 #read in state-level dataset
 Statelevel <- read.dta("data/state_level_update.dta",convert.underscore = TRUE)
 Statelevel <- Statelevel[order(Statelevel$sstate.initnum),]
 ```
 
-### Step 4: Collecting census data to enable poststratificaiton
+## Step 4: Collect Census Data to Enable Poststratification
 
-We will need census data to complete the poststratification later in the tutorial. This data must correspond to all individual-level demographic variables included in our model. Ultimately, we need a dataset of the population counts for each demographic-state type, e.g. how many African Americans between 18-25 went to college and reside in North Carolina. For this tutorial, we will use the 5% Public Use Microdata Sample from the 2000 census. 
+We will need census data to complete the poststratification later in the tutorial. These data must correspond to all individual-level demographic variables included in our model. Ultimately, we need a dataset of the population counts for each cluster of interest, e.g. how many African Americans between 18-25 went to college and reside in North Carolina. For this tutorial, we will use the 5% Public Use Microdata Sample from the 2000 census. 
 
-```{r}
+```{r census}
 #read in Census data
 Census <- read.dta("data/poststratification 2000.dta",convert.underscore = TRUE)
 Census <- Census[order(Census$cstate),]
 Census$cstate.initnum <-  match(Census$cstate, Statelevel$sstate)
 ```
 
-### Step 5: Creating Index Variables
+## Step 5: Create Indices
 
 Next we will create index variables so that we can use our individual-level model and in the poststratification step.
 
-```{r}
+```{r indices}
 # Create index variables
 
 #At level of megapoll
@@ -81,9 +94,9 @@ Next we will create index variables so that we can use our individual-level mode
 marriage.data$race.female <- (marriage.data$female *3) + marriage.data$race.wbh# from 1 for white males to 6 for hispanic females
 marriage.data$age.edu.cat <- 4 * (marriage.data$age.cat -1) + marriage.data$edu.cat# from 1 for 18-29 with low edu to 16 for 65+ with high edu
 marriage.data$p.evang.full <- Statelevel$p.evang[marriage.data$state.initnum]# proportion of evangelicals in respondent's state
-marriage.data$p.mormon.full <-Statelevel$p.mormon[marriage.data$state.initnum]# proportion of mormon's in respondent's state
-marriage.data$p.relig.full <- marriage.data$p.evang.full + marriage.data$p.mormon.full# combined evangelical + mormom proportions
-marriage.data$p.kerry.full <- Statelevel$kerry.04[marriage.data$state.initnum]# kerry's % of 2-party vote in respondent's state in 2004
+marriage.data$p.mormon.full <-Statelevel$p.mormon[marriage.data$state.initnum]# proportion of LDS church members in respondent's state
+marriage.data$p.relig.full <- marriage.data$p.evang.full + marriage.data$p.mormon.full# combined evangelical + LDS proportions
+marriage.data$p.kerry.full <- Statelevel$kerry.04[marriage.data$state.initnum]# John Kerry's % of 2-party vote in respondent's state in 2004
 
 #At census level (same coding as above for all variables)
 
@@ -95,7 +108,7 @@ Census$cp.relig.full <- Census$cp.evang.full + Census$cp.mormon.full
 Census$cp.kerry.full <-  Statelevel$kerry.04[Census$cstate.initnum]
 ```
 
-### Step 6: Fitting our individual-level regression model.
+## Step 6: Fitting Individual-level Regression Model
 
 Now we are ready to fit a regression model for an individual survey response on gay marriage rights given demographics and geography, i.e. each individual's response will be a function of their demographics and state. We'll denote each individual as *i* with indices *j, k, l, m, s,* and *p* for race-gender combination, age category, education category, region, state, and poll respectively, and including an age-education interaction. More specifically, we denote $y_i$ as 1 for supporters of same-sex marriage and 0 for opponents and those with no opinion. Remember that since we're modeling a binary variables we ought to use logistic regression, and thus our model will be as follows:
 
@@ -140,7 +153,7 @@ state.ranefs[,1][is.na(state.ranefs[,1])] <- 0 #set states with missing REs (b/c
 
 This logistic regression gives the probability that any adult will support same-sex marriage given the person’s sex, race, age, education, and state.
 
-### Step 7: Poststatify the demographic-geographic types
+### Step 7: Poststatify the Demographic-Geographic Types
 
 To complete this method, we need to compute a weighted average of the probabilities from the logistic regression to estimate the proportin of same-sex marriage supporters in each state. First, need to create a prediction for each demographic-state combination (each cell in Census data):
 
@@ -178,10 +191,10 @@ statepred
 
 This result is a set a state-level opinion estimates that you could use to help make predictions regarding the election. 
 
-### Bayesian Model
+## Bayesian Model
 We could also implement this model using Stan which allows for quantifying model uncertainity. The model specification will be the same our other section, except for some weakly informative priors on the standard deviations of the varying intercepts useful for convergence.
 
-```{r, cache = TRUE}
+```{r, eval=FALSE, cache = TRUE}
 library(rstan)
 library(brms)
 

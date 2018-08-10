@@ -1,0 +1,382 @@
+---
+title: Survival Analysis
+output: 
+  revealjs::revealjs_presentation:
+    theme: night
+    highlight: espresso
+    center: true
+    transition: none
+    css: styles.css
+    fig_caption: true
+    reveal_options:
+      progress: true
+      slideNumber: true
+      
+  
+---
+## Survival Data
+##{.smaller}
+In many studies, the outcome of interest is the amount of time from an initial observation until the occurrence of some event of interest, e.g.
+
+- Time from transplant surgery until new organ failture
+- Time to death in a pancreatic cancer trial
+- Time to first sex
+- Time to menopause
+- Time to divorce
+- Time to receipt of PhD
+
+Typically, the event of interest is called a *failure* (even if it is a good thing). The time interval between a starting point and the failure is known as the *survival time* and is often represented by $t$.
+
+##{.smaller}
+Certain aspects of survival data make data analysis particularly challenging.
+
+- Typically, not all the individuals are observed until their times of failure
+    - An organ transplant recipient may die in an automobile accident before the new organ fails.
+    - A PhD student may withdraw from the program to start a multi-billion dollar health company
+    - Not everyone gets divorced
+    - A pancreatic cancer patient may move to Aitutaki instead of undergoing further treatment
+- In this case, an observation is said to be *censored* at the last point of contact with the patient.
+
+## Study Time and Patient Time
+##{.smaller}
+
+
+```{r studytime, echo=FALSE, fig.cap="", out.width = '80%'}
+knitr::include_graphics("figures/studytime.jpg")
+```
+
+It is important to distinguish between study time and patient time.
+
+- A study may start enrolling patients in September and continue until all 500 patients have been enrolled
+- This is likely to take months or years
+- Time is typically converted to patient time (time between enrollment and failure or censoring) before analysis
+
+## Survival Function
+The distribution of survival times is characterized by the *survival function*, represented by $S(t)$. For a continuous random variable $T$, 
+$$S(t) = Pr(T>t),$$
+and $S(t)$ represents the proportion of individuals who have not yet failed.
+
+The graph of $S(t)$ versus $t$ is called a survival curve. The survival curve shows the proportion of survivors at any given time.
+
+##{.smaller}
+
+```{r Vac, echo=FALSE, fig.cap="Survival of Children in Burkina Faso by Vaccination Status", out.width = '80%'}
+knitr::include_graphics("figures/burkinafaso.pdf")
+```
+
+## Simple Example{.smaller}
+A small study enrolls 10 patients, whose outcomes are below.
+
+```{r echo=FALSE, results='asis'}
+library(knitr)
+Patient <- 1:10
+Time <- c(4.5,7.5,8.5,11.5,13.5,15.5,16.5,17.5,19.5,21.5)
+Type <- c(0,0,1,0,1,0,0,1,0,1)
+table_df <- as.data.frame(cbind(Patient,Time,Type))
+table_df$Type <- ifelse(table_df$Type==0,"Death","Censored")
+names(table_df) <- c("Patient","Event time (x)","Event Type")
+kable(table_df,caption="")
+```
+
+How do we estimate the survival curve for these data?
+
+## Kaplan-Meier Estimate{.smaller}
+Perhaps the most popular estimate of a survival curve is the *Kaplan-Meier* or *product-limit* estimate. This method is actually fairly intuitive.
+
+First, define the following quantities.
+
+- $I_t$: # at risk of failure at time $t$ (i.e., those who did not fail
+before $t$ and those who were not censored before $t$)
+- $d_t$: # who fail at time $t$
+- $q_t = \frac{d_t}{I_t}$: estimated probability of failing at time $t$
+- $S(t)$: cumulative probability of surviving beyond time $t$, estimated as $$\hat{S}(t) = \prod_{t_i \leq t}\Big(1-\frac{d_{t_i}}{I_{t_i}}\Big)$$.
+
+## How is that intuitive?
+At each time $t$, the probability of surviving is just 1 − Pr(failing). Before there are any failures in the data, our estimated $\hat{S}(t)=1$. At the time of the first failure, this probability falls below 1 and is simply one minus the probability of failing at that time, or $1- \frac{\# \text{failures}}{\# \text{at risk of failing}}$.
+
+After the first failure, things get more complicated. At the time of
+the second failure, you can calcuate $1- \frac{\# \text{failures}}{\# \text{at risk of failing}}$, but this # at risk of failing
+doesn’t provide the whole picture, as someone else has already died. In fact, this is the conditional probability of surviving now that you’ve made it past the time of the first failure.
+
+## How is that intuitive?
+$$\hat{S}(t) = \prod_{t_i \leq t}\Big(1-\frac{d_{t_i}}{I_{t_i}}\Big)$$
+
+How do you then calculate the total (unconditional) probability of survival? That is just the product of the probability of surviving past the first failure times the conditional probability of surviving beyond the second failure given that you made it past the first, or
+
+$$\scriptsize{Pr(\text{survived past 1st and 2nd times})}$$
+$$=\scriptsize{Pr(\text{survive past 1st time})Pr(\text{survive past 2nd time| survived past 1st time})} $$
+$$ = \scriptsize{\Big(1-\frac{\text{# failures at time 1}}{\text{# at risk of failing at failure time 1}}\Big)\Big(1-\frac{\text{# failures at time 2}}{\text{# at risk of failing at failure time 2}}\Big)}$$
+
+If someone is censored, they are no longer at risk of failing at the next failure time and are taken out of the calculation.
+
+## Kaplan-Meier (KM) Esimate Example
+##{.smaller}
+$$\hat{S}(t) = \prod_{t_i \leq t}\Big(1-\frac{d_{t_i}}{I_{t_i}}\Big)$$
+
+```{r echo=FALSE, results='asis'}
+library(knitr)
+t <- c(0,4.5,7.5,8.5,11.5,13.5,15.5,16.5,17.5,19.5,21.5)
+Failed <- c(0,1,1,0,1,0,1,1,0,1,0)
+Censored <- c(0,0,0,1,0,1,0,0,1,0,1)
+Left <- rep(NA,11)
+Left[1] <- 10
+St <- rep("NA",11)
+St[1] <- "1"
+table_ex <- as.data.frame(cbind(t,Failed,Censored,Left,St))
+names(table_ex) <- c("t","# Failed(d[t])","# Censored",paste("# Left",expression(I[t+1])),"S(t)")
+kable(table_ex,caption="")
+```
+
+##{.smaller}
+$$\hat{S}(t) = \prod_{t_i \leq t}\Big(1-\frac{d_{t_i}}{I_{t_i}}\Big)$$
+
+```{r echo=FALSE, results='asis'}
+Left[2] <- "9"
+St[2] <- "1-1/10 = 0.9"
+table_ex <- as.data.frame(cbind(t,Failed,Censored,Left,St))
+names(table_ex) <- c("t","# Failed(d[t])","# Censored",paste("# Left",expression(I[t+1])),"S(t)")
+kable(table_ex,caption="")
+```
+
+##{.smaller}
+$$\hat{S}(t) = \prod_{t_i \leq t}\Big(1-\frac{d_{t_i}}{I_{t_i}}\Big)$$
+
+```{r echo=FALSE, results='asis'}
+Left[3] <- "8"
+Left[4] <- 7
+St[2] <- "0.9"
+St[3] <- "0.8"
+St[4] <- "0.8*(1-0/8) = 0.8"
+table_ex <- as.data.frame(cbind(t,Failed,Censored,Left,St))
+names(table_ex) <- c("t","# Failed(d[t])","# Censored",paste("# Left",expression(I[t+1])),"S(t)")
+kable(table_ex,caption="")
+```
+
+##{.smaller}
+$$\hat{S}(t) = \prod_{t_i \leq t}\Big(1-\frac{d_{t_i}}{I_{t_i}}\Big)$$
+
+```{r echo=FALSE, results='asis'}
+Left[3] <- "8"
+Left[4] <- 7
+Left[5] <- 6
+St[2] <- "0.9"
+St[3] <- "0.8"
+St[4] <- "0.8"
+St[5] <- "0.8*(1-1/7) = 0.69"
+table_ex <- as.data.frame(cbind(t,Failed,Censored,Left,St))
+names(table_ex) <- c("t","# Failed(d[t])","# Censored",paste("# Left",expression(I[t+1])),"S(t)")
+kable(table_ex,caption="")
+```
+
+##{.smaller}
+$$\hat{S}(t) = \prod_{t_i \leq t}\Big(1-\frac{d_{t_i}}{I_{t_i}}\Big)$$
+
+```{r echo=FALSE, results='asis'}
+Left[3] <- "8"
+Left[4] <- 7
+Left[5] <- 6
+Left[6] <- 5
+St[2] <- "0.9"
+St[3] <- "0.8"
+St[4] <- "0.8"
+St[5] <- "0.69"
+St[6] <- "0.69"
+table_ex <- as.data.frame(cbind(t,Failed,Censored,Left,St))
+names(table_ex) <- c("t","# Failed(d[t])","# Censored",paste("# Left",expression(I[t+1])),"S(t)")
+kable(table_ex,caption="")
+```
+
+##{.smaller}
+$$\hat{S}(t) = \prod_{t_i \leq t}\Big(1-\frac{d_{t_i}}{I_{t_i}}\Big)$$
+
+```{r echo=FALSE, results='asis'}
+Left[3] <- "8"
+Left[4] <- 7
+Left[5] <- 6
+Left[6] <- 5
+Left[7] <- 4
+St[2] <- "0.9"
+St[3] <- "0.8"
+St[4] <- "0.8"
+St[5] <- "0.69"
+St[6] <- "0.69"
+St[7] <- "0.69*(1-1/5) = 0.552"
+table_ex <- as.data.frame(cbind(t,Failed,Censored,Left,St))
+names(table_ex) <- c("t","# Failed(d[t])","# Censored",paste("# Left",expression(I[t+1])),"S(t)")
+kable(table_ex,caption="")
+```
+
+##{.smaller}
+$$\hat{S}(t) = \prod_{t_i \leq t}\Big(1-\frac{d_{t_i}}{I_{t_i}}\Big)$$
+
+```{r echo=FALSE, results='asis'}
+Left[3] <- "8"
+Left[4] <- 7
+Left[5] <- 6
+Left[6] <- 5
+Left[7] <- 4
+Left[8] <- 3
+St[2] <- "0.9"
+St[3] <- "0.8"
+St[4] <- "0.8"
+St[5] <- "0.69"
+St[6] <- "0.69"
+St[7] <- "0.552"
+St[8] <- "0.552*(1-1/4) = 0.414"
+table_ex <- as.data.frame(cbind(t,Failed,Censored,Left,St))
+names(table_ex) <- c("t","# Failed(d[t])","# Censored",paste("# Left",expression(I[t+1])),"S(t)")
+kable(table_ex,caption="")
+```
+
+##{.smaller}
+$$\hat{S}(t) = \prod_{t_i \leq t}\Big(1-\frac{d_{t_i}}{I_{t_i}}\Big)$$
+
+```{r echo=FALSE, results='asis'}
+Left[3] <- "8"
+Left[4] <- 7
+Left[5] <- 6
+Left[6] <- 5
+Left[7] <- 4
+Left[8] <- 3
+Left[9] <- 2
+St[2] <- "0.9"
+St[3] <- "0.8"
+St[4] <- "0.8"
+St[5] <- "0.69"
+St[6] <- "0.69"
+St[7] <- "0.552"
+St[8] <- "0.414"
+St[9] <- "0.414"
+table_ex <- as.data.frame(cbind(t,Failed,Censored,Left,St))
+names(table_ex) <- c("t","# Failed(d[t])","# Censored",paste("# Left",expression(I[t+1])),"S(t)")
+kable(table_ex,caption="")
+```
+
+##{.smaller}
+$$\hat{S}(t) = \prod_{t_i \leq t}\Big(1-\frac{d_{t_i}}{I_{t_i}}\Big)$$
+
+```{r echo=FALSE, results='asis'}
+Left[3] <- "8"
+Left[4] <- 7
+Left[5] <- 6
+Left[6] <- 5
+Left[7] <- 4
+Left[8] <- 3
+Left[9] <- 2
+Left[10] <- 1
+St[2] <- "0.9"
+St[3] <- "0.8"
+St[4] <- "0.8"
+St[5] <- "0.69"
+St[6] <- "0.69"
+St[7] <- "0.552"
+St[8] <- "0.414"
+St[9] <- "0.414"
+St[10] <- "0.414*(1-1/2) = 0.207"
+table_ex <- as.data.frame(cbind(t,Failed,Censored,Left,St))
+names(table_ex) <- c("t","# Failed(d[t])","# Censored",paste("# Left",expression(I[t+1])),"S(t)")
+kable(table_ex,caption="")
+```
+
+##{.smaller}
+$$\hat{S}(t) = \prod_{t_i \leq t}\Big(1-\frac{d_{t_i}}{I_{t_i}}\Big)$$
+
+```{r echo=FALSE, results='asis'}
+Left[3] <- "8"
+Left[4] <- 7
+Left[5] <- 6
+Left[6] <- 5
+Left[7] <- 4
+Left[8] <- 3
+Left[9] <- 2
+Left[10] <- 1
+Left[11] <- 0
+St[2] <- "0.9"
+St[3] <- "0.8"
+St[4] <- "0.8"
+St[5] <- "0.69"
+St[6] <- "0.69"
+St[7] <- "0.552"
+St[8] <- "0.414"
+St[9] <- "0.414"
+St[10] <- "0.207"
+St[11] <- "0.207"
+table_ex <- as.data.frame(cbind(t,Failed,Censored,Left,St))
+names(table_ex) <- c("t","# Failed(d[t])","# Censored",paste("# Left",expression(I[t+1])),"S(t)")
+kable(table_ex,caption="")
+```
+
+What would $\hat{S}(21.5)$ be if the last observation were a failure instead of censored? 
+
+## KM Estimate
+
+In between failure times, the KM estimate does not change but is constant. This gives the estimated survival function its step-like appearance (we call this type of function a *step function*).
+
+## Tumors in Children, 2012 *Neuro-Oncology*{.smaller}
+
+```{r atct, echo=FALSE, fig.cap="ACTC is an imaging-based biomarker of tumor prognosis.", out.width = '50%'}
+knitr::include_graphics("figures/atct.pdf")
+```
+
+
+## Tumors in Children, 2012 *Neuro-Oncology*{.smaller}
+
+- Which biomarker values are associated with the best survival?
+- Which values are associated with the worst survival?
+- What is the median survival time in the group with the smallest ATCT values?
+- If a child is in the group with the largest ATCT values, what is his/her estimated 5-year survival probability?
+
+## Survival Analysis in R
+##{.smaller}
+We use the "ovarian" data set, which comprises a cohort of ovarian cander patients and respective clinical information. 
+
+- The response variable is `futime`, the survival time. 
+- `fustat` tells if an individual patients' survival time is censored. 
+- Patients in this study received either one of two therapy regimens (`rx`) 
+- The attending physician assessed the regression of tumors (`resid.ds`) and patients' performance (according to the standardized ECOG criteria; `ecog.ps`) at some point.
+```{r,message=FALSE}
+library(survival)
+library(survminer)
+data(ovarian)
+```
+
+##{.smaller}
+```{r, message=FALSE}
+# Fit survival data using the Kaplan-Meier method
+surv_object <- Surv(time = ovarian$futime, event = ovarian$fustat)
+surv_object
+fit1 <- survfit(surv_object ~ rx, data = ovarian)
+summary(fit1)
+```
+
+##{.smaller}
+Examining the corresponding survival curve using the `ggsurvplot` function. Vertical lines indicate censored data, their corresponding x values at the time which censoring occurred.
+```{r,message=FALSE,out.width='60%'}
+ggsurvplot(fit1, data = ovarian, pval = TRUE)
+```
+
+##{.smaller}
+```{r,message=FALSE,out.width='60%'}
+# Examine prdictive value of residual disease status
+fit2 <- survfit(surv_object ~ resid.ds, data = ovarian)
+ggsurvplot(fit2, data = ovarian, pval = TRUE)
+```
+
+##Log-Rank Test
+##{.smaller}
+How do we determine whether the difference in survival curves is statistically significant?
+
+The log-rank test is quite intuitive. The idea behind it is to construct a $2 \times 2$ contigency table by group (therapy regimens or residual disease status) at each time $t$ at which a failure occurs. Then, the Mantel-Haenszel test statistic is used to test for differences between the two groups. For this test, the null hypothesis is that the survival curves in the two groups are the same, e.g.
+$$ H_0: S_{\text{regimen 1}}(t) = S_{\text{regimen 2}}(t)$$
+
+## {.smaller}
+```{r,message=FALSE}
+# log rank test of 2 regimens
+survdiff(surv_object~rx,data=ovarian)
+# log rank test of residual disease status
+survdiff(surv_object~resid.ds,data=ovarian)
+```
+Also notice that, the `pval = TRUE` argument in `ggsurvplot` function plots the p-value of a log rank test as well.
+
+##{.smaller}
+Reference: https://www.datacamp.com/community/tutorials/survival-analysis-R

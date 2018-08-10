@@ -5,14 +5,14 @@ output: html_document
 
 #### Introduction
 
-In this document, we'll be recreating the visualization from the book using tableau. We will be using the data we created earlier during the R visualization with the already merged data sets.
+In this document, we'll be recreating the visualization from the book using Tableau. We will be using the data we created earlier during the R visualization with the already merged data sets.
 
 ### Importing & Opening the Data 
 To begin, open Tableau desktop - you should see a screen similar to the below.
 ![](IM_simple_figures/open.png)
 
 ***
-Then we will want to connect to our data set. On the left-hand side there is a blue panel with options for different kinds of data - recall that our file is an RData file, so select the option for "Statistical File". This should allow you to select the correct file from your computer. (If you didn't rename the file from the R tutorial, it'll be called "allCtryData.RData".)
+Then we will want to connect to our data set. Select the data tab on the top of the screen, then new data source. On the left-hand side there will be a blue panel with options for different kinds of data - recall that our file is an RData file, so select the option for "Statistical File". This should allow you to select the correct file from your computer. (If you didn't rename the file from the R tutorial, it'll be called "allCtryData.RData".)
 
 ![](IM_simple_figures/open_data.png)
 
