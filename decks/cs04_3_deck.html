@@ -458,7 +458,7 @@ document.getElementsByTagName('head')[0].appendChild(style);
 </section>
 
 <section id="why-use-poststratification" class="slide level2">
-<h2>Why Use Poststratification?</h2>
+<h1>Why Use Poststratification?</h1>
 <ul>
 <li>Sometimes we would like to stratify on a key variable, e.g. gender, but cannot place the units into their correct strata until the units are sampled. For example, in aggregate polling data we cannot determine if an individual is male or female until after they’ve been polled.</li>
 <li>So, we’ll use poststratification, or stratification after the selection of a sample, to handle this type of data</li>
@@ -467,11 +467,11 @@ document.getElementsByTagName('head')[0].appendChild(style);
 </ul>
 </section>
 <section id="how-it-works---population-distribution" class="slide level2">
-<h2>How It Works - Population Distribution</h2>
+<h1>How It Works - Population Distribution</h1>
 <p>The first step in poststratification is knowing the ratio of the candidate stratum. In more simple terms, we want to know the distribution of our variable within the population, e.g. what proportion of individuals in North Carolina are African American. We will denote this as <span class="math inline">\(\frac{N_h}{N}\)</span> where <span class="math inline">\(N_h\)</span> is the number of individuals in that stratum, and N is the totally number of individuals in the populations.</p>
 </section>
 <section id="how-it-works---poststratifying" class="slide level2">
-<h2>How It Works - Poststratifying</h2>
+<h1>How It Works - Poststratifying</h1>
 <p>Once we know the distribution of the candidate stratum, we can move onto poststratifying. Essentially, what we are going to do is a weighted sum where the weights are the population proportions. For example, suppose our variable of interest is gender:</p>
 <p><span class="math display">\[
 \bar{y}_{poststrat.} = \frac{N_{female}}{N}\cdot \bar{y}_{female} + \frac{N_{male}}{N}\cdot \bar{y}_{male}
@@ -479,11 +479,11 @@ document.getElementsByTagName('head')[0].appendChild(style);
 <p>which would yield our new sample mean of the stratified data.</p>
 </section>
 <section id="example-with-code" class="slide level2">
-<h2>Example With Code</h2>
+<h1>Example With Code</h1>
 <p>See the end of the Multi-Level Regression and Poststratification Tutorial for a more concrete example with code included.</p>
 </section>
 <section id="further-reading-resources" class="slide level2">
-<h2>Further Reading &amp; Resources</h2>
+<h1>Further Reading &amp; Resources</h1>
 <ul>
 <li><a href="https://msu.edu/~barbozag/Web/poststrat.pdf" class="uri">https://msu.edu/~barbozag/Web/poststrat.pdf</a></li>
 <li><a href="https://onlinecourses.science.psu.edu/stat506/node/29/" class="uri">https://onlinecourses.science.psu.edu/stat506/node/29/</a></li>

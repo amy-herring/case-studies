@@ -57,7 +57,7 @@ and based on self-reported data.
 
 #### Case Studies:
 
-STA 440 involves detailed analysis of a series of case studies using current, relevant data. Each case study will involve a final submission and in some cases one or more interim submissions. Points will be allocated separately for each submission and case study based on the scope of work. Final case study submissions will involve both a written report and an oral presentation to be viewed by the other teams (in class or by video, as assigned). 
+STA 440 involves detailed analysis of a series of case studies using current, relevant data. Each case study will involve a final submission and in some cases one or more interim submissions. Points will be allocated separately for each submission and case study based on the scope of work. Final case study submissions will involve a written report and possibly an oral presentation to be viewed by the other teams (in class or by video, as assigned). 
 
 Additional details on the case studies will be provided as the course progresses.
 

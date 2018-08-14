@@ -749,8 +749,8 @@ for(i in <span class="dv">1</span>:<span class="kw">length</span>(rads)){
   if(<span class="kw">is.na</span>(rads[i])){rads[i] &lt;-<span class="st"> </span><span class="dv">1</span>}
 }</code></pre></div>
 </section>
-<section id="new-map" class="slide level2">
-<h1>New Map</h1>
+<section id="revised-map" class="slide level2">
+<h1>Revised Map</h1>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">world =<span class="st"> </span><span class="kw">map</span>(<span class="dt">database =</span> <span class="st">&quot;world&quot;</span>, <span class="dt">fill =</span> <span class="ot">TRUE</span>, <span class="dt">col=</span><span class="st">&quot;light grey&quot;</span>)
 <span class="kw">symbols</span>(allCtryData$longitude, allCtryData$latitude, <span class="dt">add =</span> <span class="ot">TRUE</span>,
         <span class="dt">circles=</span> rads, <span class="dt">inches =</span> <span class="ot">FALSE</span>,
