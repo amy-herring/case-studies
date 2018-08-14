@@ -41,8 +41,10 @@ We will use the birth data here, and measure whether there is a relationship bet
 * Only look at most recent year, 2016
 ```{r}
 #Read in birth data
-o_data <- read.csv("~/Documents/case-studies/data/2011-2016 Vital Files Duke_Herring/Yr1116Birth.csv", na.strings=c("99", "9999"))
+o_data <- read.csv("~/Documents/case-studies/data/2011-2016 Vital Files Duke_Herring/Yr1116Birth.csv", na.strings=c(99,9999))
+o_data$SEX = ifelse(o_data$SEX==9, NA, o_data$SEX)
 
+#Remove NAs and restrict to year 2016 - for demonstrations purposes
 birth_data <- na.omit(o_data)
 birth_data_2016 <- birth_data[which(birth_data$YOB==2016),]
 ```
@@ -86,7 +88,7 @@ $$\epsilon_i \sim \text{Normal}(0, \sigma^2)$$
 ## Fit regression to data
 Let's fit a linear model using OLS with function `lm`.
 ```{r}
-model1 = lm(BWTG~GEST+SEX, data=birth_data_2016)
+model1 = lm(BWTG~GEST+as.factor(SEX), data=birth_data_2016)
 summary(model1)
 ```
 
@@ -159,7 +161,7 @@ install.packages("brms", dependencies=TRUE)
 require(brms)
 #Specify family as student(). 
 #We also set chains=2 for faster computation and tell the computer to split work over 2 cores.
-fit1 <- brm(formula = BWTG ~ GEST+SEX ,
+fit1 <- brm(formula = BWTG ~ GEST+as.factor(SEX) ,
             data = birth_data_2016, family = student(), cores = 2, chains=2)
 ```
 
@@ -204,7 +206,7 @@ We fit the same regression using the `rlm` function. How do the estimated coeffi
 
 ```{r}
 library(MASS)
-fit2 <- rlm(BWTG ~ GEST+SEX, data = birth_data_2016)
+fit2 <- rlm(BWTG ~ GEST+as.factor(SEX), data = birth_data_2016)
 summary(fit2)
 
 ```

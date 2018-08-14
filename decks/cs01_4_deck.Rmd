@@ -132,7 +132,8 @@ Propensity score analysis (for observational studies) typically involves two sta
 Does cigarette smoking in the last trimester cause lower birthweight in babies?
 ```{r}
 #Read in birth data
-o_data <- read.csv("~/Documents/case-studies/data/2011-2016 Vital Files Duke_Herring/Yr1116Birth.csv", na.strings=c("99", "9999"))
+o_data <- read.csv("~/Documents/case-studies/data/2011-2016 Vital Files Duke_Herring/Yr1116Birth.csv", na.strings=c(99,9999))
+o_data$SEX = ifelse(o_data$SEX==9, NA, o_data$SEX)
 
 #Remove NAs and restrict to year 2016 - for demonstrations purposes
 birth_data <- na.omit(o_data)

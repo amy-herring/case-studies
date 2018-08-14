@@ -1,0 +1,65 @@
+---
+title: 'Birth Data: Data cleaning'
+author: "Liz Lorenzi"
+date: "8/13/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, echo=FALSE, include=FALSE}
+library(knitr)
+library(tidyverse)
+```
+
+## Cleaning the NC Birth Data
+### Checking for missing data
+First, we read in the original data set as is, and summarize the data to look for potential missingness and other data problems. There are a few that I spot..
+```{r}
+#Read in birth data
+o_data <- read.csv("~/Documents/case-studies/data/2011-2016 Vital Files Duke_Herring/Yr1116Birth.csv")
+summary(o_data)
+```
+
+Skim through the data description excel file provided. You'll notice that missing information is denoted with a **9** (for sex), **99** for other variables, and **9999** for birthweight. We can read in the data and note the missing values as such (9 appears as a value in the other covariates, so we are not safe to remove it as a missing number globally. Always be sure to check for numeric values that you set with the `na.strings` that it does not mark "missing" the true data inputs). We replace the values with **9** in the `SEX` column with a NA manually using an ifelse statement.
+
+```{r}
+#Read in birth data
+o_data <- read.csv("~/Documents/case-studies/data/2011-2016 Vital Files Duke_Herring/Yr1116Birth.csv", na.strings=c(99,9999))
+o_data$SEX = ifelse(o_data$SEX==9, NA, o_data$SEX)
+
+#Now remove the missing values (NA)
+birth_data <- na.omit(o_data)
+```
+
+### Checking for Data Quality
+Next, we examine the birthweight data to get a sense of data quality. We can use some clinical information to clean the variables. For example, live births could range from around 20 weeks to 44-45 weeks. Data outside of those ranges are likely errors. 
+```{r}
+outliers <- which(!(birth_data$GEST >=20 & birth_data$GEST < 45))
+#Remove these outliers
+birth_data <- birth_data[-outliers,]
+```
+
+How do the remaining variables look?
+```{r}
+hist(birth_data$BWTG)
+hist(birth_data$MAGE)
+hist(birth_data$PARITY)
+plot(y=birth_data$BWTG, x=birth_data$GEST, xlab="Gestational age", ylab="Birthweight")
+
+par(mfrow=c(2,2))
+hist(birth_data$CIGPN)
+hist(birth_data$CIGFN)
+hist(birth_data$CIGSN)
+hist(birth_data$CIGLN)
+
+table(birth_data$MRACER)
+
+```
+Are any variables showing outliers? Are all groups in binary variables well represented?
+
+To Do: Calculate birth weight z-scores for age and sex. Need to calculate based on reference charts. I am still looking for this information..
+
+Provide additional visualizations of the data to explore further relationships between the variables.
