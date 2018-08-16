@@ -5,7 +5,6 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-setwd("~/Desktop/factbook/rankorder")
 ```
 
 # How to Obtain Data Frames From CIA Factbook
@@ -20,26 +19,23 @@ Your first option is using the rank order section of the factbook which has txt 
  
 ```{r}
 
-setwd("~/Desktop/factbook/rankorder")
-
-pop_dta <- read.delim("rawdata_2119.txt", header = FALSE, col.names = c("", "country","pop"))
+pop_dta <- read.delim("~/Documents/TEACHING/factbook/rankorder/rawdata_2119.txt", header = FALSE, col.names = c("", "country","pop"))
 pop_dta <- pop_dta[,-1] # remove blank column
 pop_dta$pop <- as.numeric(gsub(",", "", pop_dta$pop)) #remove commas, so it can be converted to numeric
-save(pop_dta, file="pop_data.RData")
+save(pop_dta, file="~/Documents/TEACHING/factbook/rankorder/pop_data.RData")
 
-IM_dta <- read.delim("rawdata_2091.txt", header = FALSE, col.names = c("", "country","infMort", ""))
+IM_dta <- read.delim("~/Documents/TEACHING/factbook/rankorder/rawdata_2091.txt", header = FALSE, col.names = c("", "country","infMort", ""))
 IM_dta <- IM_dta[,-c(1,4)]
-save(IM_dta, file="IM_data.RData")
+save(IM_dta, file="~/Documents/TEACHING/factbook/rankorder/IM_data.RData")
 ```
 ## Option 2: Field HTML Files
 Your second option is to use the field html files. These have the advantage of being more complete and more detailed information on each variable. However, they are also in a less user-friendly format.
 
 ```{r}
-setwd("~/Desktop/factbook/fields")
 library(rvest)
 
 # read in data
-test <- read_html("print_2010.html")
+test <- read_html("~/Documents/TEACHING/factbook/fields/print_2010.html")
 t <- test %>% html_table(fill = TRUE) # converts html to a list
 
 # Extracting the desired data
@@ -66,7 +62,7 @@ for(i in 1:231){
 }
 
 # Another Example
-test <- read_html("print_2091.html")
+test <- read_html("~/Documents/TEACHING/factbook/fields/print_2091.html")
 t <- test %>% html_table(fill = TRUE)
 IM <- matrix(0, 231, 4)
 colnames(IM) <- c("country", "IM_total", "IM_male", "IM_female")

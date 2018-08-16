@@ -1,26 +1,53 @@
 ---
-title: "Basics of Election Prediction"
-output:
-  html_document:
-    df_print: paged
+title: Basics of Election Prediction
+output: 
+  revealjs::revealjs_presentation:
+    theme: night
+    highlight: espresso
+    center: true
+    transition: none
+    css: styles.css
+    fig_caption: true
+    reveal_options:
+      progress: true
+      slideNumber: true
+      
+  
 ---
+## Introduction
 
-### Introduction
+We will visit some information sources you may consider when designing your own election prediction strategy. Each source can be used as a starting point, and then expanded upon or combined with another approach, to obtain the best possible prediction.
 
-These are some simple approaches you may consider when designing your own election prediction strategy. Each approach can be used as a starting point, and then expanded upon or combined with another approach, to obtain the best possible prediction.
+## Current Polling Data
 
-### Approach 1: Using Current Polling Data
+One strategy for predicting the winner in an election would be to use the latest aggregate polling data from a reputable source, e.g. FiveThirtyEight or The New York Times. 
 
-One strategy for predicting the winner in an election would be to use the latest aggregate polling data from a reputable source, e.g. FiveThirtyEight or The New York times. You could either use this data on its own, or combine data from various to sources, to create your prediction. On its own, you could predict that the individual (or party) with the highest probability of winning will likely win. If you choose to combine data from different sources - you could do something similar to choosing the winner of each state based on how the majority of the sources project the outcome. One drawback of these polls is they may be subject to bias, e.g. nonresponse bias, so the predictions should be compared with other methods such as our next strategy to confirmed their plausibility. (Also, don't forget about the margin of error in these polls!)
+- Some polls are of likely voters, while others may not restrict to this group
+- Polls vary in quality (you can find some quality ratings online)
+- Polls may be subject to bias (e.g., nonresponse bias, assumptions involved in determining "likely voters")
+- Polls associated with margin of error
+- More polls focus on national sentiments than on state-specific sentiments
 
-### Approach 2: Using Historical Results
 
-Another straetegy is to use historical data from past elections to predict the outcome. There are resources such as the [NC Voter Record](https://dl.ncsbe.gov/?prefix=data/) that could be used for this strategy. You can look into the historical trends in each state, or county, and use this to predict the outcome of the election. This strategy is especially useful for states that historically almost always vote for the same party, e.g. Texas usually votes Republican, but for swing states this strategy is less useful since there is not a clear trend in the voting history.
+## Historical Results
 
-### Approach 3: Using Voter Turnout Data
+- Use historical data from past elections, e.g. within a house district, within a state, nationally
+- Useful when a state consistently votes for the same party but less useful for swing states
+- Check out the [NC Voter Record](https://dl.ncsbe.gov/?prefix=data/) 
 
-A more complex strategy involves looking at voter turnout data. You could use this data to project what voter participation might be like in each state for the election and make predictions based on those projections. This strategy is similar to Approach 2 because it uses historical data, but instead of studying the trends of the voters, you use to determine how many people are likely to vote in each location. This is helpful because locations with low voter turnout are more likely to result in more surprising results since each individual vote counts more.
+## Voter Turnout Data
 
-### Approach 4: Using Correlated Data
+- States like NC make available data on who votes in each selection
+- Voter turnout data can be used to construct a voting history for certain districts, demographic groups, etc.
+- Locations with low or variable turnout often harder to predict
+- Many better predictions take voter turnout data into account in some way
 
-Finally, another more complication strategy is to look at information that is indirectly related to the election. Some examples of this include looking at voter demographics, voter results for other elections, e.g. Senate results when predicting the presidental election, and other factors. These variables may be helpful when predicting results since they are highly correlated with the election. (But remember to use caution with this method since correlation doesn't imply causation!)
+
+## Ancillary Data
+
+- Voter results for other elections, e.g. Senate results when predicting the presidental election
+- "It's the economy, stupid" -- James Carville
+- Societal movements (e.g., \#METOO)
+- Incumbency
+- Wars, hurricanes, etc.
+- These factors may be helpful when predicting results if they are  correlated with the election results. (Remember to use caution with this type of approach because correlation does not imply causation!)
