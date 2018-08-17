@@ -12,6 +12,7 @@ description: "Students apply statistical analysis skills to in-depth data analys
 markup: "mmark"
 ---
 
+#Welcome to STA440!
 
 ### Class Meetings
 
@@ -49,7 +50,7 @@ You should have access to a laptop and bring it to every class, fully charged. T
 | September 5   | CS1: Modeling in Class | |
 | September 7   | CS1: Causal Inference | CS1 Interim Report: Model Development and Evaluation |
 | September 12  | CS2: Visualizing our World in Data | |
-| September 14  | CS2: Tableau | CS1 Final Report: Smoking and Birth Weight |
+| September 14  | CS2: Lab: Tableau | CS1 Final Report: Smoking and Birth Weight |
 | September 19  | CS2: Tableau | |
 | Septmeber 21  | CS3: Hierarchical Models: Birth Weight Disparities | |
 | September 26  | Group Presentations of CS2 | CS2 Final Report: Our World in Data |
@@ -68,8 +69,8 @@ You should have access to a laptop and bring it to every class, fully charged. T
 | November 9    | CS5: Missing Data: How to Survive | |
 | Movember 14   | CS5: Missing Data | |
 | November 16   | CS5: Missing Data | CS5 Interim Report: Patterns of Missing Data |
-| November 28   | CS Lab | Individual CS Draft Report | 
-| November 30   | Individual CS Q&A | CS5: Final Report |
+| November 28   | Lab: CS5 and Individual CS Help | Individual CS Draft Report | 
+| November 30   | Lab: Individual CS Practice Presentations to Groups | CS5: Final Report |
 | December 5    | Individual Presentations | Individual Reports Due |
 | December 7    | Individual Presentations | Individual Reports Due |
 | December 13, 2-5pm   | Individual Presentations | Individual Reports Due |

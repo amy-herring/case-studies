@@ -19,6 +19,7 @@ It is my goal for our learning environment to facilitate learning and intellectu
   
   - If you have a name and/or set of pronouns that differ from those that appear in your official Duke records, please let me know!
   - We are constantly learning more about diverse perspectives and identities. If something was said in class (by anyone) that made you feel uncomfortable, please talk to me about it. 
+  
 
 ### Academic integrity:
 
@@ -46,7 +47,7 @@ Please review the Academic Dishonesty policies <a href="https://studentaffairs.d
 
 #### Class sessions:
 
-If you miss class or would like to review the material covered in class, you can view the recordings [here](https://trinity.capture.duke.edu/Panopto/Pages/Sessions/List.aspx?folderID=9161c49e-b3d5-4d40-a282-ebe8a938055d). AMY UPDATE LINK Note that you will need to log in with your Net ID.
+If you miss class or would like to review the material covered in class, you can view the recordings [AT THIS LINK THAT WILL BE ADDED WHEN GIVEN TO ME](). Note that you will need to log in with your Net ID.
 
 #### Teams:
 
@@ -62,7 +63,6 @@ STA 440 involves detailed analysis of a series of case studies using current, re
 Additional details on the case studies will be provided as the course progresses.
 
 Individual contributions to each submission will be assessed using the fair division software Spliddit. Team members must provide Spliddit assessments in order to receive credit for an assignment.
-
 
 Each individual case study will be graded based on written reports (interim and final) and an oral presentation. Students may not collaborate with anyone on the individual case study, which should be treated like a take-home exam.
 
@@ -96,6 +96,9 @@ Example:  Suppose a submission is worth 100 points, and the team has 5 members. 
 
 The total number of group project points over the course of the semester is $N\sum_{s=1}^S P_s$, and the maximum number of points that will be awarded to any team member in total for group projects is $100S$. This ensures (1) team members are able to adjust their effort levels on projects according to their interests and other time commitments, (2) teams are encouraged to ensure contributions over the course of the semester are balanced across team members, and (3) individuals who do not make strong contributions to the team will receive clear feedback regarding the need for adjustments to their efforts. 
 
+### Accommodations:
+
+- Students who need accommodations in this class should contact the [Student Disability Access Office](http://access.duke.edu/students/) as soon as possible to ensure appropriate accommodations can be made.
 
 ### Excused Absences:
 
@@ -107,6 +110,8 @@ complete classes, you should contact your academic dean’s office. See more
 information on policies surrounding these conditions 
 at https://trinity.duke.edu/undergraduate/academic-policies/personal-emergencies. 
 Your academic dean can also provide more information.
+
+
 
 ### Late / missed work
 
@@ -122,6 +127,8 @@ Late work policy for case study reports:
 ### Regrade requests
 
 Regrade requests must be made within three days of when a report is returned. These will be honored if points were tallied incorrectly, or if you feel part of your report is correct, but it was marked wrong. No regrade will be made to alter the number of points deducted for an issue. There will be no grade changes after the individual project presentations.
+
+
 
 ### Professionalism
 
