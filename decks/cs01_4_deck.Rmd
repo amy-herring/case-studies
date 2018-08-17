@@ -1,5 +1,5 @@
 ---
-title: Birthweight - Causal Inference
+title: Causal Inference
 output: 
   revealjs::revealjs_presentation:
     theme: night
@@ -21,7 +21,7 @@ knitr::opts_chunk$set(echo = TRUE,fig.width=6, fig.height=5)
 
 
 
-## Case Study 1: Birthweight
+## Causality
 
 Birthweight is a commonly-used indicator of a newborn infant's health status. Because this indicator is easily obtained, it is a critical component of population health reporting by the World Health Organization and governments around the globe.
 
@@ -35,16 +35,16 @@ Can we learn whether a factor may *cause* the increase or decrease in birthweigh
 
 
 ## Confounding
-* Confounding is main complication between association and causation
+* Confounding is a major complication between association and causation
 * Let $W$ denote treatment, $Y$ outcome, and $X$ the observed covariates
 * Confounding variable influences the decision of treatment and outcome
     + Example: W: Education and Y: income - confounder: socio-economic status of the family
 ```{r , echo=FALSE, fig.cap="", out.width = '70%'}
 knitr::include_graphics("figures/causal_diagram.png")
 ```
-* We will aim to address observed confounders through causal inference frameworks..
+* We will aim to address observed confounders through causal inference frameworks.
 
-## Frameworks for Causal Inference
+## Frameworks for causal inference
 * Potential outcome framework also known as counterfactual framework or Neyman-Rubin Causal Model (RCM)
 
 * 3 Integral components to RCM:

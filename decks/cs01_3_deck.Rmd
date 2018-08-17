@@ -21,26 +21,29 @@ knitr::opts_chunk$set(echo = TRUE,fig.width=6, fig.height=5)
 
 
 
-## Case Study 1: Birthweight
+## Birth weight
 
 Birthweight is a commonly-used indicator of a newborn infant's health status. Because this indicator is easily obtained, it is a critical component of population health reporting by the World Health Organization and governments around the globe. The distribution of birthweight has often been described as approximately normal, though the left tail in particular is inflated relative to that from a Gaussian distribution.
 
 ## Dealing with heavy-tailed distributions
-Birthweight has heavy tails, or more observations in the tail than a typical normal distribution.
+Birth weight has heavy tails, or more observations in the tail than a typical normal distribution.
 
-Fitting an OLS model assumes the data follows a normal distribution. Instead we may want to consider a parametric family that has heavier tails and therefore better fits to the outliers in the data.
+Fitting a linear regression model assumes the data follows an approximate normal distribution. Instead, we may want to consider a parametric family that has heavier tails and therefore better accommodates outliers in the data.
 
-Let's first start by fitting the model with a linear regression.
+Let's first start with linear regression.
 
 
 ## Read data into R
-We will use the birth data here, and measure whether there is a relationship between the response, birthweight, and the explanatory variables, gestational age and sex.
+We will evaluate whether there is a relationship between the response, birth weight, and the predictors gestational age (measured in weeks) and sex.
 
-* Check for NAs in data - appear as 99, 9999
+* Check for NAs in data - appear as 9, 99, 9999 for our variables of interest (birth weight, gestational age, and sex)
 * For now, remove the rows with missing values
 ```{r readdata}
 #Read in birth data
-o_data <- read.csv("~/Documents/TEACHING/vitalstats/Yr1116Birth.csv", na.strings=c("99", "9999"))
+o_data <- read.csv("~/Documents/TEACHING/vitalstats/Yr1116Birth.csv", 
+  na.strings=c("9","99", "9999"))
+#SEX=1 male, 2 female; male=1 male, 0 female
+o_data$male=2-o_data$SEX #binary gender for interpretation
 
 birth_data <- na.omit(o_data)
 ```
@@ -49,7 +52,7 @@ birth_data <- na.omit(o_data)
 * Compare histogram of birthweight to a normal distribution parameterized with a mean and variance that is set based on birthweight variable, `BWTG`.
 * Do the distributions align?
   
-```{r histogram, out.width = '45%', echo=FALSE }
+```{r histogram, out.width = '50%', echo=FALSE }
 par(mfrow=c(1,2))
 hist(birth_data$BWTG, xlab="Birthweight (g)", main="Birthweight Histogram", prob=TRUE, breaks=50)
 curve(dnorm(x, mean=mean(birth_data$BWTG), sd=sd(birth_data$BWTG)),
@@ -61,9 +64,9 @@ curve(dnorm(x, mean=mean(birth_data$BWTG), sd=sd(birth_data$BWTG)),
 
 
 ## Fit regression to data
-Let's fit a linear model using OLS with function `lm`. 
+Let's fit a linear model using the function `lm`. 
 ```{r firstmodel}
-model1 = lm(BWTG~GEST+SEX, data=birth_data)
+model1 = lm(BWTG~GEST+male, data=birth_data)
 summary(model1)
 ```
 
@@ -81,30 +84,30 @@ Diagnostic plots of the model are essential for checking model fit.
 
 A few tools for heavy-tailed data:
 
-* Transformations (e.g. sqrt(BTWG)) - transforming outcome may fix the skewness, but can make interpretting the model more difficult
+* Transformations (e.g. sqrt(BTWG)) - transforming outcome may fix the skewness but can make interpretting the model more difficult
 * Bayesian robust regression - change parametric assumption (e.g. t-distribution)
 * Frequentist robust regression - weigh observations differently based on how well behaved these observations are (a form of weighted and reweighted regression)
 
 ## Bayesian robust regression in R
 Consider the Bayesian approach for robust regression using package `brms`.
 
-* We specify the model using the family, student-t, to describe the response distribution
-    + Student-t has heavier tails compared to the normal distribution. 
-    + The heaviness of the tails are specified with the parameter, degrees of freedom, where the larger the degrees of freedom, the closer to normal the distribution becomes
+* We specify the model using the family, Student-t, to describe the response distribution
+    + Student's t distribution has heavier tails compared to the normal distribution. 
+    + The heaviness of the tails is specified with the degrees of freedom parameter. The larger the degrees of freedom, the closer to normal the distribution becomes.
 ```{r tregbayes, eval=FALSE}
 install.packages("brms", dependencies=TRUE)
 require(brms)
-fit1 <- brm(formula = BWTG ~ GEST+SEX ,
+fit1 <- brm(formula = BWTG ~ GEST+male ,
             data = birth_data, family = student(), cores = 2)
 ```
 
 
 ## Robust regression in R
-We will explore the frequentist version of robust regression using the function, `rlm`, in `MASS` package. 
+We will explore the frequentist version of robust regression using the function `rlm` in the `MASS` package. 
 
 ```{r freqrobust}
 library(MASS)
-fit2 <- rlm(BWTG ~ GEST+SEX, data = birth_data)
+fit2 <- rlm(BWTG ~ GEST+male, data = birth_data)
 summary(fit2)
 ```
 
@@ -112,7 +115,8 @@ summary(fit2)
 `rlm` works by reweighting the observations with large residuals. Let's look at the observations with the largest and smallest weights. What do you notice about the data and the residuals?
 
 ```{r freqrobust2}
-fit2_weights = data.frame(bwt = birth_data$BWTG, gest = birth_data$GEST, resid=fit2$resid, weight=fit2$w)
+fit2_weights = data.frame(bwt = birth_data$BWTG, gest = birth_data$GEST, 
+  resid=fit2$resid, weight=fit2$w)
 fit2_weights[order(fit2$w)[c(1:5, (length(fit2$w)-5):length(fit2$w))],]
 ```
 

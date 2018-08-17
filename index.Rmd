@@ -58,13 +58,13 @@ You should have access to a laptop and bring it to every class, fully charged. T
 | October 3     | CS3: Generalized Linear Mixed Effects Models | CS3 Interim Report: Infant Mortality Visualization| 
 | October 5     | CS3: Bayesian Hierarchical Models | Midsemester Grades Due (my deliverable)  & CS4 Evaluation Criteria |
 | October 10    | CS4: Election Forecasting | CS3 Interim Report: County-Specific Mortality by Group|
-| October 12    | CS4: Election Forecasting with "Mr. P" | |
+| October 12    | CS4: Election Forecasting with "Mr. P" | CS4 Election Predictions |
 | October 17    | CS4: Who Votes in NC? | CS3 Final Report: Infant Mortality Trends |
-| October 19    | CS4: Election Modeling Workshop | |
+| October 19    | CS4: Election Modeling Workshop | CS4 Election Predictions Update|
 | October 24    | CS4: Presentations: Who Votes in NC? | CS4 Interim Report: Who Votes in NC? |
-| October 26    | Individual CS: Web Scraping | | 
+| October 26    | Individual CS: Web Scraping | CS4 Election Predictions Update| 
 | October 31    | Individual CS: Web Scraping |  CS4 Interim Report: Election Prediction Models |
-| November 2    | Individual CS: Web Scraping Work in Groups | CS4 Final Report due by Midnight Nov 5|
+| November 2    | Individual CS: Web Scraping Work in Groups | CS4 Election Predictions Update; CS4 Final Report Due by Midnight Nov 5|
 | November 7    | CS4: Presentations: Post Election Diagnostics | Individual CS Interim Report: Analysis Plan  |
 | November 9    | CS5: Missing Data: How to Survive | |
 | Movember 14   | CS5: Missing Data | |
