@@ -1,5 +1,5 @@
 ---
-title: "Case Study 1: Birthweight"
+title: "Case Study 1: Birth Weight"
 ---
 
 ```{r, echo=FALSE, include=FALSE}
@@ -17,9 +17,9 @@ library(tidyverse)
 
 # Case Study Goals
 
-- determine which factors are associated with birthweight and characterize the relationship between each factor and birthweight
+- determine which factors are associated with birth weight and characterize the relationship between each factor and birth weight
 - explore whether fit of a linear regression model is adequate or whether robust regression methods are needed
-- estimate the impact of eliminating maternal smoking on birthweight in a population
+- estimate the impact of eliminating maternal smoking on birth weight in a population
 
 # Data
 
@@ -29,24 +29,21 @@ library(tidyverse)
 
 - Interim report: produce a 5 page (maximum) report using R markdown that clearly describes your process for model selection and validation. Provide clear interpretations of the associations between each predictor and birth weight in layperson's language, including characterization of uncertainty.  Figures may be included as appropriate. Code should be fully reproducible.
 
-- Final report: produce a 5 page (maximum) report using R markdown that addresses the potential impact of eliminating smoking on birthweight in the population. Clearly describe your modeling approach and any assumptions required to produce estimates. Figures should be included. Code should be fully reproducible.
+- Final report: produce a 5 page (maximum) report using R markdown that addresses the potential impact of eliminating smoking on birth weight in the population. Clearly describe your modeling approach and any assumptions required to produce estimates. Figures should be included. Code should be fully reproducible.
 
 # Resources
 
 An Introduction to Statistical Learning with Applications in R, James et al (2013), Chapter 5: Resampling Methods (free e-book through Duke Libraries)
 
 
-# Slides (coming soon)
+# Slides
 
-<!---
-[Initial description of case study](decks/cs01_1_deck.html)
 
-[Cross-validation](decks/cs01_2_deck.html)
+[Birth weight data](decks/cs01_1_deck.html)
 
-[Robust regression](decks/cs01_3_deck.html)
+[Model validation](decks/cs01_2_deck.html)
 
-[Causal inference-Liz to create](decks/cs01_4_deck.html)
+[Least squares and robust regression](decks/cs01_3_deck.html)
 
-Why do I care about outliers?  Talk about financial crisis. Amy to do.
+[Introduction to Causal Inference](decks/cs01_4_deck.html)
 
---->
