@@ -23,16 +23,14 @@ markup: "mmark"
 
 ### Teaching team and office hours 
 
-STA 440 contains a mixture of lecture, lab, and combination sessions at the usual class times. Sessions marked "lab" will be taught by TA's and involve hands-on analysis and/or consultation about case studies.
 
-Note: this schedule is approximate and is likely to be modified as the course progresses. Readiness assessments will be given without advance notice. Assignments are due at the beginning of class unless otherwise specified.
-
+Note: office hours may vary due to travel and other commitments. Revisions to office hours will be noted in Sakai and on my office door.
 
 | Team member | Office hours | Location |
 | ----------  | ----         | ---- |
-| [Professor Amy Herring](https://stat.duke.edu/people/amy-h-herring)  <a href="mailto:amy.herring@duke.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp;  | Wed and Thurs 1:30-2:30pm | 208 Old Chemistry |
+| [Professor Amy Herring](https://stat.duke.edu/people/amy-h-herring)  <a href="mailto:amy.herring@duke.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp;  | Wednesday and Thursday 1:30-2:30pm | 208 Old Chemistry |
 [TA Jiurui Tang](https://stat.duke.edu/people/jiurui-tang)  <a href="mailto:jiurui.tang@duke.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp; | TBD | TBD
- [TA Michael Akande](https://www2.stat.duke.edu/~oma9/)  <a href="mailto:olanrewaju.akande@duke.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp;  | TBD | TBD
+ [TA Michael Akande](https://www2.stat.duke.edu/~oma9/)  <a href="mailto:olanrewaju.akande@duke.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp;  | Tuesday 5-6pm and Friday 2:25-3:35pm | TBD
  
                   
 
@@ -43,6 +41,11 @@ You should have access to a laptop and bring it to every class, fully charged. T
 
 
 ### Topics and Important Dates
+
+STA 440 contains a mixture of lecture, lab, and combination sessions at the usual class times. Sessions marked "lab" will be taught by TA's and involve hands-on analysis and/or consultation about case studies.
+
+Note: this schedule is approximate and is likely to be modified as the course progresses. Readiness assessments will be given without advance notice. Assignments are due at the beginning of class unless otherwise specified. 
+
 |Date           |Topic                      |Deliverables     |
 | ----------    | -----------------         | --------------- |
 | August 29     | Welcome, Groups, and CS1: Birth Weight        | Regression warm-up (in class)        |
