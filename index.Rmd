@@ -29,8 +29,8 @@ Note: office hours may vary due to travel and other commitments. Revisions to of
 | Team member | Office hours | Location |
 | ----------  | ----         | ---- |
 | [Professor Amy Herring](https://stat.duke.edu/people/amy-h-herring)  <a href="mailto:amy.herring@duke.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp;  | Wednesday and Thursday 1:30-2:30pm | 208 Old Chemistry |
-[TA Jiurui Tang](https://stat.duke.edu/people/jiurui-tang)  <a href="mailto:jiurui.tang@duke.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp; | TBD | TBD
  [TA Michael Akande](https://www2.stat.duke.edu/~oma9/)  <a href="mailto:olanrewaju.akande@duke.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp;  | Tuesday 5-6pm and Friday 2:25-3:35pm | TBD
+ [TA TBA](https://stat.duke.edu/)  <a href="mailto:amy.herring@duke.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp; | TBD | TBD
  
                   
 
