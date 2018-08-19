@@ -5,7 +5,6 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-setwd("~/Desktop/factbook/rankorder")
 ```
 
 # How to Obtain Data Frames From CIA Factbook
@@ -20,146 +19,60 @@ Your first option is using the rank order section of the factbook which has txt 
  
 ```{r}
 
-setwd("~/Desktop/factbook/rankorder")
+pop_dta <- read.delim("~/Documents/TEACHING/factbook/rankorder/rawdata_2119.txt", header = FALSE, col.names = c("", "country","pop"))
+pop_dta <- pop_dta[,-1] # remove blank column
+pop_dta$pop <- as.numeric(gsub(",", "", pop_dta$pop)) #remove commas, so it can be converted to numeric
+save(pop_dta, file="~/Documents/TEACHING/factbook/rankorder/pop_data.RData")
 
-pop_dta <- read.delim("rawdata_2119.txt", header = FALSE, col.names = c("", "country","pop"))
-pop_dta <- pop_dta[,-1]
-pop_dta$pop <- as.numeric(gsub(",", "", pop_dta$pop))
-save(pop_dta, file="pop_data.RData")
-
-pop_rate_dta <- read.delim("rawdata_2002.txt", header = FALSE, col.names = c("", "country","popRate", ""))
-pop_rate_dta <- pop_rate_dta[,-c(1,4)]
-
-people_and_society <- merge(pop_dta, pop_rate_dta, by = "country", all = TRUE)
-
-birth_rate_dta <- read.delim("rawdata_2054.txt", header = FALSE, col.names = c("", "country","birthRate", ""))
-birth_rate_dta <- birth_rate_dta[,-c(1,4)]
-
-people_and_society <- merge(people_and_society, birth_rate_dta, by = "country", all = TRUE)
-
-death_rate_dta <- read.delim("rawdata_2066.txt", header = FALSE, col.names = c("", "country","deathRate", ""))
-death_rate_dta <- death_rate_dta[,-c(1,4)]
-
-people_and_society <- merge(people_and_society, death_rate_dta, by = "country", all = TRUE)
-
-netMig_rate_dta <- read.delim("rawdata_2112.txt", header = FALSE, col.names = c("", "country","netMigRate", ""))
-netMig_rate_dta <- netMig_rate_dta[,-c(1,4)]
-
-people_and_society <- merge(people_and_society, netMig_rate_dta, by = "country", all = TRUE)
-
-MM_dta <- read.delim("rawdata_2223.txt", header = FALSE, col.names = c("", "country","matMort", ""))
-MM_dta <- MM_dta[,-c(1,4)]
-MM_dta$matMort <- as.numeric(gsub(",", "", MM_dta$matMort))
-
-people_and_society <- merge(people_and_society, MM_dta, by = "country", all = TRUE)
-
-IM_dta <- read.delim("rawdata_2091.txt", header = FALSE, col.names = c("", "country","infMort", ""))
+IM_dta <- read.delim("~/Documents/TEACHING/factbook/rankorder/rawdata_2091.txt", header = FALSE, col.names = c("", "country","infMort", ""))
 IM_dta <- IM_dta[,-c(1,4)]
-save(IM_dta, file="IM_data.RData")
-
-people_and_society <- merge(people_and_society, IM_dta, by = "country", all = TRUE)
-
-life_exp_dta <- read.delim("rawdata_2102.txt", header = FALSE, col.names = c("", "country","lifeExp", ""))
-life_exp_dta <- life_exp_dta[,-c(1,4)]
-
-people_and_society <- merge(people_and_society, life_exp_dta, by = "country", all = TRUE)
-
-tot_fert_dta <- read.delim("rawdata_2127.txt", header = FALSE, col.names = c("", "country","childrenPerWoman", ""))
-tot_fert_dta <- tot_fert_dta[,-c(1,4)]
-
-people_and_society <- merge(people_and_society,  tot_fert_dta, by = "country", all = TRUE)
-
-health_exp_dta <- read.delim("rawdata_2225.txt", header = FALSE, col.names = c("", "country","healthPercGDP", ""))
-health_exp_dta <- health_exp_dta[,-c(1,4)]
-
-people_and_society <- merge(people_and_society,  health_exp_dta, by = "country", all = TRUE)
-
-HIV_rate_dta <- read.delim("rawdata_2155.txt", header = FALSE, col.names = c("", "country","HIV_adult_rate", ""))
-HIV_rate_dta <- HIV_rate_dta[,-c(1,4)]
-
-people_and_society <- merge(people_and_society,  HIV_rate_dta, by = "country", all = TRUE)
-
-HIV_ppl_dta <- read.delim("rawdata_2156.txt", header = FALSE, col.names = c("", "country","Num_ppl_with_HIV", ""))
-HIV_ppl_dta <- HIV_ppl_dta[,-c(1,4)]
-HIV_ppl_dta$Num_ppl_with_HIV <- as.numeric(gsub(",", "", HIV_ppl_dta$Num_ppl_with_HIV))
-
-people_and_society <- merge(people_and_society,  HIV_ppl_dta, by = "country", all = TRUE)
-
-HIV_death_dta <- read.delim("rawdata_2157.txt", header = FALSE, col.names = c("", "country","Num_death_HIV", ""))
-HIV_death_dta <- HIV_death_dta[,-c(1,4)]
-HIV_death_dta$Num_death_HIV <- as.numeric(gsub(",", "", HIV_death_dta$Num_death_HIV))
-
-people_and_society <- merge(people_and_society,  HIV_death_dta, by = "country", all = TRUE)
-
-obs_rate_dta <- read.delim("rawdata_2228.txt", header = FALSE, col.names = c("", "country","obesityRate", ""))
-obs_rate_dta <- obs_rate_dta[,-c(1,4)]
-
-people_and_society <- merge(people_and_society,  obs_rate_dta, by = "country", all = TRUE)
-
-child_underweight_rate_dta <- read.delim("rawdata_2224.txt", header = FALSE, col.names = c("", "country","childrenUnderweightRate", ""))
-child_underweight_rate_dta <- child_underweight_rate_dta[,-c(1,4)]
-
-people_and_society <- merge(people_and_society,  child_underweight_rate_dta, by = "country", all = TRUE)
-
-educ_exp_dta <- read.delim("rawdata_2206.txt", header = FALSE, col.names = c("", "country","educPercGDP", ""))
-educ_exp_dta <- educ_exp_dta[,-c(1,4)]
-
-people_and_society <- merge(people_and_society,  educ_exp_dta, by = "country", all = TRUE)
-
-unemployment_rate_dta <- read.delim("rawdata_2229.txt", header = FALSE, col.names = c("", "country","unemploymentRate", ""))
-unemployment_rate_dta <- unemployment_rate_dta[,-c(1,4)]
-
-people_and_society <- merge(people_and_society,  unemployment_rate_dta, by = "country", all = TRUE)
-
-setwd("~/Desktop")
-save(people_and_society, file="people_and_society.RData")
-
+save(IM_dta, file="~/Documents/TEACHING/factbook/rankorder/IM_data.RData")
 ```
 ## Option 2: Field HTML Files
 Your second option is to use the field html files. These have the advantage of being more complete and more detailed information on each variable. However, they are also in a less user-friendly format.
 
 ```{r}
-setwd("~/Desktop/factbook/fields")
 library(rvest)
 
 # read in data
-test <- read_html("print_2010.html")
+test <- read_html("~/Documents/TEACHING/factbook/fields/print_2010.html")
 t <- test %>% html_table(fill = TRUE) # converts html to a list
 
 # Extracting the desired data
 # First view the data and determine what parts of the data we need
+# I recommend clicking on t in the environment to look at its structure more easily
 # head(t)
 
 # create an empty data frame to hold our data
-population_structure <- matrix(0, 230, 6)
+population_structure <- matrix(0, 231, 6)
 colnames(population_structure) <- c("country", "ps_0-14", "ps_15-24", "ps_25-54", "ps_55-64", "ps_65+")
 
 # filling the data frame
-for(i in 4:233){
+for(i in 1:231){
   # getting country
-  population_structure[i-3, 1] <- t[[i]][["X1"]][2]
+  population_structure[i, 1] <- t[[1]][i,1]
   # splitting based on category
-  levels <- strsplit(t[[i]][["X2"]][2], "\n")
+  levels <- strsplit(t[[1]][i,2], ")")
   for(j in 1:5){
     # obtaining the relevant sections of the data
     start <- regexpr(":",levels[[1]][j]) + 2
     end <- regexpr("%",levels[[1]][j]) - 1
-    population_structure[i-3, j+1] <- as.numeric(substr(levels[[1]][j], start, end))
+    population_structure[i, j+1] <- as.numeric(substr(levels[[1]][j], start, end))
   }
 }
 
 # Another Example
-test <- read_html("print_2091.html")
+test <- read_html("~/Documents/TEACHING/factbook/fields/print_2091.html")
 t <- test %>% html_table(fill = TRUE)
-IM <- matrix(0, 233, 4)
+IM <- matrix(0, 231, 4)
 colnames(IM) <- c("country", "IM_total", "IM_male", "IM_female")
-for(i in 4:236){
-  IM[i-3, 1] <- t[[i]][["X1"]][2]
-  levels <- strsplit(t[[i]][["X2"]][2], "\n")
+for(i in 1:231){
+  IM[i, 1] <- t[[1]][i,1]
+  levels <- strsplit(t[[1]][i,2], "births")
   for(j in 1:3){
     start <- regexpr(":",levels[[1]][j]) + 2
     end <- regexpr("d",levels[[1]][j]) - 2
-    IM[i-3, j+1] <- as.numeric(substr(levels[[1]][j], start[1], end[1]))
+    IM[i, j+1] <- as.numeric(substr(levels[[1]][j], start[1], end[1]))
   }
 }
 ```

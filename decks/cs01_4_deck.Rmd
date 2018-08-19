@@ -1,5 +1,5 @@
 ---
-title: Birthweight - Causal Inference
+title: Causal Inference
 output: 
   revealjs::revealjs_presentation:
     theme: night
@@ -21,7 +21,7 @@ knitr::opts_chunk$set(echo = TRUE,fig.width=6, fig.height=5)
 
 
 
-## Case Study 1: Birthweight
+## Causality
 
 Birthweight is a commonly-used indicator of a newborn infant's health status. Because this indicator is easily obtained, it is a critical component of population health reporting by the World Health Organization and governments around the globe.
 
@@ -36,16 +36,17 @@ Can we learn whether a factor may *cause* the increase or decrease in birthweigh
 
 
 ## Confounding
-* Confounding is main complication between association and causation
-* Let $W$ denote treatment, $Y$ outcome, and $X$ the observed covariates
-* Confounding variable influences the decision of treatment and outcome
-    + Example: W: Education and Y: income - confounder: socio-economic status of the family
-```{r , echo=FALSE, fig.cap="", out.width = '70%'}
+* Let $W$ denote treatment, $Y$ outcome, and $X$ potential confounder
+* A *confounding* variable influences the association of treatment and outcome
+    + Example: W: Education, Y: income, X: family SES
+```{r , echo=FALSE, fig.cap="", out.width = '50%'}
 knitr::include_graphics("figures/causal_diagram.png")
 ```
-* We will aim to address observed confounders through causal inference frameworks..
+* Does more education lead to higher income, or does that only seem to be the case because rich kids are given more education and also have higher income due to their SES?
+* We will aim to address observed confounders through causal inference frameworks.
+* If a confounder is not observed, we may not be able to adjust for it!
 
-## Frameworks for Causal Inference
+## Frameworks for causal inference
 * Potential outcome framework also known as counterfactual framework or Neyman-Rubin Causal Model (RCM)
 
 * 3 Integral components to RCM:
@@ -53,7 +54,7 @@ knitr::include_graphics("figures/causal_diagram.png")
        2. Assignment mechanism (how is treatment assigned to observations? e.g. random assignment)
        3. Outcome model relating potential outcomes and covariates
        
-* The causal diagram framework by Pearl using directed acyclic graphics (DAGs)
+* Sketch on prior slide illustrates the causal diagram framework by Pearl using a directed acyclic graph (DAG)
 
 
 ## Causal Assumptions 
@@ -74,44 +75,28 @@ To identify causal effects from observed data, we must make assumptions:
       + In observations studies, assignment mechanism is *unknown* and *uncontrolled*.
   * Properties of assignment mechanism:
       1. Individualistic assignment: treatment assignment for unit $i$ does not depend on outcomes and assignments for other units
-      2. Probabilistic assignment: probabilitiy of assignment to treatment is strictly between 0 and 1
+      2. Probabilistic assignment: probability of assignment to treatment is strictly between 0 and 1
         + Every unit has some probability of getting the treatment
       3. Unconfounded Assignment: assignment does not depend on the potential outcomes
-        + results in dependence of treatment only on the measured covariates - P(W|X) instead of $P(W|X, Y(0), Y(1))$
 
-## Causal Estimands
-The assumptions are needed to infer causal estimands in observational studies. Some estimands that are of interest:
+## Average treatment effect
+Under these assumptions, we can estimate the
 
- 1. Average Treatment Effect (ATE):   $$ \tau = \mathbb{E}[Y_i(1) - Y_i(0)]$$
- 2. Average Treatment Effect of the Treated (ATT): $$ \tau = \mathbb{E}[Y_i(1) - Y_i(0)| W_i=1]$$
- 3. Conditional Average Treatment Effect (CATE): $$ \tau = \mathbb{E}[Y_i(1) - Y_i(0)| X=x]$$
+Average Treatment Effect (ATE) $$ \tau = \mathbb{E}[Y_i(1) - Y_i(0)]$$
+
 
 ## Quick start to using causal inference
-In oberservational studies, we must adjust for the measured confounding. Some common methods used to do this: 
-  1. Covariate-adjusted estimators (e.g. regression, matching)
-  2. Propensity Score Methods (e.g. matching and weighting)
+In oberservational studies, we must adjust for the measured confounding. *Propensity score* methods are one of several ways to do this.
   
-## Covariate-adjusted estimators
-Consider two regressions, one for each potential outcome:
-$$ \mathbb{E}[Y(1)|X=x] = \mu_1(x), \quad  \mathbb{E}[Y(0)|X=x] = \mu_0(x)$$
-
-We can fit these using linear regression where
-$$ \mathbb{E}[Y(1)|X=x] = \alpha_1 + \beta_1 X_i $$
-$$ \mathbb{E}[Y(0)|X=x] = \alpha_0 + \beta_0 X_i $$
-The resulting covariate-adjusted ATE estimator is: 
-$$ \hat{\tau}_{\text{adj}} = \{\bar{Y_1}^{\text{obs}}-\hat{\beta_1}(\bar{X_1} - \bar{X})\} - 
-\{\bar{Y_0}^{\text{obs}}-\hat{\beta_0}(\bar{X_0} - \bar{X})\} $$
-where $\hat{\beta}_w$ is the OLS estimate of the coefficient of $X$ in the two regressions.
-
-Note: 1) Validity of the analysis critically relies on the validity of the unconfoundedness assumption (are we accounting for all possible confounders). 2) Also must have correctly specified regression model to result in unbiased causal estimates.
 
 
 ## Propensity Score Methods
-Propensity score is defined as the conditional probability of receiving the treatment given the pre-treatment covariates $X$:
+A *propensity score* is defined as the conditional probability of receiving the treatment given the pre-treatment covariates $X$:
 $$ e(X) = Pr(W=1|X) = \mathbb{E}(W|X) $$
+
 Properties:
 
-1. Propensity scores balances the distribution of all $X$ between treatment groups: 
+1. Propensity scores can balance the distribution of all $X$ between treatment groups: 
 $$ W \perp X | e(X)$$
 2. If $W$ is unconfounded given $X$, then $W$ is unconfounded given $e(X)$.
   * $e(X)$ is a summary score of the observed covariates
@@ -128,119 +113,197 @@ Propensity score analysis (for observational studies) typically involves two sta
     4. Regression
     5. Mixed procedure of the above
     
-## Example of PS Analysis with birthweight data
-Does cigarette smoking in the last trimester cause lower birthweight in babies?
-```{r}
-#Read in birth data
-o_data <- read.csv("~/Documents/case-studies/data/2011-2016 Vital Files Duke_Herring/Yr1116Birth.csv", na.strings=c(99,9999))
-o_data$SEX = ifelse(o_data$SEX==9, NA, o_data$SEX)
+```{r openmatching,results='hide'}
+library(Matching)
+```
+    
+## National Supported Work Demonstration (NSW)
 
-#Remove NAs and restrict to year 2016 - for demonstrations purposes
-birth_data <- na.omit(o_data)
-birth_data_2016 <- birth_data[which(birth_data$YOB==2016),]
-#Create dummy variable for mothers that smoke in last trimester (currently a count variable)
-birth_data_2016$smoke_LT <- ifelse(birth_data_2016$CIGLN >0, 1, 0)
+The NSW was a US-federally-funded project was designed to provide 12-18 months of work experience to people who had faced economic and social problems. 
+
+In this study, the outcome was income in 1978 (after program participation). Comparing participants to non-participants, researchers found the participants had higher income.
+
+## National Supported Work Demonstration (NSW)
+
+```{r lalondehist,out.width='50%'}
+data(lalonde)
+hist(lalonde$re78) #yikes, zero-inflated
 ```
 
-Let's walk through the steps to perform a propensity score causal analysis with the birthweight data.
+## National Supported Work Demonstration (NSW)
+```{r simple}
+mean(lalonde$re78[lalonde$treat==1])
+mean(lalonde$re78[lalonde$treat==0])
+wilcox.test(lalonde$re78~lalonde$treat)
+```
 
- * We will consider treatment ($W$) to be smoking in last trimester
- * Outcome is birthweight
+## Does this mean the program worked?
+
+One concern in evaluating the program is whether program participants (indicator variable treat=1) differ from non-participants across a variety of factors, including age, race and ethnicity, marital status, and high school graduation status.
+
+## Logistic regression
+
+*Logistic regression* is a type of generalized linear model, which generalizes the typical linear model to non-Gaussian data. The logistic regression model is linear on the log of the odds: $$\log\frac{p_i}{1-p_i}=\beta_0+\beta_1x_{1i}+\cdots+\beta_px_{pi},$$ where $p_i=Pr(y_i=1)$.
+If the parameter $\beta_j>0$, then increasing levels of $x_j$ are associated with higher probabilities that $y=1$, and values of $\beta_j<0$ are associated with lower probabilities that $y=1$. $\beta_j=0$ is consistent with no association between $x_j$ and $y$.
+
+## NSW participants
+
+If NSW program participants are similar to comparison people in the data set, then we would expect a logistic model for the probability of being a participant to have $\beta$ coefficients that are not significantly different from 0 (except for the intercept, which is related to the overall fraction of people in the study who participated in NSW). This is easily evaluated in R.
+
+## Are NSW participants similar to nonparticipants?
+
+```{r logistic}
+glm1  <- glm(treat~age + black +hisp + married + nodegr + re74, family=binomial, data=lalonde)
+summary(glm1)
+```
+
+## Are NSW participants similar to nonparticipants?
+
+Based on this model, people without high school degrees were less likely to be in the NSW program than their counterparts who graduated high school. Maybe incomes were higher among program participants simply because program participants were more likely to have high school diplomas.
+
+## Causal analysis
+
+Let's walk through the steps to perform a propensity score causal analysis of the jobs program.
+
+ * We will consider treatment ($W$) to be program participation
+ * Outcome is 1978 income
+ 
+We want to know if program participation led to increased income in 1978.
 
 ## Stage 1: Estimate the propensity score
 Aim of using propensity scores is to ensure **overlap** and **balance** of covariates between treatment groups.
 
-1. For binary treatments, fit propensity score model via logistic regression 
+1. For binary treatments, fit propensity score model via logistic regression (we already did this!)
 
-  * Use glm and specify treatment as response, and all possible confounders as predictors
-```{r}
-ps_mod <- glm(smoke_LT ~ PARITY+GEST+MAGE+as.factor(MRACER)+ as.factor(MHISP), family="binomial", data=birth_data_2016)
+```{r propmodel, eval=FALSE}
+glm1  <- glm(treat~age + black +hisp + married + nodegr + re74, family=binomial, data=lalonde)
 ```
-* Next estimate propensity scores
+Next, estimate propensity scores
 ```{r}
-ps <- predict(ps_mod, type="response")
-```
-
-## Stage 1: Estimate the propensity score, cont.
-2. Check overlap of propensity score between treatment groups, and discard observations with non-overlapping propensity scores
-  * Compare distribution of propensity score between treated groups
-```{r, echo=FALSE, fig.height=3}
-hist(ps[which(birth_data_2016$smoke_LT==0)], col=2, main="Propensity Score Distribution", xlab="propensity score")
-hist(ps[which(birth_data_2016$smoke_LT==1)], col=3, add=TRUE)
-legend("topright", c("Treated", "Control"), col=c(2,3), pch=c(1,1))
+ps <- predict(glm1, type="response")
+summary(ps)
 ```
 
-* Next discard those units that aren't in the overlapped region
+## Stage 1: Estimate the propensity score
+Check overlap of propensity scores between treatment groups, and discard observations with non-overlapping propensity scores so that the groups look similar in terms of variables in our model
+  
+```{r, echo=FALSE, out.width='70%'}
+par(mfrow=c(1,2))
+hist(ps[which(lalonde$treat==1)], col=2, xlab="NSW",ylim=c(0,150),xlim=c(0.2,0.7),main="")
+hist(ps[which(lalonde$treat==0)], col=3, xlab="not NSW",ylim=c(0,150),xlim=c(0.2,0.7),main="")
+
+```
+
+## Stage 1: Estimate the propensity score
+
+Next discard those units that aren't in the overlapped region
 ```{r}
-ps_0 <- ps[which(birth_data_2016$smoke_LT==0)]
-ps_1 <- ps[which(birth_data_2016$smoke_LT==1)]
+ps_0 <- ps[which(lalonde$treat==0)]
+ps_1 <- ps[which(lalonde$treat==1)]
 overlap_ind <- which(ps < max(ps_0) & ps > min(ps_1))
 ps_overlap = ps[overlap_ind]
-birth_data_overlap = birth_data_2016[overlap_ind,]
+lalonde_overlap = lalonde[overlap_ind,]
+dim(lalonde); dim(lalonde_overlap)
+```
+In this case, there was a good bit of overlap, so few observations were discarded.
+
+## Stage 1: Estimate the propensity score
+Assess balance of the covariates based on the propensity scores
+
+1. Create K blocks of $\widehat{e}$ based on its quantiles
+      
+```{r blocks}
+      blocks = cut(ps_overlap, quantile(ps_overlap, probs=seq(0,1,by=.2)), 
+      labels=c(1:5), include.lowest=TRUE)
 ```
 
-## Stage 1: Estimate the propensity score, cont.
-3. Assess balance of the covariates based on the propensity scores
-      1. Create K blocks of $\hat{e(x)}$ based on its quantiles
-    ```{r}
-      blocks = cut(ps_overlap, quantile(ps_overlap, probs=seq(0,1,by=.2))
-                   , labels=c(1:5), include.lowest=TRUE)
-    ```
-      2. For every covariate, assess the balance within **each of the blocks**, e.g. by a t-test
-    ```{r}
-      t.test(birth_data_overlap$GEST[which(blocks==1)]~birth_data_overlap$smoke_LT[which(blocks==1)])
-    ```
-      * if p-value is greater than .05, then we acheive covariate balance!
+For every covariate, we then assess the balance within **each of the blocks**, e.g. by a t-test or $\chi^2$ test
       
-## Stage 1: Estimate the propensity score, cont.
-If covariates are unbalanced in one of the blocks, try:
+## Assessing balance: continuous variables      
+```{r balancecontinuous, eval=FALSE}
+      t.test(lalonde_overlap$age[which(blocks==1)]~lalonde_overlap$treat[which(blocks==1)])
+      t.test(lalonde_overlap$re74[which(blocks==1)]~lalonde_overlap$treat[which(blocks==1)])
+      t.test(lalonde_overlap$age[which(blocks==2)]~lalonde_overlap$treat[which(blocks==2)])
+      t.test(lalonde_overlap$re74[which(blocks==2)]~lalonde_overlap$treat[which(blocks==2)])
+      t.test(lalonde_overlap$age[which(blocks==3)]~lalonde_overlap$treat[which(blocks==3)])
+      t.test(lalonde_overlap$re74[which(blocks==3)]~lalonde_overlap$treat[which(blocks==3)])
+      t.test(lalonde_overlap$age[which(blocks==4)]~lalonde_overlap$treat[which(blocks==4)])
+      t.test(lalonde_overlap$re74[which(blocks==4)]~lalonde_overlap$treat[which(blocks==4)])
+      t.test(lalonde_overlap$age[which(blocks==5)]~lalonde_overlap$treat[which(blocks==5)])
+      t.test(lalonde_overlap$re74[which(blocks==5)]~lalonde_overlap$treat[which(blocks==5)])
+```
+All p-values>0.05 (take my word for it!)
+
+## Assessing balance: categorical variables
+        
+```{r balancecat, eval=FALSE}       
+fisher.test(lalonde_overlap$black[which(blocks==1)],
+            lalonde_overlap$treat[which(blocks==1)])     
+fisher.test(lalonde_overlap$hisp[which(blocks==1)],
+            lalonde_overlap$treat[which(blocks==1)])     
+fisher.test(lalonde_overlap$married[which(blocks==1)],
+            lalonde_overlap$treat[which(blocks==1)])     
+fisher.test(lalonde_overlap$nodegr[which(blocks==1)],
+            lalonde_overlap$treat[which(blocks==1)]) 
+
+```   
+You need to run this for all 5 levels of the blocks variables. When you run the code, you notice two things: (1) all p-values>0.05, and (2) some tests failed because everyone in the block had the same value of the characteristic -- e.g. in block 2, everyone is unmarried, without a high school degree, and non-Hispanic black. Still, the block is balanced on that factor with respect to program participation.
+
+
+      
+## Stage 1: Estimate the propensity score
+If covariates are still unbalanced in one of the blocks, try:
 
 1. Splitting the propensity score into more classes (e.g. K=10) and recheck balance
 2. Include higher order terms or interactions in the propensity score model and repeat steps!
 
-Note, the propensity score matching R package (`Matching`) has a built in check balance function that does step 3 for you.
+Note: the propensity score matching R package (`Matching`) has a built in check balance function 
 
 ## Stage 1: Overview
 ```{r, echo=FALSE}
 knitr::include_graphics("figures/propensity_score_workflow.png")
 ```
 
-## Stage 2: Stratification
+## Stage 2 Option 1: Stratification
 We can estimate causal effects using stratification of the propensity score (similar to the check balance procedure above!)
 
  1. Divide subjects into $K$ strata by the corresponding quantiles of the estimated propensity score
  2. Estimate ATE within each subclass of $e_k$ and then average by the block size.
  
- $$ \hat{\tau}^{\text{ATE}} = \sum_{k=1}^K \{(\bar{Y}_{k,1} - \bar{Y}_{k,0})\}\frac{N_{k,1}+N_{k,0}}{N} $$
+ $$ \hat{\tau}^{\text{ATE}} = \sum_{k=1}^K \{\left(\bar{Y}_{k,1} - \bar{Y}_{k,0}\right)\}\frac{N_{k,1}+N_{k,0}}{N} $$
  where $N_{k,1}, N_{k,0}$ are the number of units in class $k$ under treated and control.
 
 Variance Estimation:
-$$ \mathbb{V}(\hat{\tau}) = \sum_{k=1}^K \{\mathbb{V}(\bar{Y}_{k,1}) - \mathbb{V}(\bar{Y}_{k,0})\}(\frac{N_{k,1}+N_{k,0}}{N})^2 $$
+$$ \mathbb{V}(\hat{\tau}) = \sum_{k=1}^K \{\mathbb{V}(\bar{Y}_{k,1}) - \mathbb{V}(\bar{Y}_{k,0})\}\left(\frac{N_{k,1}+N_{k,0}}{N}\right)^2 $$
  
 
-## Stage 2: Matching
+## Stage 2 Option 2: Matching
 In propensity score matching, the distance metric between observations is the estimated propensity score.
 
   * Idea is to find a treated and control patient with very similar propensity scores 
   * do this for all treated patients and then find the average difference of their outcome
 
 We can use the `Matching` package in R. Just input the outcome, treated variable, and estimated propensity score. 
+
+## Matching
+
 ```{r, message=FALSE}
-library(Matching)
-match1 <- Match(Y=birth_data_overlap$BWTG, Tr = birth_data_overlap$smoke_LT, X = ps_overlap, version='fast', estimand="ATE")
+match1 <- Match(Y=lalonde_overlap$re78, Tr = lalonde_overlap$treat, X = ps_overlap, version='fast', estimand="ATE")
 summary(match1)
 ```
 
-We then can check the resulting balance between treated and control across covariates with `MatchBalance`
-```{r, eval=FALSE}
-mb <- MatchBalance(smoke_LT ~ PARITY+GEST+MAGE+as.factor(MRACER)+ as.factor(MHISP), data= birth_data_overlap,match.out=match1)
-```
- 
- 
-## Exercises:
-1. Estimate the ATE and variance using stratification.
+In this analysis, which matches participants on potential confounders including having a high school diploma, we see again that those in the program had higher incomes than those without.
 
-  * Be sure to check balance after fitting propensity score model
-2. How does that compare to the ATE from Matching?
-3. What conclusions can we draw from 3rd trimester smoking?
-4. Redo analysis with treatment defined as any trimester smoking.
+## Matching
+
+We then can verify the resulting balance between treated and control across covariates with `MatchBalance`
+
+```{r, eval=FALSE}
+mb <- MatchBalance(treat ~ age+black+hisp+married+nodegr+re74, 
+  data= lalonde_overlap,match.out=match1)
+
+```
+
+This code's output is suppressed due to its length, but you can run it on your own and verify the p-values for the bootstrap KS test (preferred over the t-test due to better behavior for non-continuous distributions) are all large. 
+ 
+

@@ -16,23 +16,27 @@ library(tidyverse)
 - create interactive visual presentations using Tableau
 
 # Case Study Goals
-Using data from the World Bank or a complex data source of your own choosing, 
+Using data from the World Bank, CIA Factbook, or a complex data source of your own choosing, 
 - create a Shiny app in R to illustrate an aspect of our world in data
 - create an accompanying Tableau dashboard interactive visual presentation of our world in data
 
-# Data
+# Data (coming soon)
+
+<!---
 
 R Tutorial Data Set
 - [popDF.RData](data/popDF.RData)
 - [infMortDF.RData](data/infMortDF.RData)
 - [codeMapDF.RData](data/codeMapDF.RData)
+- [countries.csv](data/countries.csv)
 
 Full People And Society Data Set:
 - [full.RData](data/full.RData)
 
 How To Obtain Data from Factbook:
-- [Factbook Tutorial](data/data_file.html)
+- [Factbook Tutorial](data/data_file_2014.html)
 
+--->
 
 # Reports
 
@@ -42,12 +46,14 @@ How To Obtain Data from Factbook:
 
 Chapter 11 of Data Science in R: A Case Studies Approach to Computational Reasoning and Problem Solving by Nolan and Temple Lang (free e-book through Duke Libraries)
 
+[Tableau for Students](https://www.tableau.com/academic/students)
+
 [Introduction to Tableau Video](http://library.capture.duke.edu/Panopto/Pages/Viewer.aspx?id=05708679-00e5-45c3-bb31-fd3724cd8009)
 
 
-# Slides
+# Slides (coming soon)
 
-
+<!---
 [Initial description of CIA Factbook Data and Plotting in R](decks/cs02_1_deck.html)
 
 [Obtaining Tableau Guide](decks/cs02_2_deck.html)
@@ -56,5 +62,5 @@ Chapter 11 of Data Science in R: A Case Studies Approach to Computational Reason
 
 [Tableau dashboard visualization of Infant Mortality](decks/cs02_4_deck.html)
 
-
+--->
 

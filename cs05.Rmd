@@ -16,28 +16,30 @@ library(tidyverse)
 - apply modern methods for handling missing data to analyze time-to-event data for Duke cardiology patients
 
 # Case Study Goals
-Based on data from the Duke Databank for Cardiovascular Diseases, we will explore biological and sociodemographic factors related to survival. In order to 
 
-# Data
+Based on data from the Duke Databank for Cardiovascular Diseases, we will explore biological and sociodemographic factors related to survival. The goal is to describe both modifiable and non-modifiable risk factors for death, accounting as much as possible for potential biases due to missing data.
 
+# Data (coming soon)
+<!---
 -Jiurui post data on Sakai with data dictionary linked here; variables to include in dataset include the following:  AGE_G, GENDER, RACE_G, YRCATH_G, CHFSEV, HXCEREB, HXCHF, HXCOPD, HXDIAB, HXHTN, HXMI, HXHYL, HXSMOKE, HEIGHT_R, WEIGHT_R, (calculate BMI from height and weight),  S3, LMST, LVEF_R, NUMDZV, DEATH, DAYS2LKA
 -Jiurui let me know % with missing data for each variable. Also subset to one observation per person (repeat events are included, but there should be only one death)
 -NOtes: look at race by gender interaction, 
 - outcome should be time to death. Have Jiurui construct this bearing in mind the censoring variable
+--->
 
 # Reports
 
-- Interim report 1: investigate patterns of missing data and comment on potential for bias in analysis results
-- Final report: prepare a report, not to exceed 5 pages and accompanied by useful visualizations, describing survival as a function of predictor variables of interest
+- Interim report 1: investigate patterns of missing data and comment on potential for bias in analysis results in a report not to exceed 3 pages. Reproducible code should be provided in an appendix.
+- Final report: prepare a report, not to exceed 5 pages and accompanied by useful visualizations, describing survival as a function of predictor variables of interest. Reproducible code should be provided in an appendix.
 
 
-# Resources
-
-Amy/Jiurui to update
+# Resources (coming soon)
 
 
-# Slides
 
+
+# Slides (coming soon)
+<!---
 [Duke Databank for Cardiovascular Disease](decks/cs05_1_deck.html)
 
 
@@ -45,7 +47,7 @@ Amy/Jiurui to update
 
 
 [Survival analysis tutorial: Jiurui ](decks/cs05_3_deck.html)
-
+--->
 
 
 

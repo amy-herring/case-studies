@@ -18,9 +18,7 @@ library(tidyverse)
 # Case Study Goals
 
 - determine which factors are associated with birthweight and characterize the relationship between each factor and birthweight
-
 - explore whether fit of a linear regression model is adequate or whether robust regression methods are needed
-
 - estimate the impact of eliminating maternal smoking on birthweight in a population
 
 # Data
@@ -38,9 +36,9 @@ library(tidyverse)
 An Introduction to Statistical Learning with Applications in R, James et al (2013), Chapter 5: Resampling Methods (free e-book through Duke Libraries)
 
 
-# Slides
+# Slides (coming soon)
 
-
+<!---
 [Initial description of case study](decks/cs01_1_deck.html)
 
 [Cross-validation](decks/cs01_2_deck.html)
@@ -51,3 +49,4 @@ An Introduction to Statistical Learning with Applications in R, James et al (201
 
 Why do I care about outliers?  Talk about financial crisis. Amy to do.
 
+--->

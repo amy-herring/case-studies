@@ -20,13 +20,13 @@ Based on data from the North Carolina Center for Health Statistics (NCHS), obtai
 
 # Data
 
--Liz point them to Sakai for birth and death datafiles
--Liz provide NC shapefile here for plotting by county 
+-Data from NC Birth and Death Records will be made available on Sakai 
+ 
 
 # Reports
 
 - Interim report 1: create an engaging visualization of observed infant mortality rates by year, county and race
-- Interim report 2: using a hierarchical model, obtain estimates of infant mortality rates in 2015 by county and race. Compare to the published estimates from the SCHS and discuss any discrepancies in detail. Your report should include a visualization for 2015, a one page (maximum) description of hte model used, 1-2 pages (maximum) describing your findings, and a one page report targeted at SCHS explaining how use of your model to obtain estimated rates compares to the methods you have seen them use so far, which are pooling years (as in the 2010-2014 graphic) or reporting rates based on small cell counts (as in 2015). In your report targeted to SCHS, if you feel they should use different methodology (e.g., your model) for estimating infant mortality rates, be sure to make a clear argument for doing so.
+- Interim report 2: using a hierarchical model, obtain estimates of infant mortality rates in 2015 by county and race. Compare to the published estimates from the SCHS and discuss any discrepancies in detail. Your report should include a visualization for 2015, a one page (maximum) description of the model used, 1-2 pages (maximum) describing your findings, and a one page report targeted at SCHS explaining how use of your model to obtain estimated rates compares to the methods you have seen them use so far, which are pooling years (as in the 2010-2014 graphic) or reporting rates based on small cell counts (as in 2015). In your report targeted to SCHS, if you feel they should use different methodology (e.g., your model) for estimating infant mortality rates, be sure to make a clear argument for doing so.
 - Final report: prepare a report, not to exceed 5 pages and accompanied by useful visualizations, describing infant mortality in NC by county and race, along with any trends over time
 
 
@@ -35,8 +35,9 @@ Based on data from the North Carolina Center for Health Statistics (NCHS), obtai
 Data Analysis Using Regression and Multilevel/Hierarchical Models by Gelman & Hill
 
 
-# Slides
+# Slides (coming soon)
 
+<!---
 
 [Infant Mortality in NC](decks/cs03_1_deck.html)
 
@@ -49,6 +50,6 @@ Data Analysis Using Regression and Multilevel/Hierarchical Models by Gelman & Hi
 
 [Bayesian Hierarchical Modeing Using BMRS: Liz](decks/cs03_5_deck.html)
 
-
+--->
 
 
