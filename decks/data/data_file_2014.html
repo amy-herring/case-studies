@@ -127,31 +127,41 @@ $(document).ready(function () {
 <p>First, you will need to obtain the factbook from <a href="https://www.cia.gov/library/publications/download/" class="uri">https://www.cia.gov/library/publications/download/</a>. Click “factbook.zip” and this will download the entire factbook for you. (Note: this code corresponds to the 2014 factbook, but similar principles should be applicable to other factbooks). Then you have two options for obtains your data sets:</p>
 <div id="option-1-rank-order-txt-files" class="section level2">
 <h2>Option 1: Rank Order Txt Files</h2>
-<p>Your first option is using the rank order section of the factbook which has txt files for each variable. However, the significant drawnback of this is that it only has one value for each country, i.e. you cannot use it to obtain a variable such as population structure since it has multiple values for each country.</p>
-<ul>
-<li>Remember to give your columns names.</li>
-<li>To find the corresponding number for each variable, e.g. 2119 for population, you use the “rankorderguide.html” and click on your desired variable. Then in the address bar at the top of the screen you can see the correct number for it.</li>
-<li>You may need to delete columns/clean the data to obtain the correct format.</li>
-</ul>
+<p>Your first option is using the rank order section of the factbook which has txt files for each variable. However, the significant drawnback of this is that it only has one value for each country, i.e. you cannot use it to obtain a variable such as population structure since it has multiple values for each country. ` - Remember to give your columns names. - To find the corresponding number for each variable, e.g. 2119 for population, you use the “rankorderguide.html” and click on your desired variable. Then in the address bar at the top of the screen you can see the correct number for it. - You may need to delete columns/clean the data to obtain the correct format.</p>
 <p>Note: You will need to iterate this process for all desired variables &amp; merge the data sets to replicate the full.RData file.</p>
-<pre class="r"><code># insert country codes
-cia_ctr &lt;- read.csv(&quot;countries.csv&quot;, header = TRUE)
-cia_ctr &lt;- cia_ctr[,1:2]
+<pre class="r"><code>library(tidyverse) # We will be importing our data using the tidyverse library</code></pre>
+<pre><code>## ── Attaching packages ───────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
+<pre><code>## ✔ ggplot2 3.0.0     ✔ purrr   0.2.5
+## ✔ tibble  1.4.2     ✔ dplyr   0.7.6
+## ✔ tidyr   0.8.1     ✔ stringr 1.3.1
+## ✔ readr   1.1.1     ✔ forcats 0.3.0</code></pre>
+<pre><code>## Warning: package 'ggplot2' was built under R version 3.4.4</code></pre>
+<pre><code>## Warning: package 'tibble' was built under R version 3.4.3</code></pre>
+<pre><code>## Warning: package 'tidyr' was built under R version 3.4.4</code></pre>
+<pre><code>## Warning: package 'purrr' was built under R version 3.4.4</code></pre>
+<pre><code>## Warning: package 'dplyr' was built under R version 3.4.4</code></pre>
+<pre><code>## Warning: package 'stringr' was built under R version 3.4.4</code></pre>
+<pre><code>## Warning: package 'forcats' was built under R version 3.4.3</code></pre>
+<pre><code>## ── Conflicts ──────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()</code></pre>
+<pre class="r"><code># get country codes
+ctr_codes &lt;- read.csv(&quot;country_codes.csv&quot;, header = TRUE)
+cia_codes &lt;- ctr_codes[,1:2]
 
 # population Data
-popDF &lt;- read.delim(&quot;factbook/rankorder/rawdata_2119.txt&quot;, header = FALSE, col.names = c(&quot;&quot;, &quot;country&quot;,&quot;pop&quot;))
+popDF &lt;- read_delim(&quot;factbook/rankorder/rawdata_2119.txt&quot;, delim = &quot;\t&quot;, col_names = c(&quot;X1&quot;, &quot;country&quot;,&quot;pop&quot;), col_types = list(col_integer(), col_character(), col_number()))
+# Hint: you may want to also explore the read_table function for your homework
 popDF &lt;- popDF[,-1] # remove blank column
-popDF$pop &lt;- as.numeric(gsub(&quot;,&quot;, &quot;&quot;, popDF$pop))
-popDF &lt;- merge(cia_ctr, popDF, by.x=&quot;Entity&quot;, by.y = &quot;country&quot;) #remove commas, so it can be converted to numeric
+popDF &lt;- merge(cia_codes, popDF, by.x=&quot;Country&quot;, by.y = &quot;country&quot;) 
 popDF &lt;- popDF[,2:3]
 names(popDF) &lt;- c(&quot;ctry&quot;, &quot;pop&quot;)
 save(popDF, file=&quot;popDF.RData&quot;)
 
 # Infant Mortality Data 
-infMortDF &lt;- read.delim(&quot;factbook/rankorder/rawdata_2091.txt&quot;, header = FALSE, col.names = c(&quot;&quot;, &quot;country&quot;,&quot;infMort&quot;, &quot;&quot;))
-infMortDF &lt;- infMortDF[,-c(1,4)]
-save(infMortDF, file=&quot;infMortDF.RData&quot;)
-infMortDF &lt;- merge(cia_ctr, infMortDF, by.x=&quot;Entity&quot;, by.y = &quot;country&quot;)
+infMortDF &lt;- read_delim(&quot;factbook/rankorder/rawdata_2091.txt&quot;, delim = &quot;\t&quot;, col_names = c(&quot;X1&quot;, &quot;country&quot;,&quot;infMort&quot;), col_types = list(col_integer(), col_character(), col_number()))
+infMortDF &lt;- infMortDF[,-1]
+infMortDF &lt;- merge(cia_codes, infMortDF, by.x=&quot;Country&quot;, by.y = &quot;country&quot;)
 infMortDF &lt;- infMortDF[,2:3]
 names(infMortDF) &lt;- c(&quot;ctry&quot;, &quot;infMort&quot;)
 save(infMortDF, file=&quot;infMortDF.RData&quot;)</code></pre>
@@ -162,6 +172,14 @@ save(infMortDF, file=&quot;infMortDF.RData&quot;)</code></pre>
 <pre class="r"><code>library(rvest)</code></pre>
 <pre><code>## Loading required package: xml2</code></pre>
 <pre><code>## Warning: package 'xml2' was built under R version 3.4.3</code></pre>
+<pre><code>## 
+## Attaching package: 'rvest'</code></pre>
+<pre><code>## The following object is masked from 'package:purrr':
+## 
+##     pluck</code></pre>
+<pre><code>## The following object is masked from 'package:readr':
+## 
+##     guess_encoding</code></pre>
 <pre class="r"><code># read in data
 test &lt;- read_html(&quot;factbook/fields/print_2010.html&quot;)
 t &lt;- test %&gt;% html_table(fill = TRUE) # converts html to a list

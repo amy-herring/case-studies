@@ -22,15 +22,15 @@ Note: You will need to iterate this process for all desired variables & merge th
 ```{r}
 library(tidyverse) # We will be importing our data using the tidyverse library
 
-# insert country codes
-cia_ctr <- read.csv("countries.csv", header = TRUE)
-cia_ctr <- cia_ctr[,1:2]
+# get country codes
+ctr_codes <- read.csv("country_codes.csv", header = TRUE)
+cia_codes <- ctr_codes[,1:2]
 
 # population Data
 popDF <- read_delim("factbook/rankorder/rawdata_2119.txt", delim = "\t", col_names = c("X1", "country","pop"), col_types = list(col_integer(), col_character(), col_number()))
 # Hint: you may want to also explore the read_table function for your homework
 popDF <- popDF[,-1] # remove blank column
-popDF <- merge(cia_ctr, popDF, by.x="Entity", by.y = "country") 
+popDF <- merge(cia_codes, popDF, by.x="Country", by.y = "country") 
 popDF <- popDF[,2:3]
 names(popDF) <- c("ctry", "pop")
 save(popDF, file="popDF.RData")
@@ -38,7 +38,7 @@ save(popDF, file="popDF.RData")
 # Infant Mortality Data 
 infMortDF <- read_delim("factbook/rankorder/rawdata_2091.txt", delim = "\t", col_names = c("X1", "country","infMort"), col_types = list(col_integer(), col_character(), col_number()))
 infMortDF <- infMortDF[,-1]
-infMortDF <- merge(cia_ctr, infMortDF, by.x="Entity", by.y = "country")
+infMortDF <- merge(cia_codes, infMortDF, by.x="Country", by.y = "country")
 infMortDF <- infMortDF[,2:3]
 names(infMortDF) <- c("ctry", "infMort")
 save(infMortDF, file="infMortDF.RData")

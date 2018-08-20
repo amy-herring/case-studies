@@ -25,16 +25,16 @@ Using data from the World Bank, CIA Factbook, or a complex data source of your o
 <!---
 
 R Tutorial Data Set
-- [popDF.RData](data/popDF.RData)
-- [infMortDF.RData](data/infMortDF.RData)
-- [codeMapDF.RData](data/codeMapDF.RData)
-- [countries.csv](data/countries.csv)
+- [popDF.RData](decks/data/popDF.RData)
+- [infMortDF.RData](decks/data/infMortDF.RData)
+- [codeMapDF.RData](decks/data/codeMapDF.RData)
+- [country_codes.csv](decks/data/country_codes.csv)
 
 Full People And Society Data Set:
-- [full.RData](data/full.RData)
+- [full.RData](decks/data/full.RData)
 
 How To Obtain Data from Factbook:
-- [Factbook Tutorial](data/data_file_2014.html)
+- [Factbook Tutorial](decks/data/data_file_2014.html)
 
 --->
 
