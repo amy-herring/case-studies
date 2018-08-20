@@ -26,7 +26,7 @@ R Tutorial Data Set
 - [popDF.RData](data/popDF.RData)
 - [infMortDF.RData](data/infMortDF.RData)
 - [codeMapDF.RData](data/codeMapDF.RData)
-- [countries.csv](data/countries.csv)
+- [country_codes.csv](data/country_codes.csv)
 
 Full People And Society Data Set:
 - [full.RData](data/full.RData)
