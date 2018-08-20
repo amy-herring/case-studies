@@ -34,6 +34,7 @@ Using data relevant to countries around the world, we will explore data science 
 ## Case Study Goals
 
 Using data from the World Bank or a complex data source of your own choosing, 
+
 - create a Shiny app in R to illustrate an aspect of our world in data
 - create an accompanying Tableau dashboard interactive visual presentation of our world in data
 - explain your figures to class in an oral presentation by the group
@@ -54,7 +55,7 @@ While overall infant mortality rates in the US have declined over time, major di
 
 ## Infant Mortality Worldwide
 
-Worldmapper http://archive.worldmapper.org/display.php?selected=261 created a visualization of infant mortality worldwide in 2002, rescaling each country by its contribution to infant deaths worldwide. 
+[Worldmapper](http://archive.worldmapper.org/display.php?selected=261) created a visualization of infant mortality worldwide in 2002, rescaling each country by its contribution to infant deaths worldwide. 
 
 ![2002 Contributions to Worldwide Infant Mortality](figures/mort_scale.png) 
 
@@ -159,25 +160,27 @@ InfMortDiscrete = cut(allCtryData$infMort,
 summary(InfMortDiscrete)
 ```
 
-## Communicating Affected Lives
+## Affected Lives
 
 The infant mortality rate is not the only factor in decision-making. We are more likely to intervene when more lives are at risk. Let's examine population size.
 
-```{r pophist, out.width='55%'}
+
+```{r pophist, out.width='40%'}
 hist(allCtryData$pop, breaks = 20, main = "",
      xlab = "Population Size")
 ```
-There's a high variance!  Let's try scaling by taking the square root.
+
+Large variance -- let's try a scale transformation.
 
 
 ## Population Size
 
-```{r pophistsqrt, out.width='55%'}
+```{r pophistsqrt, out.width='40%'}
 hist(sqrt(allCtryData$pop), breaks = 20, main = "",
      xlab = "sqrt(Population Size)")
 ```
 
-That's much better. We'll work with some transformation of square root of population size (further scalng to be sure the radius of each point is not too large for our plot).
+That's much better. We'll work with some function of square root of population size (further scalng to be sure the radius of each point is not too large for our plot).
 
 ## Initial Plot 
 Now we are ready to plot the mortality rates around the world. Size of the points will be a function of population size, while color will be a function of the mortality rate (darker=higher).

@@ -17,14 +17,16 @@ library(tidyverse)
 
 # Case Study Goals
 Using data from the World Bank, CIA Factbook, or a complex data source of your own choosing, 
+
 - create a Shiny app in R to illustrate an aspect of our world in data
 - create an accompanying Tableau dashboard interactive visual presentation of our world in data
 
-# Data (coming soon)
+# Data 
 
-<!---
 
-R Tutorial Data Set
+
+R Tutorial Data 
+
 - [popDF.RData](decks/data/popDF.RData)
 - [infMortDF.RData](decks/data/infMortDF.RData)
 - [codeMapDF.RData](decks/data/codeMapDF.RData)
@@ -36,7 +38,7 @@ Full People And Society Data Set:
 How To Obtain Data from Factbook:
 - [Factbook Tutorial](decks/data/data_file_2014.html)
 
---->
+
 
 # Reports
 
@@ -51,16 +53,16 @@ Chapter 11 of Data Science in R: A Case Studies Approach to Computational Reason
 [Introduction to Tableau Video](http://library.capture.duke.edu/Panopto/Pages/Viewer.aspx?id=05708679-00e5-45c3-bb31-fd3724cd8009)
 
 
-# Slides (coming soon)
+# Slides
 
-<!---
-[Initial description of CIA Factbook Data and Plotting in R](decks/cs02_1_deck.html)
+
+[Initial description of CIA Factbook data and plotting in R](decks/cs02_1_deck.html)
 
 [Obtaining Tableau Guide](decks/cs02_2_deck.html)
 
-[Tableau visualization of Infant Mortality](decks/cs02_3_deck.html)
-
-[Tableau dashboard visualization of Infant Mortality](decks/cs02_4_deck.html)
+[Tableau visualization of infant mortality](decks/cs02_3_deck.html)
+<!---
+[Tableau dashboard visualization of infant mortality](decks/cs02_4_deck.html)
 
 --->
 
