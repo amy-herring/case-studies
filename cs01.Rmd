@@ -41,9 +41,9 @@ An Introduction to Statistical Learning with Applications in R, James et al (201
 
 [Birth weight data](decks/cs01_1_deck.html)
 
-[Model validation](decks/cs01_2_deck.html)
-
 [Least squares and robust regression](decks/cs01_3_deck.html)
+
+[Model validation](decks/cs01_2_deck.html)
 
 [Introduction to causal inference](decks/cs01_4_deck.html)
 

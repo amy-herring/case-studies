@@ -34,6 +34,8 @@ Based on data from the North Carolina Center for Health Statistics (NCHS), obtai
 
 Data Analysis Using Regression and Multilevel/Hierarchical Models by Gelman & Hill
 
+[2015 NC Infant Mortality Rates, from NC State Center for Health Statistics](NCinfantmortalityrates.pdf)
+
 
 # Slides (coming soon)
 
