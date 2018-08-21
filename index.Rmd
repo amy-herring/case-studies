@@ -30,7 +30,7 @@ Note: office hours may vary due to travel and other commitments. Revisions to of
 | ----------  | ----         | ---- |
 | [Professor Amy Herring](https://stat.duke.edu/people/amy-h-herring)  <a href="mailto:amy.herring@duke.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp;  | Wednesday and Thursday 1:30-2:30pm | 208 Old Chemistry |
  [TA Michael Akande](https://www2.stat.duke.edu/~oma9/)  <a href="mailto:olanrewaju.akande@duke.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp;  | Tuesday 5-6pm and Friday 2:25-3:35pm | TBD
- [TA TBA](https://stat.duke.edu/)  <a href="mailto:amy.herring@duke.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp; | TBD | TBD
+ [TA Henry Kirveslahti](https://stat.duke.edu/people/henry-kirveslahti-1)  <a href="mailto:henry.kirveslahti@duke.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp; | TBD | TBD
  
                   
 
@@ -50,12 +50,12 @@ Note: this schedule is approximate and is likely to be modified as the course pr
 | ----------    | -----------------         | --------------- |
 | August 29     | Welcome, Groups, and CS1: Birth Weight        | Regression warm-up (in class)        |
 | August 31     | CS1: Robust Regression    |                 |
-| September 5   | CS1: Modeling in Class | |
+| September 5   | CS1: Modeling in Class | Signed Team Expectations Agreement |
 | September 7   | CS1: Causal Inference | CS1 Interim Report: Model Development and Evaluation |
 | September 12  | CS2: Visualizing our World in Data | |
 | September 14  | CS2: Lab: Tableau | CS1 Final Report: Smoking and Birth Weight |
 | September 19  | CS2: Tableau | |
-| Septmeber 21  | CS3: Hierarchical Models: Birth Weight Disparities | |
+| September 21  | CS3: Hierarchical Models: Birth Weight Disparities | |
 | September 26  | Group Presentations of CS2 | CS2 Final Report: Our World in Data |
 | Septmeber 28  | CS3: Multilevel Models: Time Trends | |
 | October 3     | CS3: Generalized Linear Mixed Effects Models | CS3 Interim Report: Infant Mortality Visualization| 

@@ -43,7 +43,7 @@ Then to edit our dots to reflect the infant mortality and population size, we wi
 ![](IM_simple_figures/color_size.png)
 
 ***
-Thus, we've recreated the visualization from the R tutorial.
+Thus, we've recreated the visualization from the R tutorial. Note Tableau was smart about scaling and did that for us!
 
 ### Miscellaneous: Editing Titles
 Finally, we'll need to edit the titles from the default settings to more clearly reflect our data. 
