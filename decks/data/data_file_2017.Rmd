@@ -80,7 +80,7 @@ for(i in 1:231){
 test <- read_html("print_2091.html")
 t <- test %>% html_table(fill = TRUE)
 IM <- matrix(0, 231, 4)
-colnames(IM) <- c("country", "IM_total", "IM_male", "IM_female")
+colnames(IM) <- c("country", "IM_overall_avg", "IM_male_avg", "IM_female_avg")
 for(i in 1:231){
   IM[i, 1] <- t[[1]][i,1]
   levels <- strsplit(t[[1]][i,2], "births")

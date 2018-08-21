@@ -130,7 +130,7 @@ $(document).ready(function () {
 <p>Your first option is using the rank order section of the factbook which has txt files for each variable. However, the significant drawnback of this is that it only has one value for each country, i.e. you cannot use it to obtain a variable such as population structure since it has multiple values for each country. ` - Remember to give your columns names. - To find the corresponding number for each variable, e.g. 2119 for population, you use the “rankorderguide.html” and click on your desired variable. Then in the address bar at the top of the screen you can see the correct number for it. - You may need to delete columns/clean the data to obtain the correct format.</p>
 <p>Note: You will need to iterate this process for all desired variables &amp; merge the data sets to replicate the full.RData file.</p>
 <pre class="r"><code>library(tidyverse) # We will be importing our data using the tidyverse library</code></pre>
-<pre><code>## ── Attaching packages ───────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
+<pre><code>## ── Attaching packages ───────────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
 <pre><code>## ✔ ggplot2 3.0.0     ✔ purrr   0.2.5
 ## ✔ tibble  1.4.2     ✔ dplyr   0.7.6
 ## ✔ tidyr   0.8.1     ✔ stringr 1.3.1
@@ -142,7 +142,7 @@ $(document).ready(function () {
 <pre><code>## Warning: package 'dplyr' was built under R version 3.4.4</code></pre>
 <pre><code>## Warning: package 'stringr' was built under R version 3.4.4</code></pre>
 <pre><code>## Warning: package 'forcats' was built under R version 3.4.3</code></pre>
-<pre><code>## ── Conflicts ──────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+<pre><code>## ── Conflicts ──────────────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()</code></pre>
 <pre class="r"><code># get country codes
@@ -210,7 +210,7 @@ for(i in 4:233){
 test &lt;- read_html(&quot;factbook/fields/print_2091.html&quot;)
 t &lt;- test %&gt;% html_table(fill = TRUE)
 IM &lt;- matrix(0, 233, 4)
-colnames(IM) &lt;- c(&quot;country&quot;, &quot;IM_total&quot;, &quot;IM_male&quot;, &quot;IM_female&quot;)
+colnames(IM) &lt;- c(&quot;country&quot;, &quot;IM_overall_avg&quot;, &quot;IM_male_avg&quot;, &quot;IM_female_avg&quot;)
 for(i in 4:236){
   IM[i-3, 1] &lt;- t[[i]][[&quot;X1&quot;]][2]
   levels &lt;- strsplit(t[[i]][[&quot;X2&quot;]][2], &quot;\n&quot;)
