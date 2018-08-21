@@ -5,7 +5,7 @@ output: html_document
 
 #### Introduction
 
-In this document, we'll be recreating the visualization from the book using Tableau. We will be using the data we created earlier during the R visualization with the already merged data sets.
+In this document, we'll be recreating the visualization from the book using Tableau. We will be using the data we created earlier during the R visualization with the already merged data sets. If you haven't run the code from [case study 2 deck 1](cs02_1_deck.html), now is the time to do so, to ensure you have the data file ready for Tableau.
 
 ### Importing & Opening the Data 
 To begin, open Tableau desktop - you should see a screen similar to the below.
@@ -60,3 +60,6 @@ Then we can repeat this process with any other titles we wish to change. Then we
 
 ![](IM_simple_figures/final.png)
 
+###Explore!
+
+Hover over points to see data details -- which country has more people, the US or Russia?  Which has a higher infant mortality rate? What are the names of all those South Pacific Islands?
