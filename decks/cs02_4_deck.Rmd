@@ -5,12 +5,17 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-setwd("~/Desktop/Finished Document")
+
 ```
 
 #### Introduction
 
-In this document, we'll be creating a Tableau dashboard using the People and Society data set from the CIA factbook. The beginning of this tutorial is very similar to the Tableau Visualization of Infant Mortality tutorial, so we'll go briefly through this section and then move onto creating the dashboard.  
+In this document, we'll be creating a Tableau dashboard using the People and Society data set from the CIA factbook. The beginning of this tutorial is very similar to the Tableau visualization of infant mortality tutorial, so we'll go briefly through this section and then move onto creating the dashboard.  
+
+### Importing The Data
+Again we will begin by opening R and selecting the "Statistical file" option for importing the data. However, this time select the data set labeled "full.RData" (this is available for download on the course website). Now we are ready to move onto creating our sheets and then our dashboard.
+
+![](dashboard_figures/import_data.png){width=400px}
 
 ### Importing The Data
 Again we will begin by opening R and selecting the "Statistical file" option for importing the data. However, this time select the data set labeled "full.RData" (this is available for download on the course website). Now we are ready to move onto creating our sheets and then our dashboard.
@@ -18,11 +23,11 @@ Again we will begin by opening R and selecting the "Statistical file" option for
 ![](dashboard_figures/import_data.png){width=400px}
 
 ### The Sheets
-Before we create our dashboard, we must first create the figures that going on it. Each figure will have its own sheet, and we can customize these sheets as much as needed.
+Before we create our dashboard, we must first create the figures that will go on it. Each figure will have its own sheet, and we can customize these sheets as much as needed.
 
 ***
 ##### A Note On Importing Data: 
-Sometimes when data is imported into Tableau it may be in the incorrect format for the use we desire of it. So, we can change its data type by clicking the drop-down arrow on the right side and using the the "Change Data Type" option. (Note: You can also change the geographic role of a variable, i.e. we can tell Tableau which variable should be denoting countries, etc.). 
+Sometimes when data is imported into Tableau it may be in the incorrect format for the use we desire of it. So, we can change its data type by clicking the drop-down arrow on the right side and using the the "Change Data Type" option. (Note: You can also change the geographic role of a variable, i.e., we can tell Tableau which variable should be denoting countries, etc.). 
 
 ![](dashboard_figures/convert_data_type.png){width=300px}
 
