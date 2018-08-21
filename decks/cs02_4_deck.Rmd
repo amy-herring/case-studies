@@ -1,12 +1,7 @@
 ---
 title: "Tableau Dashboard Visualization of Infant Mortality"
-
 output: html_document
 ---
-
-<!--- author: "Tessa Johnson" 
-date: "7/20/2018" --->
-
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -16,6 +11,16 @@ knitr::opts_chunk$set(echo = TRUE)
 #### Introduction
 
 In this document, we'll be creating a Tableau dashboard using the People and Society data set from the CIA factbook. The beginning of this tutorial is very similar to the Tableau visualization of infant mortality tutorial, so we'll go briefly through this section and then move onto creating the dashboard.  
+
+### Importing The Data
+Again we will begin by opening R and selecting the "Statistical file" option for importing the data. However, this time select the data set labeled "full.RData" (this is available for download on the course website). Now we are ready to move onto creating our sheets and then our dashboard.
+
+![](dashboard_figures/import_data.png){width=400px}
+
+### Importing The Data
+Again we will begin by opening R and selecting the "Statistical file" option for importing the data. However, this time select the data set labeled "full.RData" (this is available for download on the course website). Now we are ready to move onto creating our sheets and then our dashboard.
+
+![](dashboard_figures/import_data.png){width=400px}
 
 ### The Sheets
 Before we create our dashboard, we must first create the figures that will go on it. Each figure will have its own sheet, and we can customize these sheets as much as needed.
