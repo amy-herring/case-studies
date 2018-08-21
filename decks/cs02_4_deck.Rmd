@@ -76,6 +76,8 @@ If we wish to edit the chart, we can do so using the marks section. For example,
 ![](dashboard_figures/color.png){width=200px}
 ![](dashboard_figures/IM.png){width=500px}
 
+Also, note that the total infant mortality rate is a weighted average of the males and females (not the sum).
+
 ***
 
 ### The Dashboard
