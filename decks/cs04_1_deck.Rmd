@@ -37,7 +37,7 @@ One strategy for predicting the winner in an election would be to use the latest
 
 ## Voter Turnout Data
 
-- States like NC make available data on who votes in each selection
+- States like NC make available data on who votes in each election
 - Voter turnout data can be used to construct a voting history for certain districts, demographic groups, etc.
 - Locations with low or variable turnout often harder to predict
 - Many better predictions take voter turnout data into account in some way

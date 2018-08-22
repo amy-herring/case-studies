@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
-  <title>Poststratification</title>
+  <title>Poststratification and Weighting</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -454,39 +454,62 @@ document.getElementsByTagName('head')[0].appendChild(style);
     <div class="slides">
 
 <section>
-    <h1 class="title">Poststratification</h1>
+    <h1 class="title">Poststratification and Weighting</h1>
 </section>
 
-<section id="why-use-poststratification" class="slide level2">
-<h1>Why Use Poststratification?</h1>
+<section id="why-use-poststratification-and-weighting" class="slide level2">
+<h2>Why Use Poststratification and Weighting?</h2>
 <ul>
-<li>Sometimes we would like to stratify on a key variable, e.g. gender, but cannot place the units into their correct strata until the units are sampled. For example, in aggregate polling data we cannot determine if an individual is male or female until after they’ve been polled.</li>
+<li>Sometimes we would like to stratify on a key variable, e.g. political party affiliation, but cannot place the units into their correct strata until the units are sampled. For example, in aggregate polling data we cannot determine if an individual is a democrat or republican until after they’ve been polled.</li>
 <li>So, we’ll use poststratification, or stratification after the selection of a sample, to handle this type of data</li>
-<li>We can also use poststratification if the sample is not representative of the population such as when we have nonresponse bias.</li>
-<li>In general poststratification is used to obtain more precise estimates of sample statistics in survey data.</li>
+<li>We can also use poststratification and weighting if the sample is not representative of the population such as when we have nonresponse bias.</li>
+<li>In general poststratification and weighting are used to obtain more accurate estimates from survey data.</li>
 </ul>
 </section>
 <section id="how-it-works---population-distribution" class="slide level2">
-<h1>How It Works - Population Distribution</h1>
-<p>The first step in poststratification is knowing the ratio of the candidate stratum. In more simple terms, we want to know the distribution of our variable within the population, e.g. what proportion of individuals in North Carolina are African American. We will denote this as <span class="math inline">\(\frac{N_h}{N}\)</span> where <span class="math inline">\(N_h\)</span> is the number of individuals in that stratum, and N is the totally number of individuals in the populations.</p>
+<h2>How It Works - Population Distribution</h2>
+<p>The first step in poststratification is knowing the ratio of the size of a stratum in question to that of the relevant population size, e.g. what proportion of individuals in North Carolina aged 20-25 identify as republicans. We will denote this as <span class="math inline">\(\frac{N_h}{N}\)</span> where <span class="math inline">\(N_h\)</span> is the number of individuals in that stratum, and N is the total number of individuals in the populations.</p>
 </section>
-<section id="how-it-works---poststratifying" class="slide level2">
-<h1>How It Works - Poststratifying</h1>
-<p>Once we know the distribution of the candidate stratum, we can move onto poststratifying. Essentially, what we are going to do is a weighted sum where the weights are the population proportions. For example, suppose our variable of interest is gender:</p>
+<section id="how-it-works---poststratifying-and-weighting" class="slide level2">
+<h2>How It Works - Poststratifying and Weighting</h2>
+<p>Once we know the distribution of factors of interest in our population, we can apply poststratifying and weighting. Essentially, we calculate a weighted sum in which the weights are the relevant proportions:</p>
 <p><span class="math display">\[
-\bar{y}_{poststrat.} = \frac{N_{female}}{N}\cdot \bar{y}_{female} + \frac{N_{male}}{N}\cdot \bar{y}_{male}
+\bar{y}_{poststrat.} = \frac{N_{democrat}}{N}\cdot \bar{y}_{democrat} + \frac{N_{republican}}{N}\cdot \bar{y}_{republican}
 \]</span></p>
-<p>which would yield our new sample mean of the stratified data.</p>
+<p>Now we have a weighted estimate, <span class="math inline">\(\bar{y}_{poststrat.}\)</span>, of our population mean. This adjustment is important if, for example, democrats are more likely than republicans to participate in a survey, but we wanted to obtain an estimate that was generalizable to the entire population.</p>
 </section>
-<section id="example-with-code" class="slide level2">
-<h1>Example With Code</h1>
-<p>See the end of the Multi-Level Regression and Poststratification Tutorial for a more concrete example with code included.</p>
+<section id="example" class="slide level2">
+<h2>Example</h2>
+<p>Suppose a middle school math club wants to estimate the proportion of undergraduate students in the RTP area who agree with the statement “Mike Krzyzewski is the all-time best college basketball coach.”</p>
+<p>They take a convenience sample of 100 undergraduate students at the Target on 15-501 to address this question.</p>
+<p>Do you see any challenges that may arise due to the study design?</p>
+</section>
+<section id="strata" class="slide level2">
+<h2>Strata</h2>
+<p>Suppose the RTP area contains N=60,000 undergraduates, with 24,000 at NC State, 19,000 at UNC, 6500 each at Duke and NCCU, and 4000 elsewhere (Meredith, Shaw, etc.). Then the proportions <span class="math inline">\(\frac{N_h}{N}\)</span> of interest are roughly 0.40 for NC State, 0.32 for UNC, 0.11 for Duke, 0.11 for NCCU, and 0.06 for other universities (proportions rounded and forced to sum to 1 for convenience).</p>
+</section>
+<section id="results" class="slide level2">
+<h2>Results</h2>
+<p>Suppose the math club carries out the survey, obtaining the following proportions of 100 surveyed students endorsing the statement: 1.0 among 50 Duke students surveyed, 0.0 among 25 UNC students surveyed, 0.6 among 20 NCCU students surveyed, 0.5 among 4 NC State students surveyed, and 1.0 from the single student from another university surveyed. This means that overall among the 100 students surveyed, 65 endorsed the statement. Is 65% a valid estimate of the percent of undergraduates in RTP who believe Coach K is the best ever?</p>
+</section>
+<section id="probably-not" class="slide level2">
+<h2>Probably not!</h2>
+<p>Students who live close to the 15-501 Target are more likely to attend the nearby schools, and Duke is one of the closest schools to the Target. What happens if we use poststratification to reweight our estimate by the representation of each university among area undergraduates (rather than its representation in our biased sample)?</p>
+<span class="math display">\[\begin{eqnarray*}
+\widehat{\pi}&amp;=&amp;1.0\left(\frac{6500}{60000}\right)+0.0\left(\frac{19000}{60000}\right)+0.6\left(\frac{6500}{60000}\right) \\  &amp; &amp; +0.5\left(\frac{24000}{60000}\right)
+ +1.0\left(\frac{4000}{60000}\right)=0.44
+\end{eqnarray*}\]</span>
+</section>
+<section id="notes" class="slide level2">
+<h2>Notes</h2>
+<p>Our estimate is really sensitive to having only 1 student from the other colleges – if that student had not liked Coach K, our estimate would have been 0.37 instead of 0.44.</p>
+<p>For this reason, many surveys will oversample individuals from small groups in order to obtain more stable estimates (e.g., we could have taken fewer Duke and UNC students, large groups who are more homogeneous in their thoughts about Coach K, and instead focused our efforts on less predictable groups).</p>
 </section>
 <section id="further-reading-resources" class="slide level2">
-<h1>Further Reading &amp; Resources</h1>
+<h2>Further Reading &amp; Resources</h2>
 <ul>
-<li><a href="https://msu.edu/~barbozag/Web/poststrat.pdf" class="uri">https://msu.edu/~barbozag/Web/poststrat.pdf</a></li>
-<li><a href="https://onlinecourses.science.psu.edu/stat506/node/29/" class="uri">https://onlinecourses.science.psu.edu/stat506/node/29/</a></li>
+<li><a href="https://onlinecourses.science.psu.edu/stat506/node/29/">Poststratification Tutorial at Penn State Online</a></li>
+<li><a href="https://msu.edu/~barbozag/Web/poststrat.pdf">Paper on Poststratification in a Sample Survey Context</a></li>
 </ul>
 </section>
     </div>

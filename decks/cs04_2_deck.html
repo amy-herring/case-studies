@@ -495,42 +495,35 @@ document.getElementsByTagName('head')[0].appendChild(style);
 </section>
 
 <section id="introduction" class="slide level2">
-<h1>Introduction</h1>
-<p>It is often of interest to researchers to consider state-level opinion, in addition to/instead of national-level opinion. Finding surveys that are uniform across all or most states is extremely challenging. One method of estimating state-level opinion using national survey data is called <strong>multilevel modeling with poststratification</strong>. This method begins by using multilevel regression to model individual survey responses as a function of demographic and geographic predictors. Then doing poststratification, in which the estimates for each demographic-geographic respondent type are weighted (poststratified) by the percentages of each type in the actual state populations.</p>
+<h2>Introduction</h2>
+<ul>
+<li>It is often of interest to researchers to consider state-level opinion, in addition to/instead of national-level opinion.</li>
+<li>Finding surveys that are uniform across all or most states is extremely challenging.</li>
+<li>One method of estimating state-level opinion using national survey data is called <strong>multilevel modeling with poststratification</strong>.</li>
+</ul>
+</section>
+<section id="multilevel-modeling-with-poststratification" class="slide level2">
+<h2>Multilevel Modeling with Poststratification</h2>
+<p>This method begins by using multilevel regression to model individual survey responses as a function of demographic and geographic predictors. Then poststratification occurs, in which the estimates for each demographic-geographic respondent type are weighted (poststratified) by the percentages of each type in the actual state populations.</p>
 </section>
 <section id="tutorial" class="slide level2">
-<h1>Tutorial</h1>
+<h2>Tutorial</h2>
 <p>This tutorial draws heavily on Jonathan Kastellec’s <a href="http://www.princeton.edu/~jkastell/mrp_primer.html">MrP primer</a>. You may find the paper at their website useful in addition to the shorter version presented here. First, download all three datasets at the link.</p>
 </section>
 <section id="add-a-few-more-r-packages" class="slide level2">
-<h1>Add a Few More R Packages</h1>
+<h2>Add a Few More R Packages</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># importing packages</span>
 
-<span class="kw">library</span>(<span class="st">&quot;arm&quot;</span>)</code></pre></div>
-<pre><code>## Loading required package: MASS</code></pre>
-<pre><code>## Warning: package 'MASS' was built under R version 3.4.3</code></pre>
-<pre><code>## 
-## Attaching package: 'MASS'</code></pre>
-<pre><code>## The following object is masked from 'package:dplyr':
-## 
-##     select</code></pre>
-<pre><code>## 
-## arm (Version 1.9-3, built: 2016-11-21)</code></pre>
-<pre><code>## Working directory is /Users/amyherring/Documents/GitHub/case-studies/decks</code></pre>
-<pre><code>## 
-## Attaching package: 'arm'</code></pre>
-<pre><code>## The following object is masked from 'package:rstan':
-## 
-##     traceplot</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">&quot;foreign&quot;</span>)</code></pre></div>
-<pre><code>## Warning: package 'foreign' was built under R version 3.4.1</code></pre>
+<span class="kw">library</span>(<span class="st">&quot;arm&quot;</span>)
+<span class="kw">library</span>(<span class="st">&quot;foreign&quot;</span>)</code></pre></div>
 </section>
 <section id="step-1-gather-national-opinion-polls" class="slide level2">
-<h1>Step 1: Gather National Opinion Poll(s)</h1>
-<p>These polls should include some respondent demographic information and some type of geographic indicator such as state. In this tutorial we’ll be using the “gay_marriage_megapoll.dta” data, which contain results from five national polls that were conducted in 2004.</p>
+<h2>Step 1: Gather National Opinion Poll(s)</h2>
+<p>These polls should include some respondent demographic information and some type of geographic indicator such as state (assuming we want to mae state-level inferences).</p>
+<p>We will consider <a href="data/gay_marriage_megapoll.dta">data used by Kastellec et al. (2016)</a> on opinions about gay marriage. These data contain results from five national polls that were conducted in 2004 and include information on state, gender, race/ethnicity, education, age, and party identification.</p>
 </section>
 <section id="step-2-create-a-single-internally-consistent-dataset." class="slide level2">
-<h1>Step 2: Create a Single Internally-consistent Dataset.</h1>
+<h2>Step 2: Create a Single Internally-Consistent Dataset.</h2>
 <p>For this step, you may rename columns so that the data sets can be merged properly. For our dataset this has already been completed.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#read in megapoll and attach</span>
 <span class="co"># Note: replace with the location of the file on your local computer</span>
@@ -539,60 +532,108 @@ marriage.data &lt;-<span class="st"> </span><span class="kw">read.dta</span>(<sp
 <span class="co">#(convert variables names with underscores to periods)</span></code></pre></div>
 </section>
 <section id="step-3-create-dataset-of-state-level-predictors" class="slide level2">
-<h1>Step 3: Create Dataset of State-Level Predictors</h1>
-<p>We may wish to model state-level effects in our multilevel regression. To do this we will use state-level predictiors, e.g. demographics. This will reduce the unexplained group level variation. In this tutorial, we already have a data set with state-level information in it.</p>
+<h2>Step 3: Create Dataset of State-Level Predictors</h2>
+<p>We may wish to model state-level effects in our multilevel regression. To do this we will use state-level predictiors, such as historical party leanings, religious values, or income. This can help reduce unexplained group level variation. In this tutorial, we already have a data set with state-level information in it.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#read in state-level dataset</span>
 Statelevel &lt;-<span class="st"> </span><span class="kw">read.dta</span>(<span class="st">&quot;data/state_level_update.dta&quot;</span>,<span class="dt">convert.underscore =</span> <span class="ot">TRUE</span>)
-Statelevel &lt;-<span class="st"> </span>Statelevel[<span class="kw">order</span>(Statelevel$sstate.initnum),]</code></pre></div>
+Statelevel &lt;-<span class="st"> </span>Statelevel[<span class="kw">order</span>(Statelevel<span class="op">$</span>sstate.initnum),]</code></pre></div>
 </section>
-<section id="step-4-collect-census-data-to-enable-poststratification" class="slide level2">
-<h1>Step 4: Collect Census Data to Enable Poststratification</h1>
+<section id="step-4-use-census-data-for-poststratification" class="slide level2">
+<h2>Step 4: Use Census Data for Poststratification</h2>
 <p>We will need census data to complete the poststratification later in the tutorial. These data must correspond to all individual-level demographic variables included in our model. Ultimately, we need a dataset of the population counts for each cluster of interest, e.g. how many African Americans between 18-25 went to college and reside in North Carolina. For this tutorial, we will use the 5% Public Use Microdata Sample from the 2000 census.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#read in Census data</span>
 Census &lt;-<span class="st"> </span><span class="kw">read.dta</span>(<span class="st">&quot;data/poststratification 2000.dta&quot;</span>,<span class="dt">convert.underscore =</span> <span class="ot">TRUE</span>)
-Census &lt;-<span class="st"> </span>Census[<span class="kw">order</span>(Census$cstate),]
-Census$cstate.initnum &lt;-<span class="st">  </span><span class="kw">match</span>(Census$cstate, Statelevel$sstate)</code></pre></div>
+Census &lt;-<span class="st"> </span>Census[<span class="kw">order</span>(Census<span class="op">$</span>cstate),]
+Census<span class="op">$</span>cstate.initnum &lt;-<span class="st">  </span><span class="kw">match</span>(Census<span class="op">$</span>cstate, Statelevel<span class="op">$</span>sstate)</code></pre></div>
 </section>
 <section id="step-5-create-indices" class="slide level2">
-<h1>Step 5: Create Indices</h1>
+<h2>Step 5: Create Indices</h2>
 <p>Next we will create index variables so that we can use our individual-level model and in the poststratification step.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Create index variables</span>
 
 <span class="co">#At level of megapoll</span>
 
-marriage.data$race.female &lt;-<span class="st"> </span>(marriage.data$female *<span class="dv">3</span>) +<span class="st"> </span>marriage.data$race.wbh<span class="co"># from 1 for white males to 6 for hispanic females</span>
-marriage.data$age.edu.cat &lt;-<span class="st"> </span><span class="dv">4</span> *<span class="st"> </span>(marriage.data$age.cat -<span class="dv">1</span>) +<span class="st"> </span>marriage.data$edu.cat<span class="co"># from 1 for 18-29 with low edu to 16 for 65+ with high edu</span>
-marriage.data$p.evang.full &lt;-<span class="st"> </span>Statelevel$p.evang[marriage.data$state.initnum]<span class="co"># proportion of evangelicals in respondent's state</span>
-marriage.data$p.mormon.full &lt;-Statelevel$p.mormon[marriage.data$state.initnum]<span class="co"># proportion of LDS church members in respondent's state</span>
-marriage.data$p.relig.full &lt;-<span class="st"> </span>marriage.data$p.evang.full +<span class="st"> </span>marriage.data$p.mormon.full<span class="co"># combined evangelical + LDS proportions</span>
-marriage.data$p.kerry.full &lt;-<span class="st"> </span>Statelevel$kerry<span class="fl">.04</span>[marriage.data$state.initnum]<span class="co"># John Kerry's % of 2-party vote in respondent's state in 2004</span>
+marriage.data<span class="op">$</span>race.female &lt;-<span class="st"> </span>(marriage.data<span class="op">$</span>female <span class="op">*</span><span class="dv">3</span>) <span class="op">+</span><span class="st"> </span>marriage.data<span class="op">$</span>race.wbh
+<span class="co"># 1=white male, 2=black male, 3=hisp male, ... 6=hisp female</span>
+marriage.data<span class="op">$</span>age.edu.cat &lt;-<span class="st"> </span><span class="dv">4</span> <span class="op">*</span><span class="st"> </span>(marriage.data<span class="op">$</span>age.cat <span class="op">-</span><span class="dv">1</span>) <span class="op">+</span><span class="st"> </span>marriage.data<span class="op">$</span>edu.cat
+<span class="co"># 1=18-29 &lt;hs, 2=18-29 hs grad, 3=18-29 some college, 4=18-29 college grad</span>
+<span class="co"># 5=30-44 &lt;hs, ..., 9=45-64 &lt;hs, ..., 16=65+ college grad</span>
+marriage.data<span class="op">$</span>p.evang.full &lt;-<span class="st"> </span>Statelevel<span class="op">$</span>p.evang[marriage.data<span class="op">$</span>state.initnum]
+<span class="co"># proportion of evangelicals in respondent's state</span>
+marriage.data<span class="op">$</span>p.mormon.full &lt;-Statelevel<span class="op">$</span>p.mormon[marriage.data<span class="op">$</span>state.initnum]
+<span class="co"># proportion of LDS church members in respondent's state</span>
+marriage.data<span class="op">$</span>p.relig.full &lt;-<span class="st"> </span>marriage.data<span class="op">$</span>p.evang.full <span class="op">+</span><span class="st"> </span>marriage.data<span class="op">$</span>p.mormon.full
+<span class="co"># combined evangelical + LDS proportions</span>
+marriage.data<span class="op">$</span>p.kerry.full &lt;-<span class="st"> </span>Statelevel<span class="op">$</span>kerry.<span class="dv">04</span>[marriage.data<span class="op">$</span>state.initnum]
+<span class="co"># John Kerry's % of 2-party vote in respondent's state in 2004</span></code></pre></div>
+</section>
+<section id="indices" class="slide level2">
+<h2>Indices</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#At census level (same coding as above for all variables)</span>
 
-<span class="co">#At census level (same coding as above for all variables)</span>
-
-Census$crace.female &lt;-<span class="st"> </span>(Census$cfemale *<span class="dv">3</span>) +<span class="st"> </span>Census$crace.WBH 
-Census$cage.edu.cat &lt;-<span class="st"> </span><span class="dv">4</span> *<span class="st"> </span>(Census$cage.cat -<span class="dv">1</span>) +<span class="st"> </span>Census$cedu.cat 
-Census$cp.evang.full&lt;-<span class="st">  </span>Statelevel$p.evang[Census$cstate.initnum]
-Census$cp.mormon.full &lt;-<span class="st"> </span>Statelevel$p.mormon[Census$cstate.initnum]
-Census$cp.relig.full &lt;-<span class="st"> </span>Census$cp.evang.full +<span class="st"> </span>Census$cp.mormon.full
-Census$cp.kerry.full &lt;-<span class="st">  </span>Statelevel$kerry<span class="fl">.04</span>[Census$cstate.initnum]</code></pre></div>
-<h3 id="step-6-fitting-our-individual-level-regression-model.">Step 6: Fitting our individual-level regression model.</h3>
-<p>Now we are ready to fit a regression model for an individual survey response on gay marriage rights given demographics and geography, i.e. each individual’s response will be a function of their demographics and state. We’ll denote each individual as <em>i</em> with indices <em>j, k, l, m, s,</em> and <em>p</em> for race-gender combination, age category, education category, region, state, and poll respectively, and including an age-education interaction. More specifically, we denote <span class="math inline">\(y_i\)</span> as 1 for supporters of same-sex marriage and 0 for opponents and those with no opinion. Remember that since we’re modeling a binary variables we ought to use logistic regression, and thus our model will be as follows:</p>
+Census<span class="op">$</span>crace.female &lt;-<span class="st"> </span>(Census<span class="op">$</span>cfemale <span class="op">*</span><span class="dv">3</span>) <span class="op">+</span><span class="st"> </span>Census<span class="op">$</span>crace.WBH 
+Census<span class="op">$</span>cage.edu.cat &lt;-<span class="st"> </span><span class="dv">4</span> <span class="op">*</span><span class="st"> </span>(Census<span class="op">$</span>cage.cat <span class="op">-</span><span class="dv">1</span>) <span class="op">+</span><span class="st"> </span>Census<span class="op">$</span>cedu.cat 
+Census<span class="op">$</span>cp.evang.full&lt;-<span class="st">  </span>Statelevel<span class="op">$</span>p.evang[Census<span class="op">$</span>cstate.initnum]
+Census<span class="op">$</span>cp.mormon.full &lt;-<span class="st"> </span>Statelevel<span class="op">$</span>p.mormon[Census<span class="op">$</span>cstate.initnum]
+Census<span class="op">$</span>cp.relig.full &lt;-<span class="st"> </span>Census<span class="op">$</span>cp.evang.full <span class="op">+</span><span class="st"> </span>Census<span class="op">$</span>cp.mormon.full
+Census<span class="op">$</span>cp.kerry.full &lt;-<span class="st">  </span>Statelevel<span class="op">$</span>kerry.<span class="dv">04</span>[Census<span class="op">$</span>cstate.initnum]</code></pre></div>
+</section>
+<section id="step-6-fitting-individual-level-regression-model" class="slide level2">
+<h2>Step 6: Fitting Individual-level Regression Model</h2>
+<p>Now we are ready to fit a regression model for an individual survey responses on gay marriage rights given demographics and geography, i.e. each individual’s response will be a function of their demographics and state. We’ll denote each individual as <em>i</em> with indices for race-gender combination, age-education combination, region, state, and poll. We denote <span class="math inline">\(y_i\)</span> as 1 for supporters of same-sex marriage and 0 for opponents and those with no opinion.</p>
+</section>
+<section id="model" class="slide level2">
+<h2>Model</h2>
 <p><span class="math display">\[
-\mathrm{Pr}(y_i = 1) = \mathrm{logit}^{-1}(\beta^0 + \alpha^{race,gender}_{j[i]} + \alpha^{age}_{k[i]} + \alpha^{edu}_{l[i]} + \alpha^{age,edu}_{k[i],l[i]} + \alpha^{state}_{s[i]} + \alpha^{year}_{p[i]})
+\mathrm{logit}\left(\mathrm{Pr}(y_i = 1)\right) = \beta^0 + \alpha^{race,gender}_{j[i]} +  \alpha^{age,edu}_{k[i]} + \alpha^{state}_{s[i]} + \alpha^{poll}_{p[i]}
 \]</span></p>
-<p>We can think of the terms after the intercept as modeled effects for different groups of respondents such as individuals who are a specific age. All of them except the state coefficient will be model as drawn from a normal distribution with mean zero and some estimated variance specific to that variable. For example,</p>
+<p>We can think of the terms after the intercept as modeled effects for different groups of respondents such as individuals who are a specific age. All of them except the state coefficient will be modeled as drawn from a normal distribution with mean zero and some estimated variance specific to that variable. For example,</p>
+<span class="math display">\[\begin{eqnarray*}
+\alpha^{race,gender}_j &amp;\sim&amp; N(0, \sigma^2_{race,gender}), ~~~\mathrm{j=1, ..., 6} \\
+\alpha^{age,edu}_k &amp;\sim&amp; N(0, \sigma^2_{age,edu}), ~~~\mathrm{k=1,...,16} \\ 
+\alpha^{poll}_p &amp;\sim&amp; N(0, \sigma^2_{poll}), ~~~\mathrm{p = 1, ..., 5}
+\end{eqnarray*}\]</span>
+</section>
+<section id="model-1" class="slide level2">
+<h2>Model</h2>
+<p>For the state effect, we model the mean for the state effect as a function of 3 state level variables: the region into which the state falls, the state’s conservative (defined as evangelical+LDS) religious percentage, and its Democratic 2004 presidential vote share:<a href="#/fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></p>
+<span class="math display">\[\begin{eqnarray*}
+\alpha^{state}_s &amp;\sim&amp; N(\alpha^{region}_{m[s]} + \beta^{relig}\cdot relig_s + \beta^{vote} \cdot vote_s, \sigma^2_{state}), \mathrm{s = 1, ..., 51} \\
+\alpha^{region}_m &amp;\sim&amp; N(0,\sigma^2_{region})
+\end{eqnarray*}\]</span>
 <p><span class="math display">\[
-\alpha^{poll}_p \sim N(0, \sigma^2_{poll}), \mathrm{p = 1, ..., n}
+\alpha^{state}_s \sim N(\alpha^{region}_{m[s]} + \beta^{relig}\cdot relig_s + \beta^{vote} \cdot vote_s, \sigma^2_{state}), \mathrm{s = 1, ..., 51}
 \]</span></p>
-<p>For the state effect, we’ll be doing something slightly different. Instead of having a distribution with mean equaling zero, we will be modeling it as a function of the the region into which the state falls and the state’s conservative religious percentage and Democratic 2004 presidential vote share:<a href="#/fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></p>
-<p><span class="math display">\[
-\alpha^{state}_s \sim N(\alpha^{region}_{m[s]} + \beta^{relig}\cdot relig_s + \beta^{presvote} \cdot presvote_s, \sigma^2_{state}), \mathrm{s = 1, ..., 51}
-\]</span></p>
-<p>(Note: we model the region variable identically to the previous variables, e.g. poll.)</p>
-<p>Now we’re ready to move onto coding up this model:</p>
+<p>(Note: we model the region variable as we do the previous variables, e.g. poll.)</p>
+<p>Now we’re ready to code:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#run individual-level opinion model</span>
 
-individual.model &lt;-<span class="st"> </span><span class="kw">glmer</span>(<span class="dt">formula =</span> yes.of.all ~<span class="st"> </span>(<span class="dv">1</span>|race.female) +<span class="st"> </span>(<span class="dv">1</span>|age.cat) +<span class="st"> </span>(<span class="dv">1</span>|edu.cat) +<span class="st"> </span>(<span class="dv">1</span>|age.edu.cat) +<span class="st"> </span>(<span class="dv">1</span>|state) +<span class="st"> </span>(<span class="dv">1</span>|region) +<span class="st"> </span>(<span class="dv">1</span>|poll) +<span class="st"> </span>p.relig.full +<span class="st"> </span>p.kerry.full,<span class="dt">data=</span>marriage.data, <span class="dt">family=</span><span class="kw">binomial</span>(<span class="dt">link=</span><span class="st">&quot;logit&quot;</span>)) <span class="co"># Note: (1|variable) denotes a random effect</span>
+individual.model &lt;-<span class="st"> </span><span class="kw">glmer</span>(<span class="dt">formula =</span> yes.of.all <span class="op">~</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>race.female) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>age.cat) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>edu.cat) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>age.edu.cat) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>state) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>region) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>poll) <span class="op">+</span><span class="st"> </span>p.relig.full <span class="op">+</span><span class="st"> </span>p.kerry.full,<span class="dt">data=</span>marriage.data, <span class="dt">family=</span><span class="kw">binomial</span>(<span class="dt">link=</span><span class="st">&quot;logit&quot;</span>)) <span class="co"># Note: (1|variable) denotes a random effect</span>
+<span class="kw">display</span>(individual.model)</code></pre></div>
+<pre><code>## glmer(formula = yes.of.all ~ (1 | race.female) + (1 | age.cat) + 
+##     (1 | edu.cat) + (1 | age.edu.cat) + (1 | state) + (1 | region) + 
+##     (1 | poll) + p.relig.full + p.kerry.full, data = marriage.data, 
+##     family = binomial(link = &quot;logit&quot;))
+##              coef.est coef.se
+## (Intercept)  -1.41     0.54  
+## p.relig.full -0.02     0.00  
+## p.kerry.full  0.02     0.01  
+## 
+## Error terms:
+##  Groups      Name        Std.Dev.
+##  state       (Intercept) 0.04    
+##  age.edu.cat (Intercept) 0.09    
+##  race.female (Intercept) 0.23    
+##  poll        (Intercept) 0.21    
+##  region      (Intercept) 0.20    
+##  edu.cat     (Intercept) 0.36    
+##  age.cat     (Intercept) 0.55    
+##  Residual                1.00    
+## ---
+## number of obs: 6341, groups: state, 49; age.edu.cat, 16; race.female, 6; poll, 5; region, 5; edu.cat, 4; age.cat, 4
+## AIC = 7459.4, DIC = 7276
+## deviance = 7357.7</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">individual.model.<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw">glmer</span>(<span class="dt">formula =</span> yes.of.all <span class="op">~</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>race.female) <span class="op">+</span><span class="st">  </span>(<span class="dv">1</span><span class="op">|</span>age.edu.cat) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>state) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>region) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>poll) <span class="op">+</span><span class="st"> </span>p.relig.full <span class="op">+</span><span class="st"> </span>p.kerry.full,<span class="dt">data=</span>marriage.data, <span class="dt">family=</span><span class="kw">binomial</span>(<span class="dt">link=</span><span class="st">&quot;logit&quot;</span>)) <span class="co"># Note: (1|variable) denotes a random effect</span>
 <span class="kw">display</span>(individual.model)</code></pre></div>
 <pre><code>## glmer(formula = yes.of.all ~ (1 | race.female) + (1 | age.cat) + 
 ##     (1 | edu.cat) + (1 | age.edu.cat) + (1 | state) + (1 | region) + 
@@ -618,7 +659,7 @@ individual.model &lt;-<span class="st"> </span><span class="kw">glmer</span>(<sp
 ## AIC = 7459.4, DIC = 7276
 ## deviance = 7357.7</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#examine random effects and standard errors for race-female</span>
-<span class="kw">ranef</span>(individual.model)$race.female</code></pre></div>
+<span class="kw">ranef</span>(individual.model)<span class="op">$</span>race.female</code></pre></div>
 <pre><code>##   (Intercept)
 ## 1 -0.21041983
 ## 2 -0.08701354
@@ -626,7 +667,7 @@ individual.model &lt;-<span class="st"> </span><span class="kw">glmer</span>(<sp
 ## 4  0.23019628
 ## 5 -0.22601715
 ## 6  0.24576228</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">se.ranef</span>(individual.model)$race.female</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">se.ranef</span>(individual.model)<span class="op">$</span>race.female</code></pre></div>
 <pre><code>##   (Intercept)
 ## 1   0.1083278
 ## 2   0.1454986
@@ -636,34 +677,34 @@ individual.model &lt;-<span class="st"> </span><span class="kw">glmer</span>(<sp
 ## 6   0.1485565</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Since we do not have any respondents from Alaska or Hawaii, we have to create a vector of state random effects that accounts for these states.</span>
 state.ranefs &lt;-<span class="st"> </span><span class="kw">array</span>(<span class="ot">NA</span>,<span class="kw">c</span>(<span class="dv">51</span>,<span class="dv">1</span>))
-<span class="kw">dimnames</span>(state.ranefs) &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="kw">c</span>(Statelevel$sstate),<span class="st">&quot;effect&quot;</span>)
-for(i in Statelevel$sstate){
-  state.ranefs[i,<span class="dv">1</span>] &lt;-<span class="st"> </span><span class="kw">ranef</span>(individual.model)$state[i,<span class="dv">1</span>]
+<span class="kw">dimnames</span>(state.ranefs) &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="kw">c</span>(Statelevel<span class="op">$</span>sstate),<span class="st">&quot;effect&quot;</span>)
+<span class="cf">for</span>(i <span class="cf">in</span> Statelevel<span class="op">$</span>sstate){
+  state.ranefs[i,<span class="dv">1</span>] &lt;-<span class="st"> </span><span class="kw">ranef</span>(individual.model)<span class="op">$</span>state[i,<span class="dv">1</span>]
 }
 state.ranefs[,<span class="dv">1</span>][<span class="kw">is.na</span>(state.ranefs[,<span class="dv">1</span>])] &lt;-<span class="st"> </span><span class="dv">0</span> <span class="co">#set states with missing REs (b/c not in data) to zero</span></code></pre></div>
 <p>This logistic regression gives the probability that any adult will support same-sex marriage given the person’s sex, race, age, education, and state.</p>
-<h3 id="step-7-poststatify-the-demographic-geographic-types">Step 7: Poststatify the demographic-geographic types</h3>
+<h3 id="step-7-poststatify-the-demographic-geographic-types">Step 7: Poststatify the Demographic-Geographic Types</h3>
 <p>To complete this method, we need to compute a weighted average of the probabilities from the logistic regression to estimate the proportin of same-sex marriage supporters in each state. First, need to create a prediction for each demographic-state combination (each cell in Census data):</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#create a prediction for each cell in Census data</span>
 cellpred &lt;-<span class="st"> </span><span class="kw">invlogit</span>(<span class="kw">fixef</span>(individual.model)[<span class="st">&quot;(Intercept)&quot;</span>]
-                     +<span class="kw">ranef</span>(individual.model)$race.female[Census$crace.female,<span class="dv">1</span>]
-                     +<span class="kw">ranef</span>(individual.model)$age.cat[Census$cage.cat,<span class="dv">1</span>]
-                     +<span class="kw">ranef</span>(individual.model)$edu.cat[Census$cedu.cat,<span class="dv">1</span>]
-                     +<span class="kw">ranef</span>(individual.model)$age.edu.cat[Census$cage.edu.cat,<span class="dv">1</span>]
-                     +state.ranefs[Census$cstate,<span class="dv">1</span>]
-                     +<span class="kw">ranef</span>(individual.model)$region[Census$cregion,<span class="dv">1</span>]   
-                     +(<span class="kw">fixef</span>(individual.model)[<span class="st">&quot;p.relig.full&quot;</span>] *Census$cp.relig.full)
-                     +(<span class="kw">fixef</span>(individual.model)[<span class="st">&quot;p.kerry.full&quot;</span>] *Census$cp.kerry.full)
+                     <span class="op">+</span><span class="kw">ranef</span>(individual.model)<span class="op">$</span>race.female[Census<span class="op">$</span>crace.female,<span class="dv">1</span>]
+                     <span class="op">+</span><span class="kw">ranef</span>(individual.model)<span class="op">$</span>age.cat[Census<span class="op">$</span>cage.cat,<span class="dv">1</span>]
+                     <span class="op">+</span><span class="kw">ranef</span>(individual.model)<span class="op">$</span>edu.cat[Census<span class="op">$</span>cedu.cat,<span class="dv">1</span>]
+                     <span class="op">+</span><span class="kw">ranef</span>(individual.model)<span class="op">$</span>age.edu.cat[Census<span class="op">$</span>cage.edu.cat,<span class="dv">1</span>]
+                     <span class="op">+</span>state.ranefs[Census<span class="op">$</span>cstate,<span class="dv">1</span>]
+                     <span class="op">+</span><span class="kw">ranef</span>(individual.model)<span class="op">$</span>region[Census<span class="op">$</span>cregion,<span class="dv">1</span>]   
+                     <span class="op">+</span>(<span class="kw">fixef</span>(individual.model)[<span class="st">&quot;p.relig.full&quot;</span>] <span class="op">*</span>Census<span class="op">$</span>cp.relig.full)
+                     <span class="op">+</span>(<span class="kw">fixef</span>(individual.model)[<span class="st">&quot;p.kerry.full&quot;</span>] <span class="op">*</span>Census<span class="op">$</span>cp.kerry.full)
 )</code></pre></div>
 <p>Then this prediction needs to be weighted by the actual population frequency of that state. Using this we can then calculate the average response, over each cell <em>j</em> in state <em>s</em>:</p>
 <p>[</p>
 <p>y^{MRP}_{s} =  ]</p>
 <p>More concretely, we would compute this using the following code:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#weights the prediction by the freq of cell                                       </span>
-cellpredweighted &lt;-<span class="st"> </span>cellpred *<span class="st"> </span>Census$cpercent.state
+cellpredweighted &lt;-<span class="st"> </span>cellpred <span class="op">*</span><span class="st"> </span>Census<span class="op">$</span>cpercent.state
 
 <span class="co">#calculates the percent within each state (weighted average of responses)</span>
-statepred &lt;-<span class="st"> </span><span class="dv">100</span>*<span class="st"> </span><span class="kw">as.vector</span>(<span class="kw">tapply</span>(cellpredweighted,Census$cstate,sum))
+statepred &lt;-<span class="st"> </span><span class="dv">100</span><span class="op">*</span><span class="st"> </span><span class="kw">as.vector</span>(<span class="kw">tapply</span>(cellpredweighted,Census<span class="op">$</span>cstate,sum))
 statepred</code></pre></div>
 <pre><code>##  [1] 35.68605 18.34818 19.56874 38.62509 45.52374 41.87638 42.97196
 ##  [8] 51.11665 34.60457 28.89359 24.00980 43.09559 32.24169 27.06452
@@ -674,15 +715,17 @@ statepred</code></pre></div>
 ## [43] 21.27458 24.61370 19.00481 28.81052 44.69614 43.00388 32.69952
 ## [50] 27.27826 30.16835</code></pre>
 <p>This result is a set a state-level opinion estimates that you could use to help make predictions regarding the election.</p>
-<h3 id="bayesian-model">Bayesian Model</h3>
+</section>
+<section id="bayesian-model" class="slide level2">
+<h2>Bayesian Model</h2>
 <p>We could also implement this model using Stan which allows for quantifying model uncertainity. The model specification will be the same our other section, except for some weakly informative priors on the standard deviations of the varying intercepts useful for convergence.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(rstan)
 <span class="kw">library</span>(brms)
 
 <span class="co"># the model</span>
-bayes.mod &lt;-<span class="st"> </span><span class="kw">brm</span>(yes.of.all ~<span class="st"> </span>(<span class="dv">1</span>|race.female) +<span class="st"> </span>(<span class="dv">1</span>|age.cat) +<span class="st"> </span>(<span class="dv">1</span>|edu.cat)
-                 +<span class="st"> </span>(<span class="dv">1</span>|age.edu.cat) +<span class="st"> </span>(<span class="dv">1</span>|state) +<span class="st"> </span>(<span class="dv">1</span>|region)
-                 +<span class="st"> </span>p.relig.full +<span class="st"> </span>p.kerry.full,
+bayes.mod &lt;-<span class="st"> </span><span class="kw">brm</span>(yes.of.all <span class="op">~</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>race.female) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>age.cat) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>edu.cat)
+                 <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>age.edu.cat) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>state) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>region)
+                 <span class="op">+</span><span class="st"> </span>p.relig.full <span class="op">+</span><span class="st"> </span>p.kerry.full,
                  <span class="dt">data=</span>marriage.data, <span class="dt">family=</span><span class="kw">bernoulli</span>(),
                  <span class="dt">prior=</span><span class="kw">c</span>(<span class="kw">set_prior</span>(<span class="st">&quot;normal(0,0.2)&quot;</span>, <span class="dt">class=</span><span class="st">'b'</span>),
                          <span class="kw">set_prior</span>(<span class="st">&quot;normal(0,0.2)&quot;</span>, <span class="dt">class=</span><span class="st">'sd'</span>, <span class="dt">group=</span><span class="st">&quot;race.female&quot;</span>),
@@ -699,31 +742,268 @@ bayes.mod &lt;-<span class="st"> </span><span class="kw">brm</span>(yes.of.all ~
 <span class="co"># devtools::install_github(&quot;mjskay/tidybayes&quot;)</span>
 <span class="kw">library</span>(tidybayes)
 
-approx_sd &lt;-<span class="st"> </span>broom::<span class="kw">tidy</span>(individual.model) %&gt;%
-<span class="st">  </span><span class="kw">filter</span>(stringr::<span class="kw">str_detect</span>(term, <span class="st">&quot;sd_&quot;</span>))
+approx_sd &lt;-<span class="st"> </span>broom<span class="op">::</span><span class="kw">tidy</span>(individual.model) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">filter</span>(stringr<span class="op">::</span><span class="kw">str_detect</span>(term, <span class="st">&quot;sd_&quot;</span>))
 
-bayes.mod %&gt;%
-<span class="st">  </span><span class="kw">gather_samples</span>(<span class="st">`</span><span class="dt">sd_.*</span><span class="st">`</span>, <span class="dt">regex=</span><span class="ot">TRUE</span>) %&gt;%
-<span class="st">  </span><span class="kw">ungroup</span>() %&gt;%
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">group =</span> stringr::<span class="kw">str_replace_all</span>(term, <span class="kw">c</span>(<span class="st">&quot;sd_&quot;</span> =<span class="st"> &quot;&quot;</span>,<span class="st">&quot;__Intercept&quot;</span>=<span class="st">&quot;&quot;</span>))) %&gt;%
-<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">y=</span>group, <span class="dt">x =</span> estimate)) +<span class="st"> </span>
-<span class="st">  </span>ggridges::<span class="kw">geom_density_ridges</span>(<span class="kw">aes</span>(<span class="dt">height=</span>..density..),
+bayes.mod <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gather_samples</span>(<span class="st">`</span><span class="dt">sd_.*</span><span class="st">`</span>, <span class="dt">regex=</span><span class="ot">TRUE</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">group =</span> stringr<span class="op">::</span><span class="kw">str_replace_all</span>(term, <span class="kw">c</span>(<span class="st">&quot;sd_&quot;</span> =<span class="st"> &quot;&quot;</span>,<span class="st">&quot;__Intercept&quot;</span>=<span class="st">&quot;&quot;</span>))) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">y=</span>group, <span class="dt">x =</span> estimate)) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span>ggridges<span class="op">::</span><span class="kw">geom_density_ridges</span>(<span class="kw">aes</span>(<span class="dt">height=</span>..density..),
                                 <span class="dt">rel_min_height =</span> <span class="fl">0.01</span>, <span class="dt">stat =</span> <span class="st">&quot;density&quot;</span>,
-                                <span class="dt">scale=</span><span class="fl">1.5</span>) +<span class="st"> </span>
+                                <span class="dt">scale=</span><span class="fl">1.5</span>) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data=</span>approx_sd)
 
 <span class="co"># Edit Census data for use</span>
-Census$p.relig.full &lt;-<span class="st"> </span>Census$cp.relig.full
-Census$p.kerry.full &lt;-<span class="st">  </span>Census$cp.kerry.full
+Census<span class="op">$</span>p.relig.full &lt;-<span class="st"> </span>Census<span class="op">$</span>cp.relig.full
+Census<span class="op">$</span>p.kerry.full &lt;-<span class="st">  </span>Census<span class="op">$</span>cp.kerry.full
 
 <span class="co"># point estimate for the level of state support for gay marriage and poststratify</span>
-ps.bayes.mod &lt;-<span class="st"> </span>bayes.mod %&gt;%
-<span class="st">  </span><span class="kw">add_predicted_draws</span>(<span class="dt">newdata=</span>Census, <span class="dt">allow_new_levels=</span><span class="ot">TRUE</span>) %&gt;%
-<span class="st">  </span><span class="kw">rename</span>(<span class="dt">support =</span> .prediction) %&gt;%
-<span class="st">  </span><span class="kw">mean_qi</span>() %&gt;%
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">support =</span> support *<span class="st"> </span>cpercent.state) %&gt;%
-<span class="st">  </span><span class="kw">group_by</span>(cstate) %&gt;%
+ps.bayes.mod &lt;-<span class="st"> </span>bayes.mod <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">add_predicted_draws</span>(<span class="dt">newdata=</span>Census, <span class="dt">allow_new_levels=</span><span class="ot">TRUE</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">rename</span>(<span class="dt">support =</span> .prediction) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mean_qi</span>() <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">support =</span> support <span class="op">*</span><span class="st"> </span>cpercent.state) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">group_by</span>(cstate) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">summarise</span>(<span class="dt">support =</span> <span class="kw">sum</span>(support))</code></pre></div>
+<!--- old stuff with overparameterized model in age and edu
+## Step 6: Fitting Individual-level Regression Model
+
+Now we are ready to fit a regression model for an individual survey responses on gay marriage rights given demographics and geography, i.e. each individual's response will be a function of their demographics and state. We'll denote each individual as *i* with indices *j, k, l, m, s,* and *p* for race-gender combination, age category, education category, region, state, and poll respectively, and including an age-education interaction. More specifically, we denote $y_i$ as 1 for supporters of same-sex marriage and 0 for opponents and those with no opinion. Remember that since we're modeling a binary variables we ought to use logistic regression, and thus our model will be as follows:
+
+\[
+\mathrm{Pr}(y_i = 1) = \mathrm{logit}^{-1}(\beta^0 + \alpha^{race,gender}_{j[i]} + \alpha^{age}_{k[i]} + \alpha^{edu}_{l[i]} + \alpha^{age,edu}_{k[i],l[i]} + \alpha^{state}_{s[i]} + \alpha^{year}_{p[i]})
+\]
+
+We can think of the terms after the intercept as modeled effects for different groups of respondents such as individuals who are a specific age. All of them except the state coefficient will be model as drawn from a normal distribution with mean zero and some estimated variance specific to that variable. For example,
+
+\[
+\alpha^{poll}_p \sim N(0, \sigma^2_{poll}), \mathrm{p = 1, ..., n}
+\]
+
+For the state effect, we'll be doing something slightly different. Instead of having a distribution with mean equaling zero, we will be modeling it as a function of the the region into which the state falls and the state’s conservative religious percentage and Democratic 2004 presidential vote share:^[These are just some examples of group-level predictors which reduce unexplained group-level variation, and thus lead to more precise estimation (Gelman and Hill 2007, 271)]
+
+\[
+\alpha^{state}_s \sim N(\alpha^{region}_{m[s]} + \beta^{relig}\cdot relig_s + \beta^{presvote} \cdot presvote_s, \sigma^2_{state}), \mathrm{s = 1, ..., 51}
+\]
+
+(Note: we model the region variable identically to the previous variables, e.g. poll.)
+
+Now we're ready to move onto coding up this model:
+
+
+```r
+#run individual-level opinion model
+
+individual.model <- glmer(formula = yes.of.all ~ (1|race.female) + (1|age.cat) + (1|edu.cat) + (1|age.edu.cat) + (1|state) + (1|region) + (1|poll) + p.relig.full + p.kerry.full,data=marriage.data, family=binomial(link="logit")) # Note: (1|variable) denotes a random effect
+display(individual.model)
+```
+
+```
+## glmer(formula = yes.of.all ~ (1 | race.female) + (1 | age.cat) + 
+##     (1 | edu.cat) + (1 | age.edu.cat) + (1 | state) + (1 | region) + 
+##     (1 | poll) + p.relig.full + p.kerry.full, data = marriage.data, 
+##     family = binomial(link = "logit"))
+##              coef.est coef.se
+## (Intercept)  -1.41     0.54  
+## p.relig.full -0.02     0.00  
+## p.kerry.full  0.02     0.01  
+## 
+## Error terms:
+##  Groups      Name        Std.Dev.
+##  state       (Intercept) 0.04    
+##  age.edu.cat (Intercept) 0.09    
+##  race.female (Intercept) 0.23    
+##  poll        (Intercept) 0.21    
+##  region      (Intercept) 0.20    
+##  edu.cat     (Intercept) 0.36    
+##  age.cat     (Intercept) 0.55    
+##  Residual                1.00    
+## ---
+## number of obs: 6341, groups: state, 49; age.edu.cat, 16; race.female, 6; poll, 5; region, 5; edu.cat, 4; age.cat, 4
+## AIC = 7459.4, DIC = 7276
+## deviance = 7357.7
+```
+
+```r
+individual.model.2 <- glmer(formula = yes.of.all ~ (1|race.female) +  (1|age.edu.cat) + (1|state) + (1|region) + (1|poll) + p.relig.full + p.kerry.full,data=marriage.data, family=binomial(link="logit")) # Note: (1|variable) denotes a random effect
+display(individual.model)
+```
+
+```
+## glmer(formula = yes.of.all ~ (1 | race.female) + (1 | age.cat) + 
+##     (1 | edu.cat) + (1 | age.edu.cat) + (1 | state) + (1 | region) + 
+##     (1 | poll) + p.relig.full + p.kerry.full, data = marriage.data, 
+##     family = binomial(link = "logit"))
+##              coef.est coef.se
+## (Intercept)  -1.41     0.54  
+## p.relig.full -0.02     0.00  
+## p.kerry.full  0.02     0.01  
+## 
+## Error terms:
+##  Groups      Name        Std.Dev.
+##  state       (Intercept) 0.04    
+##  age.edu.cat (Intercept) 0.09    
+##  race.female (Intercept) 0.23    
+##  poll        (Intercept) 0.21    
+##  region      (Intercept) 0.20    
+##  edu.cat     (Intercept) 0.36    
+##  age.cat     (Intercept) 0.55    
+##  Residual                1.00    
+## ---
+## number of obs: 6341, groups: state, 49; age.edu.cat, 16; race.female, 6; poll, 5; region, 5; edu.cat, 4; age.cat, 4
+## AIC = 7459.4, DIC = 7276
+## deviance = 7357.7
+```
+
+```r
+#examine random effects and standard errors for race-female
+ranef(individual.model)$race.female
+```
+
+```
+##   (Intercept)
+## 1 -0.21041983
+## 2 -0.08701354
+## 3  0.04904947
+## 4  0.23019628
+## 5 -0.22601715
+## 6  0.24576228
+```
+
+```r
+se.ranef(individual.model)$race.female
+```
+
+```
+##   (Intercept)
+## 1   0.1083278
+## 2   0.1454986
+## 3   0.1472982
+## 4   0.1080311
+## 5   0.1362828
+## 6   0.1485565
+```
+
+```r
+# Since we do not have any respondents from Alaska or Hawaii, we have to create a vector of state random effects that accounts for these states.
+state.ranefs <- array(NA,c(51,1))
+dimnames(state.ranefs) <- list(c(Statelevel$sstate),"effect")
+for(i in Statelevel$sstate){
+  state.ranefs[i,1] <- ranef(individual.model)$state[i,1]
+}
+state.ranefs[,1][is.na(state.ranefs[,1])] <- 0 #set states with missing REs (b/c not in data) to zero
+```
+
+This logistic regression gives the probability that any adult will support same-sex marriage given the person’s sex, race, age, education, and state.
+
+### Step 7: Poststatify the Demographic-Geographic Types
+
+To complete this method, we need to compute a weighted average of the probabilities from the logistic regression to estimate the proportin of same-sex marriage supporters in each state. First, need to create a prediction for each demographic-state combination (each cell in Census data):
+
+
+```r
+#create a prediction for each cell in Census data
+cellpred <- invlogit(fixef(individual.model)["(Intercept)"]
+                     +ranef(individual.model)$race.female[Census$crace.female,1]
+                     +ranef(individual.model)$age.cat[Census$cage.cat,1]
+                     +ranef(individual.model)$edu.cat[Census$cedu.cat,1]
+                     +ranef(individual.model)$age.edu.cat[Census$cage.edu.cat,1]
+                     +state.ranefs[Census$cstate,1]
+                     +ranef(individual.model)$region[Census$cregion,1]   
+                     +(fixef(individual.model)["p.relig.full"] *Census$cp.relig.full)
+                     +(fixef(individual.model)["p.kerry.full"] *Census$cp.kerry.full)
+)
+```
+
+Then this prediction needs to be weighted by the actual population frequency of that state. Using this we can then calculate the average response, over each cell *j* in state *s*:
+
+\[
+
+y^{MRP}_{s} = \frac{\sum_{c\in s}N_c\theta_c}{\sum_{c \in s} N_c}
+\]
+
+More concretely, we would compute this using the following code:
+
+
+```r
+#weights the prediction by the freq of cell                                       
+cellpredweighted <- cellpred * Census$cpercent.state
+
+#calculates the percent within each state (weighted average of responses)
+statepred <- 100* as.vector(tapply(cellpredweighted,Census$cstate,sum))
+statepred
+```
+
+```
+##  [1] 35.68605 18.34818 19.56874 38.62509 45.52374 41.87638 42.97196
+##  [8] 51.11665 34.60457 28.89359 24.00980 43.09559 32.24169 27.06452
+## [15] 35.83593 27.64564 27.39420 21.23864 24.50546 47.08487 35.18203
+## [22] 40.57050 33.87580 34.42007 27.23455 19.27549 34.98474 24.97002
+## [29] 27.99880 26.04115 41.51005 42.01405 40.39234 40.00020 44.13284
+## [36] 32.80594 18.08791 40.87434 37.88619 45.17418 22.35097 27.55108
+## [43] 21.27458 24.61370 19.00481 28.81052 44.69614 43.00388 32.69952
+## [50] 27.27826 30.16835
+```
+
+This result is a set a state-level opinion estimates that you could use to help make predictions regarding the election. 
+
+## Bayesian Model
+We could also implement this model using Stan which allows for quantifying model uncertainity. The model specification will be the same our other section, except for some weakly informative priors on the standard deviations of the varying intercepts useful for convergence.
+
+
+```r
+library(rstan)
+library(brms)
+
+# the model
+bayes.mod <- brm(yes.of.all ~ (1|race.female) + (1|age.cat) + (1|edu.cat)
+                 + (1|age.edu.cat) + (1|state) + (1|region)
+                 + p.relig.full + p.kerry.full,
+                 data=marriage.data, family=bernoulli(),
+                 prior=c(set_prior("normal(0,0.2)", class='b'),
+                         set_prior("normal(0,0.2)", class='sd', group="race.female"),
+                         set_prior("normal(0,0.2)", class='sd', group="age.cat"),
+                         set_prior("normal(0,0.2)", class='sd', group="edu.cat"),
+                         set_prior("normal(0,0.2)", class='sd', group="age.edu.cat"),
+                         set_prior("normal(0,0.2)", class='sd', group="state"),
+                         set_prior("normal(0,0.2)", class='sd', group="region")))
+
+summary(bayes.mod)
+
+# Model Uncertainity: standard deviation of group-level intercepts
+# install.packages("devtools")
+# devtools::install_github("mjskay/tidybayes")
+library(tidybayes)
+
+approx_sd <- broom::tidy(individual.model) %>%
+  filter(stringr::str_detect(term, "sd_"))
+
+bayes.mod %>%
+  gather_samples(`sd_.*`, regex=TRUE) %>%
+  ungroup() %>%
+  mutate(group = stringr::str_replace_all(term, c("sd_" = "","__Intercept"=""))) %>%
+  ggplot(aes(y=group, x = estimate)) + 
+  ggridges::geom_density_ridges(aes(height=..density..),
+                                rel_min_height = 0.01, stat = "density",
+                                scale=1.5) + 
+  geom_point(data=approx_sd)
+
+# Edit Census data for use
+Census$p.relig.full <- Census$cp.relig.full
+Census$p.kerry.full <-  Census$cp.kerry.full
+
+# point estimate for the level of state support for gay marriage and poststratify
+ps.bayes.mod <- bayes.mod %>%
+  add_predicted_draws(newdata=Census, allow_new_levels=TRUE) %>%
+  rename(support = .prediction) %>%
+  mean_qi() %>%
+  mutate(support = support * cpercent.state) %>%
+  group_by(cstate) %>%
+  summarise(support = sum(support))
+```
+--->
 </section>
 <section class="footnotes">
 <hr />

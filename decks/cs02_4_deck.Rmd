@@ -35,6 +35,7 @@ We can also change variables from dimensions to measures.
 
 ![](dashboard_figures/change_measure.png){width=250px}
 
+
 ***
 
 #### Sheet 1: The Map
@@ -52,7 +53,7 @@ Then we will want to create another sheet for our next figure by clicking the fa
 For our next figure, we will create a text table. To do this we will select the variables of interest and drag them into the center of the sheet (or into the "Measure Values" section). This will automatically create a text table of the variables.
 
 ![](dashboard_figures/info.png){width=350px}
-
+Note: if the "Measure Values" do not already show "SUM" instead of another type (e.g., "COUNT"), you can change them by clicking on the relevant bar labels. 
 ***
 
 ##### A Note On Variable Names: 
