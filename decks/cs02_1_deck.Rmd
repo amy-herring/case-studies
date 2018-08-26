@@ -172,7 +172,6 @@ hist(allCtryData$pop, breaks = 20, main = "",
 
 Large variance -- let's try a scale transformation.
 
-
 ## Population Size
 
 ```{r pophistsqrt, out.width='40%'}
