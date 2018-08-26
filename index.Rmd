@@ -30,7 +30,7 @@ Note: office hours may vary due to travel and other commitments. Revisions to of
 | ----------  | -------------------------------------         | ---- |
 | [Professor Amy Herring](https://stat.duke.edu/people/amy-h-herring)  <a href="mailto:amy.herring@duke.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp;  | Wednesday and Thursday 1:30-2:30pm | 208 Old Chemistry |
  [TA Michael Akande](https://www2.stat.duke.edu/~oma9/)  <a href="mailto:olanrewaju.akande@duke.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp;  | Tuesday 5-6pm and Friday 2:25-3:35pm | TBD
- [TA Henry Kirveslahti](https://stat.duke.edu/people/henry-kirveslahti-1)  <a href="mailto:henry.kirveslahti@duke.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp; | TBD | TBD
+ [TA Henry Kirveslahti](https://stat.duke.edu/people/henry-kirveslahti-1)  <a href="mailto:henry.kirveslahti@duke.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp; | Monday and Wednesday 5-6pm | 203 Old Chemistry
  
                   
 
