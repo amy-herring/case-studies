@@ -18,7 +18,7 @@ library(tidyverse)
 - combine data on a variety of levels (national, state, individual) to predict election outcomes
 
 # Case Study Goals
-Goals of this case study are (1) to predict whether the US House of Representatives remains in Republican control, and (2) to predict the outcomes of all NC Congressional elections.
+Goals of this case study are (1) to predict whether the US House of Representatives remains in Republican control, and (2) to predict the outcomes of all NC Congressional elections, including characterization of uncertainty in predictions.
 
 # Data (coming soon)
 <!---

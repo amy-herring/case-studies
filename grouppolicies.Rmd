@@ -17,7 +17,7 @@ Your group has a number of responsibilities for problem and project assignments,
 - Do the required individual preparation.
 - Coordinator sends reminder before meeting that includes meeting location, time, and individual preparation assignments
 - Meet and work. Coordinator keeps everyone on task and makes sure everyone is involved, recorder prepares final solution to be turned in, monitor makes sure everyone understands the solution, including the coding, the checker double-checks the work for reproducibility (and errors!), and the reviewer is responsible for (1) sharing comments on the graded project (and interim submissions) with the team (2) leading a discussion about them, with a focus on how to improve moving forward, and (3) reviewing Spliddit effort apportionment scores in a constructive conversation with the team.
-- Checker turns in assignment.
+- Checker turns in assignment, which also indicates which student took on each role in the first bullet point.
 - All team members complete evaluations on [Spliddit](http://www.spliddit.org). On Spliddit, you will use sliders to indicate the relative contributions of each of your peers (credit is out of 100%). Your ratings should reflect the percentage of the total project that each individual is responsible for, not taking your own contributions into account. Spliddit will then apportion credit using fair division principles (you can read more about it on the website).
 - Reviewer coordinates review of returned assignments.
 

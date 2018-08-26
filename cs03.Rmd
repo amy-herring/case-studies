@@ -16,7 +16,7 @@ library(tidyverse)
 - explain differences in estimation of rates based on small sample sizes when using complete pooling, no pooling, or shrinkage approaches
 
 # Case Study Goals
-Based on data from the North Carolina Center for Health Statistics (NCHS), obtain good estimates of infant mortality rates in NC from 2011-2016 based on county, year, and race/ethnicity. Determine whether any groups (defined by county, race/ethnicity, or their combination) are experiencing changes in infant mortality rates and describe those changes. Assess whether some groups or areas have significantly higher infant mortality rates than others. Assess whether patterns in infant mortality by race/ethnicity in NC mirror national trends. 
+Based on data from the North Carolina Center for Health Statistics (NCHS), obtain good estimates of infant mortality rates in NC from 2011-2016 based on county, year, and race/ethnicity. Determine whether any groups (defined by county, race/ethnicity, or their combination) are experiencing changes in infant mortality rates and describe those changes. Assess whether some groups or areas have significantly higher infant mortality rates than others. Assess whether patterns in infant mortality by race/ethnicity in NC mirror national trends. All assessments should involve characterization of uncertainty.
 
 # Data
 
