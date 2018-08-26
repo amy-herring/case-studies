@@ -61,8 +61,7 @@ Chapter 11 of Data Science in R: A Case Studies Approach to Computational Reason
 [Obtaining Tableau Guide](decks/cs02_2_deck.html)
 
 [Tableau visualization of infant mortality](decks/cs02_3_deck.html)
-<!---
+
 [Tableau dashboard visualization of infant mortality](decks/cs02_4_deck.html)
 
---->
 

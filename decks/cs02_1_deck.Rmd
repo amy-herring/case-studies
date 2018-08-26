@@ -62,7 +62,7 @@ While overall infant mortality rates in the US have declined over time, major di
 
 ##Mapping Infant Mortality
 
-In order to create our map of infant mortality around the world, we will need to identify the following data.
+To create our map of infant mortality around the world, we will need to identify the following data.
 
 - Infant mortality data for time period of interest by country
 - Country mapping information and link to infant mortality data
