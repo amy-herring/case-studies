@@ -19,7 +19,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Case Study 2: Data Visualization
 
-Using data relevant to countries around the world, we will explore data science tools to tell complex stories through data visualization. We will consider data on infant mortality in class, and for the report you are welcome to use any data that can be plotted by country.
+Using global health data, we will explore data science tools to tell complex stories through data visualization. We will consider data on infant mortality in class, and for the report you are welcome to use any global health data that can be plotted by country.
 
 
 
@@ -62,7 +62,7 @@ While overall infant mortality rates in the US have declined over time, major di
 
 ##Mapping Infant Mortality
 
-To create our map of infant mortality around the world, we will need to identify the following data.
+In order to create our map of infant mortality around the world, we will need to identify the following data.
 
 - Infant mortality data for time period of interest by country
 - Country mapping information and link to infant mortality data
