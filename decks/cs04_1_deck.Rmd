@@ -27,6 +27,7 @@ We will visit some information sources you may consider when designing your own 
 
 One strategy for predicting the winner in an election would be to use the latest aggregate polling data from a reputable source, e.g. FiveThirtyEight or The New York Times. 
 
+- Polls may use land lines (robocalls), cell phones, or web surveys.
 - Some polls are of likely voters, while others may not restrict to this group
 - Polls vary in quality (you can find some quality ratings online)
 - Polls may be subject to bias (e.g., nonresponse bias, assumptions involved in determining "likely voters")
