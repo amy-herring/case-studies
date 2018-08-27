@@ -1,0 +1,1759 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <title>Survival Analysis Presentation</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="Survival_files/reveal.js-3.3.0.1/css/reveal.css"/>
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; background-color: #f8f8f8; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+pre, code { background-color: #f8f8f8; }
+code > span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code > span.dt { color: #204a87; } /* DataType */
+code > span.dv { color: #0000cf; } /* DecVal */
+code > span.bn { color: #0000cf; } /* BaseN */
+code > span.fl { color: #0000cf; } /* Float */
+code > span.ch { color: #4e9a06; } /* Char */
+code > span.st { color: #4e9a06; } /* String */
+code > span.co { color: #8f5902; font-style: italic; } /* Comment */
+code > span.ot { color: #8f5902; } /* Other */
+code > span.al { color: #ef2929; } /* Alert */
+code > span.fu { color: #000000; } /* Function */
+code > span.er { color: #a40000; font-weight: bold; } /* Error */
+code > span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #000000; } /* Constant */
+code > span.sc { color: #000000; } /* SpecialChar */
+code > span.vs { color: #4e9a06; } /* VerbatimString */
+code > span.ss { color: #4e9a06; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #000000; } /* Variable */
+code > span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code > span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code > span.ex { } /* Extension */
+code > span.at { color: #c4a000; } /* Attribute */
+code > span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code > span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="Survival_files/reveal.js-3.3.0.1/css/theme/night.css" id="theme">
+
+<style type="text/css">
+.reveal section img {
+  background: rgba(255, 255, 255, 0.85);
+}
+</style>
+
+  <!-- some tweaks to reveal css -->
+  <style type="text/css">
+    .reveal h1 { font-size: 2.0em; }
+    .reveal h2 { font-size: 1.5em;  }
+    .reveal h3 { font-size: 1.25em;	}
+    .reveal h4 { font-size: 1em;	}
+
+    .reveal .slides>section,
+    .reveal .slides>section>section {
+      padding: 0px 0px;
+    }
+
+
+
+    .reveal table {
+      border-width: 1px;
+      border-spacing: 2px;
+      border-style: dotted;
+      border-color: gray;
+      border-collapse: collapse;
+      font-size: 0.7em;
+    }
+
+    .reveal table th {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      font-weight: bold;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+    .reveal table td {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+
+  </style>
+
+    <style type="text/css">code{white-space: pre;}</style>
+
+    <link rel="stylesheet" href="styles.css"/>
+
+<!-- Printing and PDF exports -->
+<script id="paper-css" type="application/dynamic-css">
+
+/* Default Print Stylesheet Template
+   by Rob Glazebrook of CSSnewbie.com
+   Last Updated: June 4, 2008
+
+   Feel free (nay, compelled) to edit, append, and
+   manipulate this file as you see fit. */
+
+
+@media print {
+
+	/* SECTION 1: Set default width, margin, float, and
+	   background. This prevents elements from extending
+	   beyond the edge of the printed page, and prevents
+	   unnecessary background images from printing */
+	html {
+		background: #fff;
+		width: auto;
+		height: auto;
+		overflow: visible;
+	}
+	body {
+		background: #fff;
+		font-size: 20pt;
+		width: auto;
+		height: auto;
+		border: 0;
+		margin: 0 5%;
+		padding: 0;
+		overflow: visible;
+		float: none !important;
+	}
+
+	/* SECTION 2: Remove any elements not needed in print.
+	   This would include navigation, ads, sidebars, etc. */
+	.nestedarrow,
+	.controls,
+	.fork-reveal,
+	.share-reveal,
+	.state-background,
+	.reveal .progress,
+	.reveal .backgrounds {
+		display: none !important;
+	}
+
+	/* SECTION 3: Set body font face, size, and color.
+	   Consider using a serif font for readability. */
+	body, p, td, li, div {
+		font-size: 20pt!important;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		color: #000;
+	}
+
+	/* SECTION 4: Set heading font face, sizes, and color.
+	   Differentiate your headings from your body text.
+	   Perhaps use a large sans-serif for distinction. */
+	h1,h2,h3,h4,h5,h6 {
+		color: #000!important;
+		height: auto;
+		line-height: normal;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		text-shadow: 0 0 0 #000 !important;
+		text-align: left;
+		letter-spacing: normal;
+	}
+	/* Need to reduce the size of the fonts for printing */
+	h1 { font-size: 28pt !important;  }
+	h2 { font-size: 24pt !important; }
+	h3 { font-size: 22pt !important; }
+	h4 { font-size: 22pt !important; font-variant: small-caps; }
+	h5 { font-size: 21pt !important; }
+	h6 { font-size: 20pt !important; font-style: italic; }
+
+	/* SECTION 5: Make hyperlinks more usable.
+	   Ensure links are underlined, and consider appending
+	   the URL to the end of the link for usability. */
+	a:link,
+	a:visited {
+		color: #000 !important;
+		font-weight: bold;
+		text-decoration: underline;
+	}
+	/*
+	.reveal a:link:after,
+	.reveal a:visited:after {
+		content: " (" attr(href) ") ";
+		color: #222 !important;
+		font-size: 90%;
+	}
+	*/
+
+
+	/* SECTION 6: more reveal.js specific additions by @skypanther */
+	ul, ol, div, p {
+		visibility: visible;
+		position: static;
+		width: auto;
+		height: auto;
+		display: block;
+		overflow: visible;
+		margin: 0;
+		text-align: left !important;
+	}
+	.reveal pre,
+	.reveal table {
+		margin-left: 0;
+		margin-right: 0;
+	}
+	.reveal pre code {
+		padding: 20px;
+		border: 1px solid #ddd;
+	}
+	.reveal blockquote {
+		margin: 20px 0;
+	}
+	.reveal .slides {
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 0 !important;
+		zoom: 1 !important;
+
+		overflow: visible !important;
+		display: block !important;
+
+		text-align: left !important;
+		-webkit-perspective: none;
+		   -moz-perspective: none;
+		    -ms-perspective: none;
+		        perspective: none;
+
+		-webkit-perspective-origin: 50% 50%;
+		   -moz-perspective-origin: 50% 50%;
+		    -ms-perspective-origin: 50% 50%;
+		        perspective-origin: 50% 50%;
+	}
+	.reveal .slides section {
+		visibility: visible !important;
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+		display: block !important;
+		overflow: visible !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 60px 20px !important;
+		z-index: auto !important;
+
+		opacity: 1 !important;
+
+		page-break-after: always !important;
+
+		-webkit-transform-style: flat !important;
+		   -moz-transform-style: flat !important;
+		    -ms-transform-style: flat !important;
+		        transform-style: flat !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+
+		-webkit-transition: none !important;
+		   -moz-transition: none !important;
+		    -ms-transition: none !important;
+		        transition: none !important;
+	}
+	.reveal .slides section.stack {
+		padding: 0 !important;
+	}
+	.reveal section:last-of-type {
+		page-break-after: avoid !important;
+	}
+	.reveal section .fragment {
+		opacity: 1 !important;
+		visibility: visible !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+	}
+	.reveal section img {
+		display: block;
+		margin: 15px 0px;
+		background: rgba(255,255,255,1);
+		border: 1px solid #666;
+		box-shadow: none;
+	}
+
+	.reveal section small {
+		font-size: 0.8em;
+	}
+
+}  
+</script>
+
+
+<script id="pdf-css" type="application/dynamic-css">
+    
+/**
+ * This stylesheet is used to print reveal.js
+ * presentations to PDF.
+ *
+ * https://github.com/hakimel/reveal.js#pdf-export
+ */
+
+* {
+	-webkit-print-color-adjust: exact;
+}
+
+body {
+	margin: 0 auto !important;
+	border: 0;
+	padding: 0;
+	float: none !important;
+	overflow: visible;
+}
+
+html {
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+}
+
+/* Remove any elements not needed in print. */
+.nestedarrow,
+.reveal .controls,
+.reveal .progress,
+.reveal .playback,
+.reveal.overview,
+.fork-reveal,
+.share-reveal,
+.state-background {
+	display: none !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	text-shadow: 0 0 0 #000 !important;
+}
+
+.reveal pre code {
+	overflow: hidden !important;
+	font-family: Courier, 'Courier New', monospace !important;
+}
+
+ul, ol, div, p {
+	visibility: visible;
+	position: static;
+	width: auto;
+	height: auto;
+	display: block;
+	overflow: visible;
+	margin: auto;
+}
+.reveal {
+	width: auto !important;
+	height: auto !important;
+	overflow: hidden !important;
+}
+.reveal .slides {
+	position: static;
+	width: 100%;
+	height: auto;
+
+	left: auto;
+	top: auto;
+	margin: 0 !important;
+	padding: 0 !important;
+
+	overflow: visible;
+	display: block;
+
+	-webkit-perspective: none;
+	   -moz-perspective: none;
+	    -ms-perspective: none;
+	        perspective: none;
+
+	-webkit-perspective-origin: 50% 50%; /* there isn't a none/auto value but 50-50 is the default */
+	   -moz-perspective-origin: 50% 50%;
+	    -ms-perspective-origin: 50% 50%;
+	        perspective-origin: 50% 50%;
+}
+
+.reveal .slides section {
+	page-break-after: always !important;
+
+	visibility: visible !important;
+	position: relative !important;
+	display: block !important;
+	position: relative !important;
+
+	margin: 0 !important;
+	padding: 0 !important;
+	box-sizing: border-box !important;
+	min-height: 1px;
+
+	opacity: 1 !important;
+
+	-webkit-transform-style: flat !important;
+	   -moz-transform-style: flat !important;
+	    -ms-transform-style: flat !important;
+	        transform-style: flat !important;
+
+	-webkit-transform: none !important;
+	   -moz-transform: none !important;
+	    -ms-transform: none !important;
+	        transform: none !important;
+}
+
+.reveal section.stack {
+	margin: 0 !important;
+	padding: 0 !important;
+	page-break-after: avoid !important;
+	height: auto !important;
+	min-height: auto !important;
+}
+
+.reveal img {
+	box-shadow: none;
+}
+
+.reveal .roll {
+	overflow: visible;
+	line-height: 1em;
+}
+
+/* Slide backgrounds are placed inside of their slide when exporting to PDF */
+.reveal section .slide-background {
+	display: block !important;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: -1;
+}
+
+/* All elements should be above the slide-background */
+.reveal section>* {
+	position: relative;
+	z-index: 1;
+}
+
+/* Display slide speaker notes when 'showNotes' is enabled */
+.reveal .speaker-notes-pdf {
+	display: block;
+	width: 100%;
+	max-height: none;
+	left: auto;
+	top: auto;
+	z-index: 100;
+}
+
+/* Display slide numbers when 'slideNumber' is enabled */
+.reveal .slide-number-pdf {
+	display: block;
+	position: absolute;
+	font-size: 14px;
+}
+
+</script>
+
+
+<script>
+var style = document.createElement( 'style' );
+style.type = 'text/css';
+var style_script_id = window.location.search.match( /print-pdf/gi ) ? 'pdf-css' : 'paper-css';
+var style_script = document.getElementById(style_script_id).text;
+style.innerHTML = style_script;
+document.getElementsByTagName('head')[0].appendChild(style);
+</script>
+
+    
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section>
+    <h1 class="title">Survival Analysis Presentation</h1>
+</section>
+
+<section id="survival-data" class="slide level2">
+<h1>Survival Data</h1>
+</section>
+<section id="section" class="slide level2 smaller">
+<h1></h1>
+<p>In many studies, the outcome of interest is the amount of time from an initial observation until the occurrence of some event of interest, e.g.</p>
+<ul>
+<li>Time from transplant surgery until new organ failture</li>
+<li>Time to death in a pancreatic cancer trial</li>
+<li>Time to first sex</li>
+<li>Time to menopause</li>
+<li>Time to divorce</li>
+<li>Time to receipt of PhD</li>
+</ul>
+<p>Typically, the event of interest is called a <em>failure</em> (even if it is a good thing). The time interval between a starting point and the failure is known as the <em>survival time</em> and is often represented by <span class="math inline">\(t\)</span>.</p>
+</section>
+<section id="section-1" class="slide level2 smaller">
+<h1></h1>
+<p>Certain aspects of survival data make data analysis particularly challenging.</p>
+<ul>
+<li>Typically, not all the individuals are observed until their times of failure
+<ul>
+<li>An organ transplant recipient may die in an automobile accident before the new organ fails.</li>
+<li>A PhD student may withdraw from the program to start a multi-billion dollar health company</li>
+<li>Not everyone gets divorced</li>
+<li>A pancreatic cancer patient may move to Aitutaki instead of undergoing further treatment</li>
+</ul></li>
+<li>In this case, an observation is said to be <em>censored</em> at the last point of contact with the patient.</li>
+</ul>
+</section>
+<section id="study-time-and-patient-time" class="slide level2">
+<h1>Study Time and Patient Time</h1>
+</section>
+<section id="section-2" class="slide level2 smaller">
+<h1></h1>
+<p><img src="studytime.jpg" width="80%" /></p>
+<p>It is important to distinguish between study time and patient time.</p>
+<ul>
+<li>A study may start enrolling patients in September and continue until all 500 patients have been enrolled</li>
+<li>This is likely to take months or years</li>
+<li>Time is typically converted to patient time (time between enrollment and failure or censoring) before analysis</li>
+</ul>
+</section>
+<section id="survival-function" class="slide level2">
+<h1>Survival Function</h1>
+<p>The distribution of survival times is characterized by the <em>survival function</em>, represented by <span class="math inline">\(S(t)\)</span>. For a continuous random variable <span class="math inline">\(T\)</span>, <span class="math display">\[S(t) = Pr(T&gt;t),\]</span> and <span class="math inline">\(S(t)\)</span> represents the proportion of individuals who have not yet failed.</p>
+<p>The graph of <span class="math inline">\(S(t)\)</span> versus <span class="math inline">\(t\)</span> is called a survival curve. The survival curve shows the proportion of survivors at any given time.</p>
+</section>
+<section id="section-3" class="slide level2 smaller">
+<h1></h1>
+<div class="figure">
+<img src="burkinafaso.jpg" alt="Survival of Children in Burkina Faso by Vaccination Status" width="80%" />
+<p class="caption">
+Survival of Children in Burkina Faso by Vaccination Status
+</p>
+</div>
+</section>
+<section id="simple-example" class="slide level2 smaller">
+<h1>Simple Example</h1>
+<p>A small study enrolls 10 patients, whose outcomes are below.</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: right;">Patient</th>
+<th style="text-align: right;">Event time (x)</th>
+<th style="text-align: left;">Event Type</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4.5</td>
+<td style="text-align: left;">Death</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">7.5</td>
+<td style="text-align: left;">Death</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">8.5</td>
+<td style="text-align: left;">Censored</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">11.5</td>
+<td style="text-align: left;">Death</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">13.5</td>
+<td style="text-align: left;">Censored</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">15.5</td>
+<td style="text-align: left;">Death</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">16.5</td>
+<td style="text-align: left;">Death</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">17.5</td>
+<td style="text-align: left;">Censored</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">19.5</td>
+<td style="text-align: left;">Death</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">21.5</td>
+<td style="text-align: left;">Censored</td>
+</tr>
+</tbody>
+</table>
+<p>How do we estimate the survival curve for these data?</p>
+</section>
+<section id="kaplan-meier-estimate" class="slide level2 smaller">
+<h1>Kaplan-Meier Estimate</h1>
+<p>Perhaps the most popular estimate of a survival curve is the <em>Kaplan-Meier</em> or <em>product-limit</em> estimate. This method is actually fairly intuitive.</p>
+<p>First, define the following quantities.</p>
+<ul>
+<li><span class="math inline">\(I_t\)</span>: # at risk of failure at time <span class="math inline">\(t\)</span> (i.e., those who did not fail before <span class="math inline">\(t\)</span> and those who were not censored before <span class="math inline">\(t\)</span>)</li>
+<li><span class="math inline">\(d_t\)</span>: # who fail at time <span class="math inline">\(t\)</span></li>
+<li><span class="math inline">\(q_t = \frac{d_t}{I_t}\)</span>: estimated probability of failing at time <span class="math inline">\(t\)</span></li>
+<li><span class="math inline">\(S(t)\)</span>: cumulative probability of surviving beyond time <span class="math inline">\(t\)</span>, estimated as <span class="math display">\[\hat{S}(t) = \prod_{t_i \leq t}\Big(1-\frac{d_{t_i}}{I_{t_i}}\Big)\]</span>.</li>
+</ul>
+</section>
+<section id="how-is-that-intuitive" class="slide level2">
+<h1>How is that intuitive?</h1>
+<p>At each time <span class="math inline">\(t\)</span>, the probability of surviving is just 1 − Pr(failing). Before there are any failures in the data, our estimated <span class="math inline">\(\hat{S}(t)=1\)</span>. At the time of the first failure, this probability falls below 1 and is simply one minus the probability of failing at that time, or <span class="math inline">\(1- \frac{\# \text{failures}}{\# \text{at risk of failing}}\)</span>.</p>
+<p>After the first failure, things get more complicated. At the time of the second failure, you can calcuate <span class="math inline">\(1- \frac{\# \text{failures}}{\# \text{at risk of failing}}\)</span>, but this # at risk of failing doesn’t provide the whole picture, as someone else has already died. In fact, this is the conditional probability of surviving now that you’ve made it past the time of the first failure.</p>
+</section>
+<section id="how-is-that-intuitive-1" class="slide level2">
+<h1>How is that intuitive?</h1>
+<p><span class="math display">\[\hat{S}(t) = \prod_{t_i \leq t}\Big(1-\frac{d_{t_i}}{I_{t_i}}\Big)\]</span></p>
+<p>How do you then calculate the total (unconditional) probability of survival? That is just the product of the probability of surviving past the first failure times the conditional probability of surviving beyond the second failure given that you made it past the first, or</p>
+<p><span class="math display">\[\scriptsize{Pr(\text{survived past 1st and 2nd times})}\]</span> <span class="math display">\[=\scriptsize{Pr(\text{survive past 1st time})Pr(\text{survive past 2nd time| survived past 1st time})} \]</span> <span class="math display">\[ = \scriptsize{\Big(1-\frac{\text{# failures at time 1}}{\text{# at risk of failing at failure time 1}}\Big)\Big(1-\frac{\text{# failures at time 2}}{\text{# at risk of failing at failure time 2}}\Big)}\]</span></p>
+<p>If someone is censored, they are no longer at risk of failing at the next failure time and are taken out of the calculation.</p>
+</section>
+<section id="kaplan-meier-km-esimate-example" class="slide level2">
+<h1>Kaplan-Meier (KM) Esimate Example</h1>
+</section>
+<section id="section-4" class="slide level2 smaller">
+<h1></h1>
+<p><span class="math display">\[\hat{S}(t) = \prod_{t_i \leq t}\Big(1-\frac{d_{t_i}}{I_{t_i}}\Big)\]</span></p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">t</th>
+<th style="text-align: left;"># Failed(d[t])</th>
+<th style="text-align: left;"># Censored</th>
+<th style="text-align: left;"># Left I[t + 1]</th>
+<th style="text-align: left;">S(t)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">10</td>
+<td style="text-align: left;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">4.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">7.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">8.5</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">11.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">13.5</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">15.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">16.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">17.5</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">19.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">21.5</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="section-5" class="slide level2 smaller">
+<h1></h1>
+<p><span class="math display">\[\hat{S}(t) = \prod_{t_i \leq t}\Big(1-\frac{d_{t_i}}{I_{t_i}}\Big)\]</span></p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">t</th>
+<th style="text-align: left;"># Failed(d[t])</th>
+<th style="text-align: left;"># Censored</th>
+<th style="text-align: left;"># Left I[t + 1]</th>
+<th style="text-align: left;">S(t)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">10</td>
+<td style="text-align: left;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">4.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">9</td>
+<td style="text-align: left;">1-1/10 = 0.9</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">7.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">8.5</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">11.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">13.5</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">15.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">16.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">17.5</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">19.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">21.5</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="section-6" class="slide level2 smaller">
+<h1></h1>
+<p><span class="math display">\[\hat{S}(t) = \prod_{t_i \leq t}\Big(1-\frac{d_{t_i}}{I_{t_i}}\Big)\]</span></p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">t</th>
+<th style="text-align: left;"># Failed(d[t])</th>
+<th style="text-align: left;"># Censored</th>
+<th style="text-align: left;"># Left I[t + 1]</th>
+<th style="text-align: left;">S(t)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">10</td>
+<td style="text-align: left;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">4.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">9</td>
+<td style="text-align: left;">0.9</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">7.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">8</td>
+<td style="text-align: left;">0.8</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">8.5</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">7</td>
+<td style="text-align: left;">0.8*(1-0/8) = 0.8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">11.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">13.5</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">15.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">16.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">17.5</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">19.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">21.5</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="section-7" class="slide level2 smaller">
+<h1></h1>
+<p><span class="math display">\[\hat{S}(t) = \prod_{t_i \leq t}\Big(1-\frac{d_{t_i}}{I_{t_i}}\Big)\]</span></p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">t</th>
+<th style="text-align: left;"># Failed(d[t])</th>
+<th style="text-align: left;"># Censored</th>
+<th style="text-align: left;"># Left I[t + 1]</th>
+<th style="text-align: left;">S(t)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">10</td>
+<td style="text-align: left;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">4.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">9</td>
+<td style="text-align: left;">0.9</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">7.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">8</td>
+<td style="text-align: left;">0.8</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">8.5</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">7</td>
+<td style="text-align: left;">0.8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">11.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">6</td>
+<td style="text-align: left;">0.8*(1-1/7) = 0.69</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">13.5</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">15.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">16.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">17.5</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">19.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">21.5</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="section-8" class="slide level2 smaller">
+<h1></h1>
+<p><span class="math display">\[\hat{S}(t) = \prod_{t_i \leq t}\Big(1-\frac{d_{t_i}}{I_{t_i}}\Big)\]</span></p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">t</th>
+<th style="text-align: left;"># Failed(d[t])</th>
+<th style="text-align: left;"># Censored</th>
+<th style="text-align: left;"># Left I[t + 1]</th>
+<th style="text-align: left;">S(t)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">10</td>
+<td style="text-align: left;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">4.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">9</td>
+<td style="text-align: left;">0.9</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">7.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">8</td>
+<td style="text-align: left;">0.8</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">8.5</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">7</td>
+<td style="text-align: left;">0.8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">11.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">6</td>
+<td style="text-align: left;">0.69</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">13.5</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">5</td>
+<td style="text-align: left;">0.69</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">15.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">16.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">17.5</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">19.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">21.5</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="section-9" class="slide level2 smaller">
+<h1></h1>
+<p><span class="math display">\[\hat{S}(t) = \prod_{t_i \leq t}\Big(1-\frac{d_{t_i}}{I_{t_i}}\Big)\]</span></p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">t</th>
+<th style="text-align: left;"># Failed(d[t])</th>
+<th style="text-align: left;"># Censored</th>
+<th style="text-align: left;"># Left I[t + 1]</th>
+<th style="text-align: left;">S(t)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">10</td>
+<td style="text-align: left;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">4.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">9</td>
+<td style="text-align: left;">0.9</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">7.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">8</td>
+<td style="text-align: left;">0.8</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">8.5</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">7</td>
+<td style="text-align: left;">0.8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">11.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">6</td>
+<td style="text-align: left;">0.69</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">13.5</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">5</td>
+<td style="text-align: left;">0.69</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">15.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">0.69*(1-1/5) = 0.552</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">16.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">17.5</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">19.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">21.5</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="section-10" class="slide level2 smaller">
+<h1></h1>
+<p><span class="math display">\[\hat{S}(t) = \prod_{t_i \leq t}\Big(1-\frac{d_{t_i}}{I_{t_i}}\Big)\]</span></p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">t</th>
+<th style="text-align: left;"># Failed(d[t])</th>
+<th style="text-align: left;"># Censored</th>
+<th style="text-align: left;"># Left I[t + 1]</th>
+<th style="text-align: left;">S(t)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">10</td>
+<td style="text-align: left;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">4.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">9</td>
+<td style="text-align: left;">0.9</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">7.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">8</td>
+<td style="text-align: left;">0.8</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">8.5</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">7</td>
+<td style="text-align: left;">0.8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">11.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">6</td>
+<td style="text-align: left;">0.69</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">13.5</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">5</td>
+<td style="text-align: left;">0.69</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">15.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">0.552</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">16.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">0.552*(1-1/4) = 0.414</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">17.5</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">19.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">21.5</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="section-11" class="slide level2 smaller">
+<h1></h1>
+<p><span class="math display">\[\hat{S}(t) = \prod_{t_i \leq t}\Big(1-\frac{d_{t_i}}{I_{t_i}}\Big)\]</span></p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">t</th>
+<th style="text-align: left;"># Failed(d[t])</th>
+<th style="text-align: left;"># Censored</th>
+<th style="text-align: left;"># Left I[t + 1]</th>
+<th style="text-align: left;">S(t)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">10</td>
+<td style="text-align: left;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">4.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">9</td>
+<td style="text-align: left;">0.9</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">7.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">8</td>
+<td style="text-align: left;">0.8</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">8.5</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">7</td>
+<td style="text-align: left;">0.8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">11.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">6</td>
+<td style="text-align: left;">0.69</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">13.5</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">5</td>
+<td style="text-align: left;">0.69</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">15.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">0.552</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">16.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">0.414</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">17.5</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">0.414</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">19.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">21.5</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="section-12" class="slide level2 smaller">
+<h1></h1>
+<p><span class="math display">\[\hat{S}(t) = \prod_{t_i \leq t}\Big(1-\frac{d_{t_i}}{I_{t_i}}\Big)\]</span></p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">t</th>
+<th style="text-align: left;"># Failed(d[t])</th>
+<th style="text-align: left;"># Censored</th>
+<th style="text-align: left;"># Left I[t + 1]</th>
+<th style="text-align: left;">S(t)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">10</td>
+<td style="text-align: left;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">4.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">9</td>
+<td style="text-align: left;">0.9</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">7.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">8</td>
+<td style="text-align: left;">0.8</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">8.5</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">7</td>
+<td style="text-align: left;">0.8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">11.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">6</td>
+<td style="text-align: left;">0.69</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">13.5</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">5</td>
+<td style="text-align: left;">0.69</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">15.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">0.552</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">16.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">0.414</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">17.5</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">0.414</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">19.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0.414*(1-1/2) = 0.207</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">21.5</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="section-13" class="slide level2 smaller">
+<h1></h1>
+<p><span class="math display">\[\hat{S}(t) = \prod_{t_i \leq t}\Big(1-\frac{d_{t_i}}{I_{t_i}}\Big)\]</span></p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">t</th>
+<th style="text-align: left;"># Failed(d[t])</th>
+<th style="text-align: left;"># Censored</th>
+<th style="text-align: left;"># Left I[t + 1]</th>
+<th style="text-align: left;">S(t)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">10</td>
+<td style="text-align: left;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">4.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">9</td>
+<td style="text-align: left;">0.9</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">7.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">8</td>
+<td style="text-align: left;">0.8</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">8.5</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">7</td>
+<td style="text-align: left;">0.8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">11.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">6</td>
+<td style="text-align: left;">0.69</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">13.5</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">5</td>
+<td style="text-align: left;">0.69</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">15.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">0.552</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">16.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">0.414</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">17.5</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">0.414</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">19.5</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0.207</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">21.5</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0.207</td>
+</tr>
+</tbody>
+</table>
+<p>What would <span class="math inline">\(\hat{S}(21.5)\)</span> be if the last observation were a failure instead of censored?</p>
+</section>
+<section id="km-estimate" class="slide level2">
+<h1>KM Estimate</h1>
+<p>In between failure times, the KM estimate does not change but is constant. This gives the estimated survival function its step-like appearance (we call this type of function a <em>step function</em>).</p>
+</section>
+<section id="tumors-in-children-2012-neuro-oncology" class="slide level2 smaller">
+<h1>Tumors in Children, 2012 <em>Neuro-Oncology</em></h1>
+<div class="figure">
+<img src="atct.jpg" alt="ACTC is an imaging-based biomarker of tumor prognosis." width="50%" />
+<p class="caption">
+ACTC is an imaging-based biomarker of tumor prognosis.
+</p>
+</div>
+</section>
+<section id="tumors-in-children-2012-neuro-oncology-1" class="slide level2 smaller">
+<h1>Tumors in Children, 2012 <em>Neuro-Oncology</em></h1>
+<ul>
+<li>Which biomarker values are associated with the best survival?</li>
+<li>Which values are associated with the worst survival?</li>
+<li>What is the median survival time in the group with the smallest ATCT values?</li>
+<li>If a child is in the group with the largest ATCT values, what is his/her estimated 5-year survival probability?</li>
+</ul>
+</section>
+<section id="survival-analysis-in-r" class="slide level2">
+<h1>Survival Analysis in R</h1>
+</section>
+<section id="section-14" class="slide level2 smaller">
+<h1></h1>
+<p>We use the “ovarian” data set, which comprises a cohort of ovarian cander patients and respective clinical information.</p>
+<ul>
+<li>The response variable is <code>futime</code>, the survival time.</li>
+<li><code>fustat</code> tells if an individual patients’ survival time is censored.</li>
+<li>Patients in this study received either one of two therapy regimens (<code>rx</code>)</li>
+<li>The attending physician assessed the regression of tumors (<code>resid.ds</code>) and patients’ performance (according to the standardized ECOG criteria; <code>ecog.ps</code>) at some point.</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(survival)
+<span class="kw">library</span>(survminer)
+<span class="kw">data</span>(ovarian)</code></pre></div>
+</section>
+<section id="section-15" class="slide level2 smaller">
+<h1></h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Fit survival data using the Kaplan-Meier method</span>
+surv_object &lt;-<span class="st"> </span><span class="kw">Surv</span>(<span class="dt">time =</span> ovarian$futime, <span class="dt">event =</span> ovarian$fustat)
+surv_object</code></pre></div>
+<pre><code>##  [1]   59   115   156   421+  431   448+  464   475   477+  563   638 
+## [12]  744+  769+  770+  803+  855+ 1040+ 1106+ 1129+ 1206+ 1227+  268 
+## [23]  329   353   365   377+</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit1 &lt;-<span class="st"> </span><span class="kw">survfit</span>(surv_object ~<span class="st"> </span>rx, <span class="dt">data =</span> ovarian)
+<span class="kw">summary</span>(fit1)</code></pre></div>
+<pre><code>## Call: survfit(formula = surv_object ~ rx, data = ovarian)
+## 
+##                 rx=1 
+##  time n.risk n.event survival std.err lower 95% CI upper 95% CI
+##    59     13       1    0.923  0.0739        0.789        1.000
+##   115     12       1    0.846  0.1001        0.671        1.000
+##   156     11       1    0.769  0.1169        0.571        1.000
+##   268     10       1    0.692  0.1280        0.482        0.995
+##   329      9       1    0.615  0.1349        0.400        0.946
+##   431      8       1    0.538  0.1383        0.326        0.891
+##   638      5       1    0.431  0.1467        0.221        0.840
+## 
+##                 rx=2 
+##  time n.risk n.event survival std.err lower 95% CI upper 95% CI
+##   353     13       1    0.923  0.0739        0.789        1.000
+##   365     12       1    0.846  0.1001        0.671        1.000
+##   464      9       1    0.752  0.1256        0.542        1.000
+##   475      8       1    0.658  0.1407        0.433        1.000
+##   563      7       1    0.564  0.1488        0.336        0.946</code></pre>
+</section>
+<section id="section-16" class="slide level2 smaller">
+<h1></h1>
+<p>Examining the corresponding survival curve using the <code>ggsurvplot</code> function. Vertical lines indicate censored data, their corresponding x values at the time which censoring occurred.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggsurvplot</span>(fit1, <span class="dt">data =</span> ovarian, <span class="dt">pval =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<p><img src="Survival_files/figure-revealjs/unnamed-chunk-14-1.png" width="60%" /></p>
+</section>
+<section id="section-17" class="slide level2 smaller">
+<h1></h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Examine prdictive value of residual disease status</span>
+fit2 &lt;-<span class="st"> </span><span class="kw">survfit</span>(surv_object ~<span class="st"> </span>resid.ds, <span class="dt">data =</span> ovarian)
+<span class="kw">ggsurvplot</span>(fit2, <span class="dt">data =</span> ovarian, <span class="dt">pval =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<p><img src="Survival_files/figure-revealjs/unnamed-chunk-15-1.png" width="60%" /></p>
+</section>
+<section id="log-rank-test" class="slide level2">
+<h1>Log-Rank Test</h1>
+</section>
+<section id="section-18" class="slide level2 smaller">
+<h1></h1>
+<p>How do we determine whether the difference in survival curves is statistically significant?</p>
+<p>The log-rank test is quite intuitive. The idea behind it is to construct a <span class="math inline">\(2 \times 2\)</span> contigency table by group (therapy regimens or residual disease status) at each time <span class="math inline">\(t\)</span> at which a failure occurs. Then, the Mantel-Haenszel test statistic is used to test for differences between the two groups. For this test, the null hypothesis is that the survival curves in the two groups are the same, e.g. <span class="math display">\[ H_0: S_{\text{regimen 1}}(t) = S_{\text{regimen 2}}(t)\]</span></p>
+</section>
+<section id="section-19" class="slide level2 smaller">
+<h1></h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># log rank test of 2 regimens</span>
+<span class="kw">survdiff</span>(surv_object~rx,<span class="dt">data=</span>ovarian)</code></pre></div>
+<pre><code>## Call:
+## survdiff(formula = surv_object ~ rx, data = ovarian)
+## 
+##       N Observed Expected (O-E)^2/E (O-E)^2/V
+## rx=1 13        7     5.23     0.596      1.06
+## rx=2 13        5     6.77     0.461      1.06
+## 
+##  Chisq= 1.1  on 1 degrees of freedom, p= 0.3</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># log rank test of residual disease status</span>
+<span class="kw">survdiff</span>(surv_object~resid.ds,<span class="dt">data=</span>ovarian)</code></pre></div>
+<pre><code>## Call:
+## survdiff(formula = surv_object ~ resid.ds, data = ovarian)
+## 
+##             N Observed Expected (O-E)^2/E (O-E)^2/V
+## resid.ds=1 11        3     6.26      1.70      3.62
+## resid.ds=2 15        9     5.74      1.85      3.62
+## 
+##  Chisq= 3.6  on 1 degrees of freedom, p= 0.06</code></pre>
+<p>Also notice that, the <code>pval = TRUE</code> argument in <code>ggsurvplot</code> function plots the p-value of a log rank test as well.</p>
+</section>
+<section id="section-20" class="slide level2 smaller">
+<h1></h1>
+<p>Reference: <a href="https://www.datacamp.com/community/tutorials/survival-analysis-R" class="uri">https://www.datacamp.com/community/tutorials/survival-analysis-R</a></p>
+</section>
+    </div>
+  </div>
+
+  <script src="Survival_files/reveal.js-3.3.0.1/lib/js/head.min.js"></script>
+  <script src="Survival_files/reveal.js-3.3.0.1/js/reveal.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Vertical centering of slides
+        center: true,
+        // Transition style
+        transition: 'none', // none/fade/slide/convex/concave/zoom
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
+
+
+
+        // Optional reveal.js plugins
+        dependencies: [
+        ]
+      });
+    </script>
+  <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+
+<script>
+  (function() {
+    if (window.jQuery) {
+      Reveal.addEventListener( 'slidechanged', function(event) {  
+        window.jQuery(event.previousSlide).trigger('hidden');
+        window.jQuery(event.currentSlide).trigger('shown');
+      });
+    }
+  })();
+</script>
+
+
+  </body>
+</html>
