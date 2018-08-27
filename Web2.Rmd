@@ -1,0 +1,163 @@
+---
+title: Web Scraping Presentation - Part II
+output: 
+  revealjs::revealjs_presentation:
+    theme: night
+    highlight: tango
+    center: true
+    transition: none
+    css: styles.css
+    fig_caption: true
+    reveal_options:
+      progress: true
+      slideNumber: true
+    html_document:
+    self_contained: no
+---
+
+## A Reusable Generic Framework for Arbitrary Sites
+##{.smaller}
+There are 4 components to get the information from all of the job posts for a given query:
+
+1. A mechanism to submit the search query and get the first page of results.
+2. A means to extract the links to the individual job posts from a page of results.
+3. A function to read the contents of an individual job post.
+4. A way to find the next page of results, relative to the current page.
+
+##{.smaller} 
+General Framework
+
+```{r,message=FALSE}
+library(rvest)
+library(XML)
+library(RCurl)
+searchJobs <-
+  # Given a search query, get the pages listing the jobs.
+  # we loop over these pages and harvest the 
+  # individual jobs in each.
+function(firstPage, getNextPage_f, getJobDescriptionLinks_f,
+           getJobDescription_f = getJobDescription,
+           max = NA, curl = getCurlHandle(followlocation = TRUE)){
+    curPage = firstPage
+    jobs = list()
+    
+    pageNum = 1
+    while(is.na(max) || length(jobs) < max) {
+      doc = read_html(curPage)
+      
+      # extract the links to the individual job posts
+      links = getJobDescriptionLinks_f(doc)
+      
+      # try(): if getJobDescription_f() raises an error for any reason for a particular post, we will catch the error here and continue on to the next post
+      posts = structure(lapply(links,function(l) try(getJobDescription_f(getURLContent(l)))), names = links)
+      jobs = c(jobs, posts)
+      
+      # determines the next page of results
+      curPage = getNextPage_f(doc)
+      
+      # if we cannot parse curPage, exit while loop
+      t <- try(read_html(curPage))
+      if(inherits(t,"try-error")){
+        break
+      } 
+      pageNum = pageNum + 1
+      # print(pageNum)
+    }
+    
+    invisible(jobs[!sapply(jobs, inherits, "try-error")])
+    return(jobs)
+}
+```
+
+## Scraping CareerBuilder
+##{.smaller}
+We could define a site-specific function using searchJobs() for CareerBuilder. 
+
+```{r,message=FALSE}
+# Since the query string is not a value of a parameter on the right of the ? in the URL, we could not use getForm() to determine the first page of our search results
+cb.searchURL <- function(query){
+  paste("https://www.careerbuilder.com/jobs-",gsub(" ","-",query),"?pay=0&siteid=cbnsv&emp=ALL&posted=30",sep = "")
+}
+
+# Get links to the job postings 
+cb.getJobLinks <- function(doc,base = baseURL){
+  links = html_text(html_nodes(doc, xpath = "//h2[@class = 'job-title show-for-medium-up']/a/@href"))
+  getRelativeURL(as.character(links), base)
+} 
+  
+# Get the link to next page
+cb.getNextPage <- function(doc){
+  nxt = html_text(html_nodes(doc,xpath = "//a[@id = 'next-button']/@href"))
+  if(length(nxt) == 0)
+    return(character())
+  return(nxt)
+}
+
+# get job descriptions
+cb.getJobDescriptions <- function(u){
+  doc = read_html(u)
+  return(html_text(html_node(doc, xpath = "//div[@class = 'description']")))
+}
+
+# Put it all together
+searchCareerBuilders <-function(query, ..., baseURL = 
+             'https://www.careerbuilder.com/jobs?pay=0&siteid=cbnsv&emp=ALL&posted=30',max = NA)
+{
+  # make baseURL a global variable, so that we can use it in other function
+  baseURL <<- baseURL  
+  
+  # Determine the first page of search results
+  txt = cb.searchURL(query)
+    
+  searchJobs(firstPage = txt, getNextPage_f = cb.getNextPage, 
+               getJobDescriptionLinks_f = cb.getJobLinks, 
+               getJobDescription_f = cb.getJobDescriptions, max = max)
+}
+
+allposts = searchCareerBuilders(query = "Data Scientist", max = 100)
+length(allposts)
+```
+
+## Scraping SimplyHired.com
+##{.smaller}
+We can follow the same recipe to scrapy SimplyHired.com
+```{r,message=FALSE}
+# Get links to the job postings 
+sh.getJobLinks <- function(doc,base = baseURL){
+  links = html_text(html_nodes(doc, xpath = "//a[@class = 'card-link js-job-link']/@href"))
+  getRelativeURL(as.character(links), base)
+} 
+
+# Get the link to next page
+sh.getNextPage <- function(doc, base = baseURL){
+  nxt = html_text(html_nodes(doc,xpath = "//li[@class = 'next-pagination']/a/@href"))
+  nxt = getRelativeURL(nxt, base)
+  if(length(nxt) == 0)
+    return(character())
+  return(nxt)
+}
+
+# get job descriptions
+sh.getJobDescriptions <- function(u){
+  Sys.sleep(8)
+  doc = read_html(u)
+  return(html_text(html_node(doc, xpath = "//div[@class = 'viewjob-description']")))
+}
+
+
+# Put it all together
+searchSH <-function(query, ..., baseURL = 
+             'https://www.simplyhired.com/search',max = NA)
+{ 
+  # Determine the first page of search results
+  baseURL <<- baseURL
+  txt = getForm(baseURL, q = query)
+  
+  searchJobs(firstPage = txt, getNextPage_f = sh.getNextPage, 
+               getJobDescriptionLinks_f = sh.getJobLinks, 
+               getJobDescription_f = sh.getJobDescriptions, max = max)
+}
+
+alljobs = searchSH(query = "data scientist", max = 50)
+alljobs[[1]]
+```
