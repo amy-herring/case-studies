@@ -62,7 +62,7 @@ STA 440 involves detailed analysis of a series of case studies using current, re
 
 Additional details on the case studies will be provided as the course progresses.
 
-Individual contributions to each submission will be assessed using the fair division software Spliddit. Team members must provide Spliddit assessments in order to receive credit for an assignment.
+Individual contributions to each submission will be assessed using the fair division software [Spliddit](http://www.spliddit.org). Team members must provide Spliddit assessments in order to receive credit for an assignment.
 
 Each individual case study will be graded based on written reports (interim and final) and an oral presentation. Students may not collaborate with anyone on the individual case study, which should be treated like a take-home exam.
 
@@ -102,7 +102,7 @@ The total number of group project points over the course of the semester is $N\s
 
 ### Excused absences
 
-Students who miss a class due to a scheduled varsity trip, religious holiday, or short-term illness should fill out an online <a href="http://trinity.duke.edu/academic-requirements?p=notification-of-varsity-athletic-participation-novap">NOVAP</a>, <a href="http://trinity.duke.edu/academic-requirements?p=religious-observance">RHoliday</a> or <a href="http://trinity.duke.edu/academic-requirements?p=policy-short-term-illness-notification">short-term illness</a> form respectively. Note that these excused absences do not excuse you from assigned case studies; it is your responsibility to make alternative arrangements with your team to participate.
+Students who miss a class due to a scheduled varsity trip, religious holiday, or short-term illness should fill out an online <a href="https://trinity.duke.edu/undergraduate/academic-policies/athletic-varsity-participation">NOVAP</a>, <a href="https://trinity.duke.edu/undergraduate/academic-policies/religious-holidays">RHoliday</a> or <a href="http://trinity.duke.edu/academic-requirements?p=policy-short-term-illness-notification">short-term illness</a> form respectively. Note that these excused absences do not excuse you from assigned case studies; it is your responsibility to make alternative arrangements with your team to participate.
 
 If you are faced with a personal or family emergency or a
 chronic health condition that interferes with your ability to attend or 
