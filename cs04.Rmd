@@ -41,8 +41,10 @@ Goals of this case study are (1) to predict whether the US House of Representati
 + [ASA 2016 Election Contest](http://thisisstatistics.org/demystifying-the-election-prediction-2016-contest/)
 + [Why do we care about likely voters?]( https://fivethirtyeight.com/features/registered-voter-polls-will-usually-overrate-democrats/)
 + [FiveThirtyEight's 2016 forecast details]( https://fivethirtyeight.com/features/a-users-guide-to-fivethirtyeights-2016-general-election-forecast/) 
++ [FiveThirtyEight's current forecasts](https://projects.fivethirtyeight.com/2018-midterm-election-forecast/house/?ex_cid=rrpromo)
 + [Potentially helpful blog 1]( https://www.r-statistics.com/2016/08/presidential-election-predictions-2016/)
 + [Potentially helpful blog 2]( https://github.com/hardin47/prediction2016/blob/master/predblog.pdf)
++ [Worst 2016 Political Predictions](https://www.politico.com/magazine/story/2016/12/the-worst-political-predictions-of-2016-214555)
 
 # Slides (coming soon)
 
