@@ -34,8 +34,16 @@ One strategy for predicting the winner in an election would be to use the latest
 - Polls associated with margin of error
 - More polls focus on national sentiments than on state-specific sentiments
 
+## Sources of election uncertainty
 
-## Historical Results
+- Sample sizes of polls
+- Individual changes in turnout
+- Systematic changes in turnout (different turnout patterns from historical records, e.g. more young people vote)
+- Individual variation in support (undecided voters)
+- Unmeasured bias in polls
+
+
+## Historical results
 
 - Use historical data from past elections, e.g. within a house district, within a state, nationally
 - Useful when a state consistently votes for the same party but less useful for swing states
