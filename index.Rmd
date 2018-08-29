@@ -48,8 +48,8 @@ Note: this schedule is approximate and is likely to be modified as the course pr
 
 |Date           |Topic                      |Deliverables     |
 | ----------    | ---------------------------         | --------------- |
-| August 29     | Welcome, Groups, and CS1: Birth Weight        | Regression warm-up (in class)        |
-| August 31     | CS1: Model Selection \& Validation    |                 |
+| August 29     | Welcome and Groups        | Regression warm-up (in class)        |
+| August 31     | CS1: Birth Weight, Model Selection \& Validation    |   Getting to Know You Sheet              |
 | September 5   | CS1: Modeling in Class | Signed Team Expectations Agreement |
 | September 7   | CS1: Causal Inference | CS1 Interim Report: Model Development and Evaluation |
 | September 12  | CS2: Visualizing our World in Data | |
