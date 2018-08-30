@@ -17,6 +17,7 @@ output:
   
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE,fig.width=6, fig.height=5)
+library(ggplot2)
 ```
 
 ## Skills covered
@@ -105,6 +106,62 @@ par(mfrow=c(2,2))
 plot(model1)
 ```
 
+## Investigating the problem
+
+Clearly we have a problem!  Generally it is a good idea to start with exploratory data analysis rather than jumping right into modeling.
+
+## <small> Weight as a function of gestational age </small>
+
+```{r scatterplot, out.width='50%'}
+ggplot(data = birth_data, mapping = aes(x = GEST, y = BWTG)) +
+  geom_point() + xlab("Gestational age (weeks)") + ylab("Birth weight (g)") + 
+  ggtitle("NC Births, 2011-2016")
+```
+<small>
+- Time for data cleaning!  (Unless an Asian elephant snuck in....)
+- Why does the plot have a barred structure?
+</small>
+
+## Data Cleaning
+
+Because it will complicate all our plotting, we're going to set the gestational age of the baby that is presumably *NOT* an elephant given its weight (elephants have the longest gestation of all mammals) to NA. Because this is a file of live births, we're going to do the same to gestational periods less than 20 weeks and birth weights below 500 g. Ideally, we would use a criterion to flag unreasonable combinations of birth weight and gestational age as well (but we will save that for you, if you'd like!).
+
+```{r clean}
+birth_data$GEST_C=birth_data$GEST
+birth_data$BWTG_C=birth_data$BWTG
+birth_data$GEST_C[birth_data$GEST_C>50]=NA
+birth_data$GEST_C[birth_data$GEST_C<20]=NA
+birth_data$BWTG_C[birth_data$BWTG_C<500]=NA
+bdclean=na.omit(birth_data)
+```
+
+## Now refit the model
+
+```{r secondmodel}
+model2 = lm(BWTG_C~GEST_C+male, data=bdclean)
+summary(model2)
+```
+
+## Guide to residual plots
+
+- RxP plot (residuals versus fitted): you want to see a "happy cloud" of residuals with no obvious trends or patterns, centered around 0
+
+- Q-Q plot (standardized residuals vs order stats from normal): want to see a straight line with slope 1
+
+- Scale-Location plot (are residuals spread equally across range of predictors?): want equal spacing of points with horizontal smoother
+
+- Residuals vs Leverage (are outliers influencing model fit?): look for points in top and bottom right side corners to see if outliers are also high leverage points that may affect fit of line
+
+
+## Look at residuals
+What do the residuals tell us about model fit?
+```{r residuals2, out.width= '50%' }
+par(mfrow=c(2,2))
+plot(model2)
+```
+
+
+
 
 ## Diagnosing the problem
 Diagnostic plots of the model are essential for checking model fit. 
@@ -170,7 +227,7 @@ We will explore frequentist robust regression via M-estimation using the functio
 
 ```{r freqrobust}
 library(MASS)
-fit2 <- rlm(BWTG ~ GEST+male, data = birth_data)
+fit2 <- rlm(BWTG_C ~ GEST_C+male, data = bdclean)
 summary(fit2)
 ```
 How do these results compare to those of ordinary least squares?
@@ -180,7 +237,7 @@ How do these results compare to those of ordinary least squares?
 This robust regression technique works by reweighting the observations with large residuals. Let's look at the observations with the largest and smallest weights. What do you notice?
 
 ```{r freqrobust2}
-fit2_weights = data.frame(bwt = birth_data$BWTG, gest = birth_data$GEST, 
+fit2_weights = data.frame(bwt = bdclean$BWTG_C, gest = bdclean$GEST_C, 
   resid=fit2$resid, weight=fit2$w)
 fit2_weights[order(fit2$w)[c(1:5, (length(fit2$w)-5):length(fit2$w))],]
 ```
@@ -236,7 +293,7 @@ $$\frac{1}{n}\sum_{i=1}^n \left(\frac{y_i-\widehat{y}_i}{1-h_i}\right)^2,$$ wher
 * Divide the data into $k$ folds, where $k$ is the number of group members present, and assign each group member a different validation set (setting a seed may be helpful).  See [helpful code](https://gist.github.com/duttashi/a51c71acb7388c535e30b57854598e77)
 
 ## Class Exercises:
-* Each member should fit a regression model with birthweight as the outcome and predictors including biological sex, total pregnancies (dichotomized as 1 or >1), smoking status (dichotomized as any versus none), and gestational age (linear term in weeks) on their particular training set and compute the test MSE in their assigned validation set
+* Each member should fit a regression model with birth weight as the outcome and predictors including biological sex, total pregnancies (dichotomized as 1 or >1), smoking status (dichotomized as any versus none), and gestational age (linear term in weeks) on their particular training set and compute the test MSE in their assigned validation set
 * Combine results across team members to get the average test MSE
 * Now compute average test MSE for a variety of polynomial functions in gestational age to determine a preferred model
 * Time permitting, continue model-fitting with `rlm`, exploring the remaining covariates
