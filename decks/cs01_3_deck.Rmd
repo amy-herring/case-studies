@@ -322,7 +322,7 @@ In a small dataset, the random split of the data can have considerable impact on
 *k-Fold cross-validation* involves splitting the data into $k$ mutually-exclusive groups, called *folds*, and then fitting a model on $k-1$ folds (combined) with the $k^{th}$ fold treated as a validation set. We repeat $k$ times (so each fold has a turn as the validation set). We obtain $k$ estimates of the test error and summarize using the average $$\frac{1}{k}\sum_{i=1}^k MSE_i.$$  
 
 ## Leave-one-out cross-validation
-*Leave-one-out cross-validation*, in which $k=1$, is a special case (more computationally intensive except in special cases). Test error estimates using $k=5$ or $k=10$ have been shown to have good statistical properties, motivating these common choices.
+*Leave-one-out cross-validation*, in which $k=n$, is a special case (more computationally intensive except in special cases). Test error estimates using $k=5$ or $k=10$ have been shown to have good statistical properties, motivating these common choices.
 
 ## Leave-one-out cross-validation
 
