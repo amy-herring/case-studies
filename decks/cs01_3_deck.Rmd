@@ -44,7 +44,7 @@ We will evaluate whether there is a relationship between the response, birth wei
 
 * Check for NAs in data - appear as 9, 99, 9999 for our variables of interest (birth weight, gestational age, and sex)
 * For now, remove the rows with missing values
-* Focus on most recent year with data, 2016
+
 ```{r readdata}
 #Read in birth data
 o_data <- read.csv("~/Documents/TEACHING/vitalstats/Yr1116Birth.csv", 
@@ -53,7 +53,7 @@ o_data <- read.csv("~/Documents/TEACHING/vitalstats/Yr1116Birth.csv",
 o_data$male=2-o_data$SEX #binary gender for interpretation
 
 birth_data <- na.omit(o_data)
-birth_data_2016=birth_data[which(birth_data$YOB==2016),]
+
 ```
 
 ## Is birth weight normally distributed?
@@ -79,6 +79,12 @@ When we fit the line, we estimate the coefficients $\mathbf{\widehat{\beta}}= \{
 
 $$ \widehat{y}_i = \widehat{\beta}_0 + \widehat{\beta}_1 \text{GEST}_i + \widehat{\beta}_2 \text{male}_i  $$
 We denote residuals, $e_i = y_i - \widehat{y}_i$ where $\widehat{y}_i$ is the estimated predicted value for observation $i$.
+
+## Matrix Formulation of Regression
+
+Wait, we did not talk about $\mathbf{\widehat{\beta}}= \{\widehat{\beta}_0, \widehat{\beta}_1, \widehat{\beta}_2\}$, where $\widehat{\beta} = (X^\prime X)^{-1} X^\prime Y$ in STA 210!  This is something covered in 360 but not 210 -- if you have not had STA 360, you should review the matrix formulation of regression [briefly](http://www.philender.com/courses/multivariate/notes/mr3.html) or [in greater detail](http://global.oup.com/booksites/content/0199268010/samplesec3).
+
+
 
 ## Model Assumptions
 To make inference on the model parameters, $\beta$, we check four assumptions for the linear regression model:
@@ -140,7 +146,21 @@ bdclean=na.omit(birth_data)
 ```{r secondmodel}
 model2 = lm(BWTG_C~GEST_C+male, data=bdclean)
 summary(model2)
+
 ```
+
+## Plotting in R
+
+Aside: how well is this model fitting?
+
+```{r plotmod}
+ plot(bdclean$GEST_C, bdclean$BWTG_C, type="n")
+lines(bdclean$GEST_C[bdclean$male==1],model2$fitted.values[bdclean$male==1],col=2)
+lines(bdclean$GEST_C[bdclean$male==0],model2$fitted.values[bdclean$male==0],col=3)
+points(bdclean$GEST_C,bdclean$BWTG_C)
+``` 
+
+
 
 ## Guide to residual plots
 
@@ -159,6 +179,7 @@ What do the residuals tell us about model fit?
 par(mfrow=c(2,2))
 plot(model2)
 ```
+
 
 
 
@@ -242,6 +263,27 @@ fit2_weights = data.frame(bwt = bdclean$BWTG_C, gest = bdclean$GEST_C,
 fit2_weights[order(fit2$w)[c(1:5, (length(fit2$w)-5):length(fit2$w))],]
 ```
 
+## Class Exercises:
+* Subset the data to Tyrrell County (CORES=89) and 2016 and evaluate whether linear and robust regression methods give similar results in the cleaned data. If not, why not?
+
+```{r tyrrell}
+birth2016=subset(birth_data,birth_data$YOB=='2016')
+#CORES code for Tyrrell Co is 89
+tyrrell=subset(birth2016,birth2016$CORES=='89')
+
+
+```
+<!--- m3=lm(BWTG_C~GEST_C+male,data=tyrrell)
+summary(m3)
+m4=rlm(BWTG_C~GEST_C+male,data=tyrrell)
+summary(m4)
+m4_weights = data.frame(bwt = tyrrell$BWTG_C, gest = tyrrell$GEST_C, 
+  resid=m4$resid, weight=m4$w)
+m4_weights[order(m4$w)[c(1:5, (length(m4$w)-5):length(m4$w))],]
+--->
+
+
+
 ## Measuring model fit
 
 One metric for measuring model fit is the mean squared error (MSE):  $$MSE=\frac{1}{n}\sum_{i=1}^n (y_i-\widehat{y}_i)^2.$$ This value will be small when our predictions $\widehat{y}_i$ are close to the true values $y_i$.
@@ -288,8 +330,9 @@ In the case of least squares, we can get an estimate of the average MSE from lea
 $$\frac{1}{n}\sum_{i=1}^n \left(\frac{y_i-\widehat{y}_i}{1-h_i}\right)^2,$$ where $h_{i}$ is the $i$th diagonal element of the hat matrix $X(X'X)^{-1}X'$ and is often termed the *leverage*. High leverage points (close to 1) tend to have more of an impact on model fit.
 
 
-## Class Exercises:
-* Evaluate the observations with largest residuals/weights and discuss possible reasons for the large residual
+
+## Class Exercises
+* In the full data, evaluate the observations with largest residuals/weights and discuss possible reasons for the large residuals
 * Divide the data into $k$ folds, where $k$ is the number of group members present, and assign each group member a different validation set (setting a seed may be helpful).  See [helpful code](https://gist.github.com/duttashi/a51c71acb7388c535e30b57854598e77)
 
 ## Class Exercises:
