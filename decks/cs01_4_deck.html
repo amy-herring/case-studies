@@ -571,7 +571,7 @@ document.getElementsByTagName('head')[0].appendChild(style);
 <li><p><strong>Assignment mechanism</strong>: the probabilistic rule that decides which unit gets assigned to which treatment</p>
 <ul>
 <li>In randomized experiments, assignment mechanism is <em>known</em> and <em>controlled</em> by investigators.</li>
-<li>In observations studies, assignment mechanism is <em>unknown</em> and <em>uncontrolled</em>.</li>
+<li>In observational studies, assignment mechanism is <em>unknown</em> and <em>uncontrolled</em>.</li>
 </ul></li>
 <li>Properties of assignment mechanism:
 <ol type="1">
@@ -591,7 +591,7 @@ document.getElementsByTagName('head')[0].appendChild(style);
 </section>
 <section id="quick-start-to-using-causal-inference" class="slide level2">
 <h2>Quick start to using causal inference</h2>
-<p>In oberservational studies, we must adjust for the measured confounding. <em>Propensity score</em> methods are one of several ways to do this.</p>
+<p>In oberservational studies, we must adjust for the measured confounding. One way to do this is by including measured confounders in a model. This works well if there are not too many confounders. <em>Propensity score</em> methods are another choice and are particularly attractive when we may have many confounders relative to the sample size.</p>
 <p>The idea behind these methods is to compare two groups of people who have different values of the treatment but similar values of the measured confounders <span class="math inline">\(X\)</span>, in hopes that balancing comes close to random allocation of the treatment.</p>
 </section>
 <section id="propensity-score-methods" class="slide level2">

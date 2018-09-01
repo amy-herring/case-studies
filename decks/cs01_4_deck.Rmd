@@ -88,7 +88,7 @@ To identify causal effects from observed data, we must make assumptions:
   * **Assignment mechanism**: the probabilistic rule that decides which unit gets assigned to which treatment
   
       + In randomized experiments, assignment mechanism is *known* and *controlled* by investigators.
-      + In observations studies, assignment mechanism is *unknown* and *uncontrolled*.
+      + In observational studies, assignment mechanism is *unknown* and *uncontrolled*.
   * Properties of assignment mechanism:
       1. Individualistic assignment: treatment assignment for unit $i$ does not depend on outcomes and assignments for other units
       2. Probabilistic assignment: probability of assignment to treatment is strictly between 0 and 1
@@ -102,7 +102,7 @@ Average Treatment Effect (ATE) $$ \tau = \mathbb{E}[Y_i(1) - Y_i(0)]$$
 
 
 ## Quick start to using causal inference
-In oberservational studies, we must adjust for the measured confounding. *Propensity score* methods are one of several ways to do this.
+In oberservational studies, we must adjust for the measured confounding. One way to do this is by including measured confounders in a model. This works well if there are not too many confounders. *Propensity score* methods are another choice and are particularly attractive when we may have many confounders relative to the sample size.
 
 The idea behind these methods is to compare two groups of people who have different values of the treatment but similar values of the measured confounders $X$, in hopes that balancing comes close to random allocation of the treatment.
   

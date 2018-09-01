@@ -53,8 +53,8 @@ Note: this schedule is approximate and is likely to be modified as the course pr
 | September 5   | CS1: Modeling in Class | Signed Team Expectations Agreement |
 | September 7   | CS1: Causal Inference | CS1 Interim Report: Model Development and Evaluation |
 | September 12  | CS2: Visualizing our World in Data | |
-| September 14  | CS2: Lab: Tableau | CS1 Final Report: Smoking and Birth Weight |
-| September 19  | CS2: Hands-On with Tableau | |
+| September 14  | CS2: Lab: Modeling for CS 1 \& 2| |
+| September 19  | CS2: Hands on with Tableau | CS1 Final Report: Smoking and Birth Weight |
 | September 21  | CS3: Hierarchical Models: Birth Weight Disparities | |
 | September 26  | Group Presentations of CS2 | CS2 Final Report: Our World in Data |
 | September 28  | CS3: Multilevel Models: Time Trends | |
