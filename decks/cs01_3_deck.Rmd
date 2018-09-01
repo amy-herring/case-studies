@@ -339,5 +339,6 @@ $$\frac{1}{n}\sum_{i=1}^n \left(\frac{y_i-\widehat{y}_i}{1-h_i}\right)^2,$$ wher
 * Each member should fit a regression model with birth weight as the outcome and predictors including biological sex, total pregnancies (dichotomized as 1 or >1), smoking status (dichotomized as any versus none), and gestational age (linear term in weeks) on their particular training set and compute the test MSE in their assigned validation set
 * Combine results across team members to get the average test MSE
 * Now compute average test MSE for a variety of polynomial functions in gestational age to determine a preferred model
+* [R has a nice cross-validation function](https://www.rdocumentation.org/packages/DiceEval/versions/1.4/topics/crossValidation) for automating this in the future.
 
 
