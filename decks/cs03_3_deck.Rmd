@@ -45,6 +45,9 @@ Multilevel regression is a method for compromising between two extremes:
 - Excluding a categorical predictor from a model (complete pooling)
 - Estimating separate models within each level of the categorical
   predictor (no pooling)
+  
+  
+Sometimes, the no pooling approach is not a good option due to limited sample sizes within groups. With a multilevel model, we can get decent estimates for small groups by borrowing information.
 
 ## Radon study
 
@@ -54,13 +57,70 @@ Radon levels in US homes varies greatly, and some homes have dangerously high ra
 
 ## Radon study
 
-We wish to estimate the distribution of radon levels in houses within 85 counties in Minnesota.  
+We wish to estimate the distribution of radon levels in houses $i$ within 85 counties $j$ in Minnesota.  
 
-- One estimate would be the average of all radon levels in Minnesota (same estimate for all counties), but this ignores variation across counties, and some counties may have higher radon levels naturally than others (radon is more commonly found in soils with granite rock, as opposed to some other soil types).
+- One estimate would be the average of all radon levels in Minnesota (same estimate for all counties), $\overline{y}_{\cdot \cdot}$, but this ignores variation across counties, and some counties may have higher radon levels naturally than others (radon is more commonly found in soils with granite rock, as opposed to some other soil types).
 
 - Another estimate would be just to average the radon level in each
-  county, which can over-fit the data within county (for example, Lac Qui Parle County, which has the highest radon level of all the 85 MN counties, has radon measures from only 2 homes). 
+  county, $\overline{y}_j$, which can over-fit the data within county (for example, Lac Qui Parle County, which has the highest radon level of all the 85 MN counties, has radon measures from only 2 homes). 
 
 ## Data exploration
+![Estimates and SE's for log radon levels in MN versus the
+    (jittered) sample size (Gelman and Hill)](figures/gelman1.jpg){width=70%}
+    
+## Radon study
 
+The multilevel estimates in the previous slide represent a compromise between the two extremes.  In this simple setting (with no predictors), the multilevel estimate for county $j$ can be approximated as a weighted average of the mean of all observations in the county (the unpooled estimate $\overline{y}_j$), and the mean over all counties (the completely pooled estimate, $\overline{y}_{\cdot \cdot}$).
+}
+
+## Radon study
+
+$$\widehat{\alpha}_j \approx
+\frac{\frac{n_j}{{\sigma^2}_y}\overline{y}_j+\frac{1}{{\sigma^2}_{\alpha}}\overline{y}_{\cdot
+    \cdot}}{\frac{n_j}{{\sigma^2}_y}+\frac{1}{{\sigma^2}_{\alpha}}},$$
+    where 
+    
+- $n_j$ is the number of homes measured in county $j$
+
+- ${\sigma^2}_y$ is the within-county variance in the log radon
+  measurements
   
+- ${\sigma^2}_{\alpha}$ is the variance across the average log radon
+  levels of different counties
+
+## Radon study
+
+The weighted average reflects the relative amount of information available on each individual county, compared to that available across all counties.
+
+- Averages from counties with smaller sample sizes are less precise, so the weighting shrinks the multilevel estimates closer to the overall state average.  For example, if $n_j=0,$ the multilevel estimate is just $\overline{y}_{\cdot \cdot}$.
+
+- Averages from counties with larger sample sizes are more precise, and the multilevel estimates are closer to the county averages.  As $n_j \rightarrow \infty$, the multilevel estimate is just the county average $\overline{y}_j$.
+
+- In intermediate cases, the multilevel estimate is in between the
+  extremes.
+
+## Radon study
+
+In practice, we carry out all estimation together (estimate variances along with the $\alpha$ parameters), but we won't worry about this yet.
+
+## Location of measurement in radon study
+
+One important predictor of radon levels is the floor on which the measurement is taken:  basement ($x_i=0$) or first floor ($x_i=1$); radon comes from underground and can enter more easily when the house is built into the ground.
+
+First, we examine the complete-pooling regression, $y_i=\alpha+\beta x_i + \varepsilon_i$, and the no-pooling regression $y_i=\alpha_{j[i]}+\beta x_i + \varepsilon_i$, where $\alpha_{j[i]}$ is the mean log radon level from basement
+measures of homes (indexed by i) in county $j$. 
+
+The following plot shows the solid lines $\widehat{y}=\widehat{\alpha}+\widehat{\beta} x$ for eight selected counties from the no pooling model, and the dashed lines
+$\widehat{y}=\widehat{\alpha}_j+\widehat{\beta}x$ from the complete pooling model.
+
+## No pooling and pooling
+
+![Complete-pooling and no-pooling regression fits to radon
+data (Gelman and Hill)](figures/gelman2.jpg){width=70%}
+  
+## Interpretation
+
+The estimates of $\beta$ differ slightly for the two regressions, with $\widehat{\beta}=-0.61$ for the pooling model, and $\widehat{\beta}=-0.72$ for the no-pooling model.
+
+Neither analysis is perfect.  The complete-pooling analysis ignores variation in radon levels between counties, which is undesirable because our goal is to identify counties with high-radon homes -- we can't pool away the main
+research question!  The no-pooling analysis is also problematic -- for example the Lac Qui Parle County line is estimated based on just two data points.
