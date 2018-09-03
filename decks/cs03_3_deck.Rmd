@@ -59,5 +59,8 @@ We wish to estimate the distribution of radon levels in houses within 85 countie
 - One estimate would be the average of all radon levels in Minnesota (same estimate for all counties), but this ignores variation across counties, and some counties may have higher radon levels naturally than others (radon is more commonly found in soils with granite rock, as opposed to some other soil types).
 
 - Another estimate would be just to average the radon level in each
-  county, which can over-fit the data within county (for example, Lac Qui Parle County, which has the highest radon level of all the 85 MN counties, has radon measures from only 2 homes).
+  county, which can over-fit the data within county (for example, Lac Qui Parle County, which has the highest radon level of all the 85 MN counties, has radon measures from only 2 homes). 
 
+## Data exploration
+
+  
