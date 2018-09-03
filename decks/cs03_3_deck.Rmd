@@ -1,0 +1,36 @@
+---
+title: Introduction to Multilevel Models
+output: 
+  revealjs::revealjs_presentation:
+    theme: night
+    highlight: espresso
+    center: true
+    transition: none
+    css: styles.css
+    fig_caption: true
+    reveal_options:
+      progress: true
+      slideNumber: true
+      
+  
+---
+
+
+## What to cover
+
+
+- MLM first in context of radon data -- a second set of notes
+- then talk about GLMM
+
+## Clustered data
+Clustering of observations generally leads to positive correlation among members of the same unit due to shared characteristics.
+
+- The TAAG Study (Trial of Activity for Adolescent Girls) is a study of school-based interventions to promote physical activity.  The schools themselves are randomized to the interventions, and the girls are clustered within schools (also within grades in schools).
+
+- In studies of social determinants of health, we may study families clustered by neighborhood within a community.  
+
+## Clustered data 
+- In developmental toxicity studies, pregnant dams are dosed with a study chemical, and outcomes are measured in the offspring.
+
+- In a longitudinal study, repeated measurement occasions are nested within subjects (e.g., measure height of kids annually)
+
