@@ -35,3 +35,29 @@ Clustering of observations generally leads to positive correlation among members
 - In a longitudinal study, repeated measurement occasions are nested within subjects (e.g., measure height of kids annually)
 
 ## Hierarchical linear model
+
+The *hierarchical linear model* is the dominant approach to analysis of multilevel data.  The correlation induced by clustering is described by random effects at each "level."  The higher levels in the hierarchy involve clusters of members at the lower levels.
+
+## Pooling motivation
+
+Multilevel regression is a method for compromising between two extremes: 
+
+- Excluding a categorical predictor from a model (complete pooling)
+- Estimating separate models within each level of the categorical
+  predictor (no pooling)
+
+## Radon study
+
+Radon, a naturally-occurring radioactive gas, is a carcinogen known to cause lung cancer in high concentrations.  Several thousand lung cancer deaths in the US per year are attributable to radon exposure.
+
+Radon levels in US homes varies greatly, and some homes have dangerously high radon levels.  In order to identify areas of the US with high radon exposures, the US EPA conducted a study of radon levels in a random sample of more than 80,000 homes.
+
+## Radon study
+
+We wish to estimate the distribution of radon levels in houses within 85 counties in Minnesota.  
+
+- One estimate would be the average of all radon levels in Minnesota (same estimate for all counties), but this ignores variation across counties, and some counties may have higher radon levels naturally than others (radon is more commonly found in soils with granite rock, as opposed to some other soil types).
+
+- Another estimate would be just to average the radon level in each
+  county, which can over-fit the data within county (for example, Lac Qui Parle County, which has the highest radon level of all the 85 MN counties, has radon measures from only 2 homes).
+
