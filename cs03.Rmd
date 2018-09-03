@@ -37,16 +37,18 @@ Data Analysis Using Regression and Multilevel/Hierarchical Models by Gelman & Hi
 [2015 NC Infant Mortality Rates, from NC State Center for Health Statistics](NCinfantmortalityrates.pdf)
 
 
-# Slides (coming soon)
+# Slides
+
+
+
+- [Infant Mortality in NC](decks/cs03_1_deck.html)
+
+- [Binomial regression ](decks/cs03_2_deck.html)
 
 <!---
-
-[Infant Mortality in NC](decks/cs03_1_deck.html)
-
 [Multilevel Modeling Tutorial: Liz (including radon analysis from Gelman and Hill)](decks/cs03_2_deck.html)
 
 
-[Binomial regression:  Amy ](decks/cs03_3_deck.html)
 
 [Multilevel modeling with categorical data: Liz](decks/cs03_4_deck.html)
 
