@@ -102,6 +102,9 @@ The weighted average reflects the relative amount of information available on ea
 
 In practice, we carry out all estimation together (estimate variances along with the $\alpha$ parameters), but we won't worry about this yet.
 
+Code for the radon analysis [is available at](http://www.stat.columbia.edu/~gelman/arm/examples/radon/radon_chap12.R)  .
+
+
 ## Location of measurement in radon study
 
 One important predictor of radon levels is the floor on which the measurement is taken:  basement ($x_i=0$) or first floor ($x_i=1$); radon comes from underground and can enter more easily when the house is built into the ground.
@@ -149,6 +152,11 @@ To include the county-level uranium measure, $u_j$, as a predictor, we just
 modify the model so that $\alpha_{j} \sim N(\gamma_0 + \gamma_1
 u_j,{\sigma^2}_\alpha)$.
 
+## To get county-specific estimates, check if uranium centered!!!
 
+We could also allow the effect of home floor to vary by group:
+
+$y_i=\alpha_{j[i]}+\beta_{j[i]} x_i + \varepsilon_i$, where $\varepsilon_i \sim N\Big(0,{\sigma^2}_y)$ and $\begin{pmatrix}\alpha_{j} \\ \beta_{j} \end{pmatrix}
+\sim N(\begin{pmatrix}\gamma_0 + \gamma_1u_j \\ \gamma_2+\gamma_3 u_j \end{pmatrix},\begin{pmatrix} {\sigma^2}_\alpha & \rho \sigma_\alpha \sigma_\beta \\ \rho \sigma_\alpha \sigma_\beta & {\sigma^2}_\beta \end{pmatrix}\Big).$
 
 
