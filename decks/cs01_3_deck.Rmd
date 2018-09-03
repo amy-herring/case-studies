@@ -332,7 +332,8 @@ $$\frac{1}{n}\sum_{i=1}^n \left(\frac{y_i-\widehat{y}_i}{1-h_i}\right)^2,$$ wher
 
 
 ## Class Exercises
-* In the full data, evaluate the observations with largest residuals/weights and discuss possible reasons for the large residuals
+* Subset the data to 2016 births in Duplin County (CORES=31).
+* Evaluate the observations with largest residuals/weights and discuss possible reasons for the large residuals
 * Divide the data into $k$ folds, where $k$ is the number of group members present, and assign each group member a different validation set (setting a seed may be helpful).  See [helpful code](https://gist.github.com/duttashi/a51c71acb7388c535e30b57854598e77)
 
 ## Class Exercises:
