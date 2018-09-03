@@ -119,7 +119,36 @@ data (Gelman and Hill)](figures/gelman2.jpg){width=70%}
   
 ## Interpretation
 
-The estimates of $\beta$ differ slightly for the two regressions, with $\widehat{\beta}=-0.61$ for the pooling model, and $\widehat{\beta}=-0.72$ for the no-pooling model.
+The estimates of $\beta$ differ slightly for the two regressions, with $\widehat{\beta}=-0.61$ for the pooling model, and $\widehat{\beta}=-0.72$ for the no-pooling model. [(Click here for code)](radoncode.html) 
 
 Neither analysis is perfect.  The complete-pooling analysis ignores variation in radon levels between counties, which is undesirable because our goal is to identify counties with high-radon homes -- we can't pool away the main
 research question!  The no-pooling analysis is also problematic -- for example the Lac Qui Parle County line is estimated based on just two data points.
+
+## Multilevel model
+
+We will start with a simple multilevel model, $y_i=\alpha_0 +
+\alpha_{j[i]}+\beta x_i + \varepsilon_i$, where now $\alpha_{j} \sim N(0,{\sigma^2}_\alpha)$.  We fit this model using the lmer() function in the lme4 package -- [click here for code](radoncode.html).
+
+## Multilevel model fit
+![Multilevel fit to radon data](figures/gelman3.jpg){width=90%}
+    
+Note that there is strong pooling in counties with few data points (multilevel
+line is closer to the dashed line, as in Lac Qui Parle county), and weak
+pooling in counties with larger data points (multilevel line closer to light
+solid line, as in St. Louis county).
+
+## Adding a county-level covariate
+
+Radon comes from uranium that has been in the ground since the earth's
+formation.  A measure of average uranium content of the soil was available at
+the county level (but not for each house).  We will extend our model to
+account for variability across counties due to uranium levels in the soil:
+$y_i=\alpha_{j[i]}+\beta x_i + \varepsilon_i,$ where $\alpha_{j} \sim
+N(\gamma_0,{\sigma^2}_\alpha)$ and $\varepsilon_i \sim N(0,{\sigma^2}_y)$.
+To include the county-level uranium measure, $u_j$, as a predictor, we just
+modify the model so that $\alpha_{j} \sim N(\gamma_0 + \gamma_1
+u_j,{\sigma^2}_\alpha)$.
+
+
+
+
