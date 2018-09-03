@@ -34,3 +34,4 @@ Clustering of observations generally leads to positive correlation among members
 
 - In a longitudinal study, repeated measurement occasions are nested within subjects (e.g., measure height of kids annually)
 
+## Hierarchical linear model
