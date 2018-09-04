@@ -53,11 +53,11 @@ Note: this schedule is approximate and is likely to be modified as the course pr
 | September 5   | CS1: Modeling in Class | Signed Team Expectations Agreement |
 | September 7   | CS1: Causal Inference | CS1 Interim Report: Model Development and Evaluation |
 | September 12  | CS2: Visualizing our World in Data | |
-| September 14  | CS2: Lab: Modeling for CS 1 \& 2| |
+| September 14  | CS2: Lab: Hands on for CS 1 \& 2| |
 | September 19  | CS2: Hands on with Tableau | CS1 Final Report: Smoking and Birth Weight |
-| September 21  | CS3: Hierarchical Models: Birth Weight Disparities | |
+| September 21  | CS3: Birth Weight Disparities \& Binomial regression | |
 | September 26  | Group Presentations of CS2 | CS2 Final Report: Our World in Data |
-| September 28  | CS3: Multilevel Models: Time Trends | |
+| September 28  | CS3: Multilevel Models | |
 | October 3     | CS3: Generalized Linear Mixed Effects Models | CS3 Interim Report: Infant Mortality Visualization| 
 | October 5     | CS3: Bayesian Hierarchical Models | Midsemester Grades Due (my deliverable)  & CS4 Evaluation Criteria |
 | October 10    | CS4: Election Forecasting | CS3 Interim Report: County-Specific Mortality by Group|

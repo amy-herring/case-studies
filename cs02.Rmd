@@ -50,6 +50,8 @@ Chapter 11 of Data Science in R: A Case Studies Approach to Computational Reason
 
 [Shiny Tutorials](https://shiny.rstudio.com/tutorial/)
 
+[Super simple Shiny app you can edit](decks/cs02_shiny.Rmd)
+
 [Tableau for Students](https://www.tableau.com/academic/students)
 
 [Introduction to Tableau Video](http://library.capture.duke.edu/Panopto/Pages/Viewer.aspx?id=05708679-00e5-45c3-bb31-fd3724cd8009)
