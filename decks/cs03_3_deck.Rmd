@@ -15,7 +15,35 @@ output:
   
 ---
 
+```{r setup, include=FALSE}
+library(kableExtra)
+library(knitr)
+library(tidyverse)
+srrs2 <- read.table ("srrs2.dat", header=T, sep=",")
+mn <- srrs2$state=="MN"
+radon <- srrs2$activity[mn]
+log.radon <- log (ifelse (radon==0, .1, radon))
+floor <- srrs2$floor[mn]   # 0 for basement, 1 for first floor
+n <- length(radon)
+y <- log.radon
+x <- floor
 
+county.name <- as.vector(srrs2$county[mn])
+uniq <- unique(county.name)
+J <- length(uniq)
+county <- rep (NA, J)
+for (i in 1:J){
+  county[county.name==uniq[i]] <- i
+}
+
+srrs2.fips <- srrs2$stfips*1000 + srrs2$cntyfips
+cty <- read.table ("cty.dat", header=T, sep=",")
+usa.fips <- 1000*cty[,"stfips"] + cty[,"ctfips"]
+usa.rows <- match (unique(srrs2.fips[mn]), usa.fips)
+uranium <- cty[usa.rows,"Uppm"]
+u <- log (uranium)
+u.full<-u[county]
+```
 ## What to cover
 
 
@@ -76,15 +104,15 @@ The multilevel estimates in the previous slide represent a compromise between th
 ## Radon study
 
 $$\widehat{\alpha}_j \approx
-\frac{\frac{n_j}{{\sigma^2}_y}\overline{y}_j+\frac{1}{{\sigma^2}_{\alpha}}\overline{y}_{\cdot\cdot}}{\frac{n_j}{{\sigma^2}_y}+\frac{1}{{\sigma^2}_{\alpha}}},$$
+\frac{\frac{n_j}{\sigma^2_y}\overline{y}_j+\frac{1}{\sigma^2_{\alpha}}\overline{y}_{\cdot\cdot}}{\frac{n_j}{\sigma^2_y}+\frac{1}{\sigma^2_{\alpha}}},$$
     where 
     
 - $n_j$ is the number of homes measured in county $j$
 
-- ${\sigma^2}_y$ is the within-county variance in the log radon
+- $\sigma^2_y$ is the within-county variance in the log radon
   measurements
   
-- ${\sigma^2}_{\alpha}$ is the variance across the average log radon
+- $\sigma^2_{\alpha}$ is the variance across the average log radon
   levels of different counties
 
 ## Radon study
@@ -102,7 +130,7 @@ The weighted average reflects the relative amount of information available on ea
 
 In practice, we carry out all estimation together (estimate variances along with the $\alpha$ parameters), but we won't worry about this yet.
 
-Code for the radon analysis [is available at](http://www.stat.columbia.edu/~gelman/arm/examples/radon/radon_chap12.R)  .
+Code for the radon analysis [is available at this link](http://www.stat.columbia.edu/~gelman/arm/examples/radon/radon_chap12.R)  .
 
 
 ## Location of measurement in radon study
@@ -129,16 +157,40 @@ research question!  The no-pooling analysis is also problematic -- for example t
 
 ## Multilevel model
 
-We will start with a simple multilevel model, $y_i=\alpha_0 +
-\alpha_{j[i]}+\beta x_i + \varepsilon_i$, where now $\alpha_{j} \sim N(0,{\sigma^2}_\alpha)$.  We fit this model using the lmer() function in the lme4 package -- [click here for code](radoncode.html).
+We will start with a simple multilevel model, $y_i=\gamma_0 +
+\alpha_{j[i]}+\beta x_i + \varepsilon_i$, where now $\alpha_{j} \sim N(0,\sigma^2_\alpha)$.  We fit this model using the lmer() function in the lme4 package -- [click here for code](radoncode.html).
+
+This model can also be written $y_i \sim N(\alpha_{j[i]}+\beta x_i, \sigma_y^2),$ 
+
+$\alpha_j \sim N\left(\gamma_0,\sigma_\alpha^2 \right)$
+
+## Code to fit multilevel model
+
+
+
+```{r M1}
+library(lme4)
+#basic MLM with just random intercept for county
+M1<-lmer(y~x+(1|county),REML=FALSE)
+```
+
+## Output from MLM
+```{r M1out}
+summary(M1)
+```
+## County-level estimates
+```{r M1colevel}
+coef(M1)
+```
+
+The first column gives estimates of $\alpha_j$, and the second column gives the estimate of $\beta$ (does not vary over county $j$ according to the model we specified), for the first 19 of 85 counties.
 
 ## Multilevel model fit
-![Multilevel fit to radon data](figures/gelman3.jpg){width=90%}
+![No, complete, and partial pooling models](figures/gelman3.jpg){width=90%}
     
 Note that there is strong pooling in counties with few data points (multilevel
 line is closer to the dashed line, as in Lac Qui Parle county), and weak
-pooling in counties with larger data points (multilevel line closer to light
-solid line, as in St. Louis county).
+pooling in counties with more data points (multilevel line essentially on top of no pooling line in St. Louis county).
 
 ## Adding a county-level covariate
 
@@ -147,16 +199,57 @@ formation.  A measure of average uranium content of the soil was available at
 the county level (but not for each house).  We will extend our model to
 account for variability across counties due to uranium levels in the soil:
 $y_i=\alpha_{j[i]}+\beta x_i + \varepsilon_i,$ where $\alpha_{j} \sim
-N(\gamma_0,{\sigma^2}_\alpha)$ and $\varepsilon_i \sim N(0,{\sigma^2}_y)$.
+N(\gamma_0,\sigma^2_\alpha)$ and $\varepsilon_i \sim N(0,\sigma^2_y)$.
 To include the county-level uranium measure, $u_j$, as a predictor, we just
 modify the model so that $\alpha_{j} \sim N(\gamma_0 + \gamma_1
-u_j,{\sigma^2}_\alpha)$.
+u_j,\sigma^2_\alpha)$.
 
-## To get county-specific estimates, check if uranium centered!!!
+## Code for including uranium
+```{r M2}
+# Extended model adding uranium but still only letting county effect be random
+M2<-lmer(y~x+u.full+(1|county),REML=FALSE)
+
+```
+
+## Uranium model output
+```{r M2out}
+summary(M2)
+```
+## Uranium model coefficients
+```{r M2coef}
+coef(M2) 
+```
+
+## Model with and without uranium
+
+![Blue: controlling U, red: not controlling](figures/gelman_amycolor_125plot.jpg){width=90%}
+
+
+## Allowing home floor term to vary by county
 
 We could also allow the effect of home floor to vary by group:
 
-$y_i=\alpha_{j[i]}+\beta_{j[i]} x_i + \varepsilon_i$, where $\varepsilon_i \sim N\Big(0,{\sigma^2}_y)$ and $\begin{pmatrix}\alpha_{j} \\ \beta_{j} \end{pmatrix}
-\sim N(\begin{pmatrix}\gamma_0 + \gamma_1u_j \\ \gamma_2+\gamma_3 u_j \end{pmatrix},\begin{pmatrix} {\sigma^2}_\alpha & \rho \sigma_\alpha \sigma_\beta \\ \rho \sigma_\alpha \sigma_\beta & {\sigma^2}_\beta \end{pmatrix}\Big).$
+$y_i=\alpha_{j[i]}+\beta_{j[i]} x_i + \varepsilon_i$, where $\varepsilon_i \sim N(0,\sigma^2_y)$ and $\begin{pmatrix}\alpha_{j} \\ \beta_{j} \end{pmatrix}
+\sim N\Big(\begin{pmatrix}\gamma_0 + \gamma_1u_j \\ \gamma_2 \end{pmatrix},\begin{pmatrix} \sigma^2_\alpha & \rho \sigma_\alpha \sigma_\beta \\ \rho \sigma_\alpha \sigma_\beta & \sigma^2_\beta \end{pmatrix}\Big).$
 
+This model is called a random intercepts and slopes model.
 
+## Code to allow varying home floor term
+```{r M3}
+M3<-lmer(y~x+u.full+(1+x|county),REML=FALSE)
+```
+
+## Output
+
+```{r M3out}
+summary(M3)
+```
+
+## Estimates of county-level effects
+```{r M3est}
+coef(M3)
+```
+
+## Model with and without varying "slope" for floor
+
+![Blue: fixed slopes, red: random slopes](figures/M3.jpg){width=40%}

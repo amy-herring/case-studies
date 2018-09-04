@@ -15,13 +15,6 @@ output:
   
 ---
 
-
-## What to cover
-
-- Logistic regression in general was covered in deck 1, now go back and cover the odds ratio plus how to fit it from count data as binomial rather than bernoulli -- a first set of notes using German Rodriguez princeton notes
-- MLM first in context of radon data -- a second set of notes
-- then talk about GLMM
-
 ## Logistic regression
 
 *Logistic regression* is a type of generalized linear model, which generalizes the typical linear model to non-Gaussian data. The logistic regression model is linear on the log of the odds: $$\log\frac{p_i}{1-p_i}=\beta_0+\beta_1x_{1i}+\cdots+\beta_px_{pi},$$ where $p_i=Pr(y_i=1)$.
