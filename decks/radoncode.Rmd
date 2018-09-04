@@ -41,10 +41,12 @@ summary(lm.unpooled)
 
 ```{r lmer}
 library(lme4)
-#basic MLM
+#basic MLM with just random intercept for county
 M1<-lmer(y~x+(1|county),REML=FALSE)
 summary(M1)
 ```
+
+Here we pull in county-level data on uranium concentrations in the soil.
 
 ```{r getcounty}
 srrs2.fips <- srrs2$stfips*1000 + srrs2$cntyfips
@@ -57,6 +59,22 @@ u.full<-u[county]
 ```
 
 ```{r updateU}
+# Extended model adding uranium but still only letting county effect be random
 M2<-lmer(y~x+u.full+(1|county),REML=FALSE)
 summary(M2)
+```
+You can add the fixed effects and random effects intercept estimates to get the county-specific estimates.
+```{r countyspecificest}
+#county-specific intercepts (already summed)
+coef(M2)
+#fixed effects
+fixef(M2)
+#random effects
+ranef(M2)
+```
+
+We can also allow variation across county in the association between floor of measurement and radon concentration. 
+```{r M3}
+M3<-lmer(y~x+u.full+(1+x|county),REML=FALSE)
+summary(M3)
 ```
