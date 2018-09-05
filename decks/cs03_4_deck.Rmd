@@ -1,5 +1,5 @@
 ---
-title: Introduction to Multilevel Models
+title: Multilevel Models for Discrete Data
 output: 
   revealjs::revealjs_presentation:
     theme: night
