@@ -253,5 +253,3 @@ coef(M3)
 ## Model with and without varying "slope" for floor
 
 ![Blue: fixed slopes, red: random slopes](figures/M3.jpg){width=40%}
-
-##CHECK HETEROGENEOUS VARIANCES CODE
