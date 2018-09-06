@@ -52,15 +52,21 @@ If each school has the ability to choose (or not) the new curriculum, we might w
 Smarter students, better teachers, etc. are considered potential *confounding* factors because they may be related to a school's decision to adopt the new curriculum and to student performance.  If schools with better students and teachers are more likely to adopt the new curriculum, and those schools have better performance, then we cannot be sure whether the performance is related to the new curriculum itself or to the qualities of the students and teachers in the schools that chose the new curriculum.
 
 ## Confounding
-* Let $W$ denote treatment, $Y$ outcome, and $X$ potential confounder
+* Let $W$ denote treatment/exposure, $Y$ outcome, and $X$ potential confounder
 * A *confounding* variable influences the association of treatment and outcome
-    + Example: W: Education, Y: income, X: family SES
+    + Example: W: birth order, Y: Trisomy 21 status, X: maternal age
 ```{r , echo=FALSE, fig.cap="", out.width = '50%'}
 knitr::include_graphics("figures/causal_diagram.png")
 ```
-* Does more education lead to higher income, or does that only seem to be the case because rich kids are given more education and also have higher income due to their SES?
+* A study finds that children born 5th or higher in their families have a 4-fold increased risk of Trisomy 21. Is this association causal or due only to maternal age, which is related to birth order and Trisomy 21 risk?
 * We will aim to address observed confounders through causal inference frameworks.
 * If a confounder is not observed, we may not be able to adjust for it!
+
+## Causal inference advantages and drawbacks
+
+* Causal inference frameworks attempt to make more transparent assumptions that are necessary for valid inference
+
+* Use of a causal inference framework alone does not produce valid inferences (e.g., you can mess up with any model or framework!)
 
 ## Frameworks for causal inference
 * Potential outcome framework also known as counterfactual framework or Neyman-Rubin Causal Model (RCM)
@@ -74,15 +80,10 @@ knitr::include_graphics("figures/causal_diagram.png")
 
 
 ## Causal Assumptions 
-To identify causal effects from observed data, we must make assumptions:
-
- 1. SUTVA - Stable Unit Treatment Value Assumption (often referred to as consistency)
-    * If $W_i = 1$, then $Y_i = Y_i(1)$
-    * If $W_i = 0$, then $Y_i = Y_i(0)$
+To identify causal effects from observed data, we must make assumptions. Two important ones are:
  
-  * Includes 2 assumptions:
-      1. No interference - potential outcome for an individual cannot depend on what treatment other people receive (e.g. vaccinations)
-      2. No different versions of the treatment (e.g. surgery performed by different surgeons - may provide slightly different versions of the treatment)
+1. No interference - potential outcome for an individual cannot depend on what treatment other people receive (e.g. vaccinations)
+2. No different versions of the treatment (e.g. surgery performed by different surgeons - may provide slightly different versions of the treatment)
 
 ## Causal Assumptions cont.
   * **Assignment mechanism**: the probabilistic rule that decides which unit gets assigned to which treatment
@@ -99,6 +100,8 @@ To identify causal effects from observed data, we must make assumptions:
 Under these assumptions, we can estimate the
 
 Average Treatment Effect (ATE) $$ \tau = \mathbb{E}[Y_i(1) - Y_i(0)]$$
+
+Where $Y_i(1)$ is the response you would get for person $i$ under condition 1, and $Y_i(0)$ is the response you would have seen for that person if instead they experienced condition 0.  Of course you only actually see one condition for each person.
 
 
 ## Quick start to using causal inference
@@ -207,7 +210,7 @@ summary(ps)
 ## Stage 1: Estimate the propensity score
 Check overlap of propensity scores between treatment groups, and discard observations with non-overlapping propensity scores so that the groups look similar in terms of variables in our model
   
-```{r, echo=FALSE, out.width='70%'}
+```{r, echo=FALSE, out.width='60%'}
 par(mfrow=c(1,2))
 hist(ps[which(lalonde$treat==1)], col=2, xlab="NSW",ylim=c(0,150),xlim=c(0.2,0.7),main="")
 hist(ps[which(lalonde$treat==0)], col=3, xlab="not NSW",ylim=c(0,150),xlim=c(0.2,0.7),main="")
@@ -340,6 +343,6 @@ This code's output is suppressed due to its length, but you can run it on your o
 
 ## Next steps
 
-Using the vital records data, evaluate whether smoking in the first trimester of pregnancy is associated with birth weight, after accounting for factors that may be related to maternal smoking (maternal age, parity, etc.).
+Using the vital records data and assuming no unmeasured confounders (a big assumption as we do not have many), start your evaluation of the causal effect of smoking on birth weight.
  
 
