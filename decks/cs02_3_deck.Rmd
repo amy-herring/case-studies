@@ -5,7 +5,11 @@ output: html_document
 
 #### Introduction
 
-In this document, we'll be recreating the visualization from the book using Tableau. We will be using the data we created earlier during the R visualization with the already merged data sets. If you haven't run the code from [case study 2 deck 1](cs02_1_deck.html), now is the time to do so, to ensure you have the data file ready for Tableau.
+In this document, we'll be recreating the visualization from the book using Tableau. We will be using the data we created earlier during the R visualization with the already merged data sets. If you haven't run the code from [case study 1 deck 3](cs01_3_deck.html), now is the time to do so, to ensure you have the data file ready for Tableau.
+
+### Downloading Tableau
+
+[Instructions for downloading Tableau](tableaudownload.html) are available online. Please do this before class (it can take a bit of time to activate the software).
 
 ### Importing & Opening the Data 
 To begin, open Tableau desktop - you should see a screen similar to the below.

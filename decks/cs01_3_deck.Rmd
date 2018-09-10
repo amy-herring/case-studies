@@ -267,7 +267,7 @@ fit2_weights[order(fit2$w)[c(1:5, (length(fit2$w)-5):length(fit2$w))],]
 * Subset the data to Tyrrell County (CORES=89) and 2016 and evaluate whether linear and robust regression methods give similar results in the cleaned data. If not, why not?
 
 ```{r tyrrell}
-birth2016=subset(birth_data,birth_data$YOB=='2016')
+birth2016=subset(bdclean,birth_data$YOB=='2016')
 #CORES code for Tyrrell Co is 89
 tyrrell=subset(birth2016,birth2016$CORES=='89')
 
