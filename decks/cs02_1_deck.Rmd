@@ -62,10 +62,13 @@ While overall infant mortality rates in the US have declined over time, major di
 
 ##Mapping Infant Mortality
 
+Our goal today is to map infant mortality worldwide, using a point with color indicating the infant mortality rate and size of the point indicating the population of the country (and thus some indication of the number of lives affected).
+
 In order to create our map of infant mortality around the world, we will need to identify the following data.
 
 - Infant mortality data for time period of interest by country
 - Country mapping information and link to infant mortality data
+- Population of each country
 
 ## Extracting Latitude and Longitude of Country Centroids
 
@@ -179,7 +182,7 @@ hist(sqrt(allCtryData$pop), breaks = 20, main = "",
      xlab = "sqrt(Population Size)")
 ```
 
-That's much better. We'll work with some function of square root of population size (further scalng to be sure the radius of each point is not too large for our plot).
+That's much better. We'll work with some function of square root of population size (further scalng to be sure the radius of each point is not too large for our plot). Why not a log transformation?  I don't want to pull the right tail in too much -- big countries should still look very large.
 
 ## Initial Plot 
 Now we are ready to plot the mortality rates around the world. Size of the points will be a function of population size, while color will be a function of the mortality rate (darker=higher).
