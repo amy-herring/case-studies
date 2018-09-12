@@ -25,19 +25,28 @@ Using data on births and infant deaths in North Carolina, we will obtain good es
 ## Case Study Data
 
 - Vital records data on North Carolina births, 2011-2016
-- Vital records data on North Carolina infant deaths of births from 2011-2016
+
+- Vital records data on North Carolina infant deaths of babies born 2011-2016
 
 ## Case Study Goals
 
 Using data on NC births and infant deaths,
+
 - obtain good estimates of the infant mortality rate by county, year, and race/ethnicity
+
 - determine whether disparities in the infant mortality rate exist in NC as a function of race/ethnicity
+
 - determine whether infant mortality rates, both overall and by group, are changing over time
+
 - describe infant mortality rates and time trends by group in language accessible to policymakers
+
+- make recommendations for where policymakers should invest resources to address infant mortality
 
 ##Case for Class: Infant Mortality
 
-*Infant death* is defined as the death of a live-born infant during the first year of life. The *infant mortality rate* is the number of infant deaths per 1000 live births. The infant mortality rate, which is relatively easily measured even in resource-poor settings, is often used as a marker of the overall health of a society because of the overlap in causes of infant mortality and factors that are likely to influence the health of an overall population, such as general living conditions, poverty and socioeconomic status, quality of medical care, and rates of illness. Infant mortality rates can be compared across different areas or across time to evaluate the impact of public health program or to determine where new investments in health are needed.
+*Infant death* is defined as the death of a live-born infant during the first year of life. 
+
+The *infant mortality rate* is the number of infant deaths per 1000 live births. The infant mortality rate, which is relatively easily measured even in resource-poor settings, is often used as a marker of the overall health of a society because of the overlap in causes of infant mortality and factors that are likely to influence the health of an overall population, such as general living conditions, poverty and socioeconomic status, quality of medical care, and rates of illness. Infant mortality rates can be compared across different areas or across time to evaluate the impact of public health program or to determine where new investments in health are needed.
 
 ##Changes in US Infant Mortality over Time
 

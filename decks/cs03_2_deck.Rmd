@@ -52,7 +52,7 @@ Thus researchers will fit the model  \begin{eqnarray*}
 
 ## Fitting the model
 
-When using summary counts, we can provide R with the outcome counts in a matrix, with the first column indicating counts "successes" (these will be treated as $y=1$ occurrences) and the second column indicating counts of "failures" ($y=0$). 
+When using summary counts, we can provide R with the outcome counts in a matrix, with the first column indicating counts of "successes" (these will be treated as $y=1$ occurrences) and the second column indicating counts of "failures" ($y=0$). 
 
 ```{r fitcont}
 m1=glm( cbind(using,notUsing) ~ age * wantsMore + education , family=binomial, 
@@ -99,15 +99,15 @@ We can define $c$ in R, and pull off the covariance matrix of our estimates usin
 
 ##  Linear combinations of parameters in R 
 
-Let's  obtain the odds ratio comparing a woman aged 40-49 to a woman aged 30-39, assuming both do not want more children and have the same educational level, derived previously as $e^{\beta_3-\beta_2}.$
+Let's  obtain the estimated odds ratio and its 95\% CI comparing a woman aged 40-49 to a woman aged 30-39, assuming both do not want more children and have the same educational level, derived previously as $e^{\beta_3-\beta_2}.$
 
 ```{r cont1}
 c=c(0,0,-1,1,0,0,0,0,0) #beta3-beta2
 m1.40493039.OR=exp(t(c)%*%coef(m1))
 m1.40493039.selogOR=t(c)%*%vcov(m1)%*%c
 #print OR and 95% CI 
-m1.40493039.OR
-c(exp(t(c)%*%coef(m1)-1.96*sqrt(m1.40493039.selogOR)),exp(t(c)%*%coef(m1)+1.96*sqrt(m1.40493039.selogOR)))
+c(exp(t(c)%*%coef(m1)-1.96*sqrt(m1.40493039.selogOR)),m1.40493039.OR,
+  exp(t(c)%*%coef(m1)+1.96*sqrt(m1.40493039.selogOR)))
 ```
 So the woman aged 40-49 who wants no more kids has 1.33 (95\% CI=(0.88, 2.00)) times the odds of using contraceptives as her counterpart aged 30-39 who also wants no more kids and has the same level of education.
 
@@ -120,14 +120,14 @@ c=c(0,-1,1,0,0,0,0,0,0) #beta3-beta2
 m1.30392029.OR=exp(t(c)%*%coef(m1))
 m1.30392029.selogOR=t(c)%*%vcov(m1)%*%c
 #print OR and 95% CI 
-m1.30392029.OR
-c(exp(t(c)%*%coef(m1)-1.96*sqrt(m1.30392029.selogOR)),exp(t(c)%*%coef(m1)+1.96*sqrt(m1.30392029.selogOR)))
+c(exp(t(c)%*%coef(m1)-1.96*sqrt(m1.30392029.selogOR)),m1.30392029.OR,
+  exp(t(c)%*%coef(m1)+1.96*sqrt(m1.30392029.selogOR)))
 ```
 So the woman aged 30-39 who wants no more kids has 2.73 (95\% CI=(1.73, 4.31)) times the odds of using contraceptives as her counterpart aged 20-29 who also wants no more kids and has the same level of education.
 
 ## Now add some interaction terms!
 
-To make comparisons among women who do want more children, we need to add the main effect and interaction terms.  For example, the odds of contraceptive use for a woman aged 40-49 who wants more kids are given by $e^{\beta_0+\beta_3 + \beta_4 +\beta_5 I(lowedu_i) + \beta_8}$, and the odds of contraceptive use for a woman $<25$ who wants more kids are given by $e^{\beta_0+\beta_4+\beta_5 I(lowedu_i)}$. Assuming these women have the same educational level, then the OR is given by $\frac{e^{\beta_0+\beta_3 + \beta_4 +\beta_5 I(lowedu_i) + \beta_8}}{e^{\beta_0+\beta_4+\beta_5 I(lowedu_i)}}=e^{\beta_3+\beta_8}$.
+To make comparisons among women who do want more children, we need to add the main effect and interaction terms.  For example, the odds of contraceptive use for a woman aged 40-49 who wants more kids are given by $e^{\beta_0+\beta_3 + \beta_4 +\beta_5 I(lowedu_i) + \beta_8}$, and the odds of contraceptive use for a woman $<25$ who wants more kids are given by $e^{\beta_0+\beta_4+\beta_5 I(lowedu_i)}$. Assuming these women have the same educational level, then the OR is given by $$\frac{e^{\beta_0+\beta_3 + \beta_4 +\beta_5 I(lowedu_i) + \beta_8}}{e^{\beta_0+\beta_4+\beta_5 I(lowedu_i)}}=e^{\beta_3+\beta_8}.$$
 
 ## Adding interactions!
 

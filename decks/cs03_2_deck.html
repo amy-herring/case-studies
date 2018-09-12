@@ -541,7 +541,7 @@ Thus researchers will fit the model
 </section>
 <section id="fitting-the-model" class="slide level2">
 <h2>Fitting the model</h2>
-<p>When using summary counts, we can provide R with the outcome counts in a matrix, with the first column indicating counts “successes” (these will be treated as <span class="math inline">\(y=1\)</span> occurrences) and the second column indicating counts of “failures” (<span class="math inline">\(y=0\)</span>).</p>
+<p>When using summary counts, we can provide R with the outcome counts in a matrix, with the first column indicating counts of “successes” (these will be treated as <span class="math inline">\(y=1\)</span> occurrences) and the second column indicating counts of “failures” (<span class="math inline">\(y=0\)</span>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m1=<span class="kw">glm</span>( <span class="kw">cbind</span>(using,notUsing) <span class="op">~</span><span class="st"> </span>age <span class="op">*</span><span class="st"> </span>wantsMore <span class="op">+</span><span class="st"> </span>education , <span class="dt">family=</span>binomial, 
         <span class="dt">data=</span>cuse)</code></pre></div>
 </section>
@@ -615,16 +615,14 @@ Thus researchers will fit the model
 </section>
 <section id="linear-combinations-of-parameters-in-r-1" class="slide level2">
 <h2>Linear combinations of parameters in R</h2>
-<p>Let’s obtain the odds ratio comparing a woman aged 40-49 to a woman aged 30-39, assuming both do not want more children and have the same educational level, derived previously as <span class="math inline">\(e^{\beta_3-\beta_2}.\)</span></p>
+<p>Let’s obtain the estimated odds ratio and its 95% CI comparing a woman aged 40-49 to a woman aged 30-39, assuming both do not want more children and have the same educational level, derived previously as <span class="math inline">\(e^{\beta_3-\beta_2}.\)</span></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">c=<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>) <span class="co">#beta3-beta2</span>
 m1.<span class="fl">40493039.</span>OR=<span class="kw">exp</span>(<span class="kw">t</span>(c)<span class="op">%*%</span><span class="kw">coef</span>(m1))
 m1.<span class="fl">40493039.</span>selogOR=<span class="kw">t</span>(c)<span class="op">%*%</span><span class="kw">vcov</span>(m1)<span class="op">%*%</span>c
 <span class="co">#print OR and 95% CI </span>
-m1.<span class="fl">40493039.</span>OR</code></pre></div>
-<pre><code>##          [,1]
-## [1,] 1.325609</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">c</span>(<span class="kw">exp</span>(<span class="kw">t</span>(c)<span class="op">%*%</span><span class="kw">coef</span>(m1)<span class="op">-</span><span class="fl">1.96</span><span class="op">*</span><span class="kw">sqrt</span>(m1.<span class="fl">40493039.</span>selogOR)),<span class="kw">exp</span>(<span class="kw">t</span>(c)<span class="op">%*%</span><span class="kw">coef</span>(m1)<span class="op">+</span><span class="fl">1.96</span><span class="op">*</span><span class="kw">sqrt</span>(m1.<span class="fl">40493039.</span>selogOR)))</code></pre></div>
-<pre><code>## [1] 0.8791646 1.9987601</code></pre>
+<span class="kw">c</span>(<span class="kw">exp</span>(<span class="kw">t</span>(c)<span class="op">%*%</span><span class="kw">coef</span>(m1)<span class="op">-</span><span class="fl">1.96</span><span class="op">*</span><span class="kw">sqrt</span>(m1.<span class="fl">40493039.</span>selogOR)),m1.<span class="fl">40493039.</span>OR,
+  <span class="kw">exp</span>(<span class="kw">t</span>(c)<span class="op">%*%</span><span class="kw">coef</span>(m1)<span class="op">+</span><span class="fl">1.96</span><span class="op">*</span><span class="kw">sqrt</span>(m1.<span class="fl">40493039.</span>selogOR)))</code></pre></div>
+<pre><code>## [1] 0.8791646 1.3256090 1.9987601</code></pre>
 <p>So the woman aged 40-49 who wants no more kids has 1.33 (95% CI=(0.88, 2.00)) times the odds of using contraceptives as her counterpart aged 30-39 who also wants no more kids and has the same level of education.</p>
 </section>
 <section id="linear-combinations-of-parameters-in-r-2" class="slide level2">
@@ -634,16 +632,14 @@ m1.<span class="fl">40493039.</span>OR</code></pre></div>
 m1.<span class="fl">30392029.</span>OR=<span class="kw">exp</span>(<span class="kw">t</span>(c)<span class="op">%*%</span><span class="kw">coef</span>(m1))
 m1.<span class="fl">30392029.</span>selogOR=<span class="kw">t</span>(c)<span class="op">%*%</span><span class="kw">vcov</span>(m1)<span class="op">%*%</span>c
 <span class="co">#print OR and 95% CI </span>
-m1.<span class="fl">30392029.</span>OR</code></pre></div>
-<pre><code>##          [,1]
-## [1,] 2.733388</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">c</span>(<span class="kw">exp</span>(<span class="kw">t</span>(c)<span class="op">%*%</span><span class="kw">coef</span>(m1)<span class="op">-</span><span class="fl">1.96</span><span class="op">*</span><span class="kw">sqrt</span>(m1.<span class="fl">30392029.</span>selogOR)),<span class="kw">exp</span>(<span class="kw">t</span>(c)<span class="op">%*%</span><span class="kw">coef</span>(m1)<span class="op">+</span><span class="fl">1.96</span><span class="op">*</span><span class="kw">sqrt</span>(m1.<span class="fl">30392029.</span>selogOR)))</code></pre></div>
-<pre><code>## [1] 1.734013 4.308737</code></pre>
+<span class="kw">c</span>(<span class="kw">exp</span>(<span class="kw">t</span>(c)<span class="op">%*%</span><span class="kw">coef</span>(m1)<span class="op">-</span><span class="fl">1.96</span><span class="op">*</span><span class="kw">sqrt</span>(m1.<span class="fl">30392029.</span>selogOR)),m1.<span class="fl">30392029.</span>OR,
+  <span class="kw">exp</span>(<span class="kw">t</span>(c)<span class="op">%*%</span><span class="kw">coef</span>(m1)<span class="op">+</span><span class="fl">1.96</span><span class="op">*</span><span class="kw">sqrt</span>(m1.<span class="fl">30392029.</span>selogOR)))</code></pre></div>
+<pre><code>## [1] 1.734013 2.733388 4.308737</code></pre>
 <p>So the woman aged 30-39 who wants no more kids has 2.73 (95% CI=(1.73, 4.31)) times the odds of using contraceptives as her counterpart aged 20-29 who also wants no more kids and has the same level of education.</p>
 </section>
 <section id="now-add-some-interaction-terms" class="slide level2">
 <h2>Now add some interaction terms!</h2>
-<p>To make comparisons among women who do want more children, we need to add the main effect and interaction terms. For example, the odds of contraceptive use for a woman aged 40-49 who wants more kids are given by <span class="math inline">\(e^{\beta_0+\beta_3 + \beta_4 +\beta_5 I(lowedu_i) + \beta_8}\)</span>, and the odds of contraceptive use for a woman <span class="math inline">\(&lt;25\)</span> who wants more kids are given by <span class="math inline">\(e^{\beta_0+\beta_4+\beta_5 I(lowedu_i)}\)</span>. Assuming these women have the same educational level, then the OR is given by <span class="math inline">\(\frac{e^{\beta_0+\beta_3 + \beta_4 +\beta_5 I(lowedu_i) + \beta_8}}{e^{\beta_0+\beta_4+\beta_5 I(lowedu_i)}}=e^{\beta_3+\beta_8}\)</span>.</p>
+<p>To make comparisons among women who do want more children, we need to add the main effect and interaction terms. For example, the odds of contraceptive use for a woman aged 40-49 who wants more kids are given by <span class="math inline">\(e^{\beta_0+\beta_3 + \beta_4 +\beta_5 I(lowedu_i) + \beta_8}\)</span>, and the odds of contraceptive use for a woman <span class="math inline">\(&lt;25\)</span> who wants more kids are given by <span class="math inline">\(e^{\beta_0+\beta_4+\beta_5 I(lowedu_i)}\)</span>. Assuming these women have the same educational level, then the OR is given by <span class="math display">\[\frac{e^{\beta_0+\beta_3 + \beta_4 +\beta_5 I(lowedu_i) + \beta_8}}{e^{\beta_0+\beta_4+\beta_5 I(lowedu_i)}}=e^{\beta_3+\beta_8}.\]</span></p>
 </section>
 <section id="adding-interactions" class="slide level2">
 <h2>Adding interactions!</h2>
