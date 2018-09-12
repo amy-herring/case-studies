@@ -136,8 +136,8 @@ c=c(0,0,0,1,0,0,0,0,1) #beta3+beta8
 m1.4049lt25morekids.OR=exp(t(c)%*%coef(m1))
 m1.4049lt25morekids.selogOR=t(c)%*%vcov(m1)%*%c
 #print OR and 95% CI 
-m1.4049lt25morekids.OR
-c(exp(t(c)%*%coef(m1)-1.96*sqrt(m1.4049lt25morekids.selogOR)),
+
+c(exp(t(c)%*%coef(m1)-1.96*sqrt(m1.4049lt25morekids.selogOR)),m1.4049lt25morekids.OR,
   exp(t(c)%*%coef(m1)+1.96*sqrt(m1.4049lt25morekids.selogOR)))
 ```
 So the woman aged 40-49 who wants more kids has 1.79 (95\% CI=(0.90, 3.53)) times the odds of using contraceptives as her counterpart aged under 25 who also wants more kids and has the same level of education. (Recall the OR was 6.97 for the same comparison among women who did not want more children.)
