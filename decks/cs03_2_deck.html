@@ -647,12 +647,10 @@ m1.<span class="fl">30392029.</span>selogOR=<span class="kw">t</span>(c)<span cl
 m1.4049lt25morekids.OR=<span class="kw">exp</span>(<span class="kw">t</span>(c)<span class="op">%*%</span><span class="kw">coef</span>(m1))
 m1.4049lt25morekids.selogOR=<span class="kw">t</span>(c)<span class="op">%*%</span><span class="kw">vcov</span>(m1)<span class="op">%*%</span>c
 <span class="co">#print OR and 95% CI </span>
-m1.4049lt25morekids.OR</code></pre></div>
-<pre><code>##          [,1]
-## [1,] 1.785188</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">c</span>(<span class="kw">exp</span>(<span class="kw">t</span>(c)<span class="op">%*%</span><span class="kw">coef</span>(m1)<span class="op">-</span><span class="fl">1.96</span><span class="op">*</span><span class="kw">sqrt</span>(m1.4049lt25morekids.selogOR)),
+
+<span class="kw">c</span>(<span class="kw">exp</span>(<span class="kw">t</span>(c)<span class="op">%*%</span><span class="kw">coef</span>(m1)<span class="op">-</span><span class="fl">1.96</span><span class="op">*</span><span class="kw">sqrt</span>(m1.4049lt25morekids.selogOR)),m1.4049lt25morekids.OR,
   <span class="kw">exp</span>(<span class="kw">t</span>(c)<span class="op">%*%</span><span class="kw">coef</span>(m1)<span class="op">+</span><span class="fl">1.96</span><span class="op">*</span><span class="kw">sqrt</span>(m1.4049lt25morekids.selogOR)))</code></pre></div>
-<pre><code>## [1] 0.9035587 3.5270481</code></pre>
+<pre><code>## [1] 0.9035587 1.7851877 3.5270481</code></pre>
 <p>So the woman aged 40-49 who wants more kids has 1.79 (95% CI=(0.90, 3.53)) times the odds of using contraceptives as her counterpart aged under 25 who also wants more kids and has the same level of education. (Recall the OR was 6.97 for the same comparison among women who did not want more children.)</p>
 </section>
 <section id="finish-describing-the-results" class="slide level2">

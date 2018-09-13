@@ -3,7 +3,7 @@ title: Infant Mortality in NC
 output: 
   revealjs::revealjs_presentation:
     theme: night
-    highlight: tango
+    highlight: espresso
     center: true
     transition: none
     css: styles.css
@@ -70,6 +70,52 @@ Which presentation would you recommend, and why?
 
 ##NC Data on Infant Mortality
 These data are not in the public domain but are available on the Sakai website. Note the death data are not available on an individual record level but as counts broken down by year, county, and race/ethnicity.
+
+## Add here plotting information across NC States
+
+Infant mortality data can be visualized in number of interesting ways. [A nice tutorial by Luke Tierney at Iowa](https://homepage.divms.uiowa.edu/~luke/classes/STAT4580/maps.html#focusing-on-iowa) covers a variety of options.
+
+For illustration, we'll simulate data for North Carolina and plot it on the map.
+
+## R code to link map and simulated data
+
+```{r NCplot1}
+library(dplyr)
+library(ggplot2)
+nc_map <- tbl_df(map_data("county", region = "north carolina"))
+# Simulate data to plot by county
+data_frame(
+  subregion = unique(nc_map$subregion),
+  simdata = sample(50:500, length(unique(nc_map$subregion)))
+) -> simdata_df
+# Join the values to the map
+nc_map <- left_join(nc_map, simdata_df)
+```
+
+## Plotting code
+
+```{r NCplot2a, eval=FALSE}
+library(ggthemes); library(mapproj)
+ggplot() +
+  geom_polygon(data=nc_map, color="black",
+               aes(x=long, y=lat, group=subregion, fill=simdata)) +
+  viridis::scale_fill_viridis(name="Simulated Data ", direction=-1) +
+  coord_map("polyconic") +
+  ggthemes::theme_map() +
+  theme(legend.position="bottom")
+```
+
+## Plot
+```{r NCplot2b, echo=FALSE}
+library(ggthemes); library(mapproj)
+ggplot() +
+  geom_polygon(data=nc_map, color="black",
+               aes(x=long, y=lat, group=subregion, fill=simdata)) +
+  viridis::scale_fill_viridis(name="Simulated Data ", direction=-1) +
+  coord_map("polyconic") +
+  ggthemes::theme_map() +
+  theme(legend.position="bottom")
+```
 
 
 

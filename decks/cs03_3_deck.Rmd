@@ -171,7 +171,7 @@ $\alpha_j \sim N\left(\gamma_0,\sigma_\alpha^2 \right)$
 ```{r M1}
 library(lme4)
 #basic MLM with just random intercept for county
-M1<-lmer(y~x+(1|county),REML=FALSE)
+M1<-lmer(y~x+(1|county))
 ```
 
 ## Output from MLM
@@ -207,7 +207,7 @@ u_j,\sigma^2_\alpha)$.
 ## Code for including uranium
 ```{r M2}
 # Extended model adding uranium but still only letting county effect be random
-M2<-lmer(y~x+u.full+(1|county),REML=FALSE)
+M2<-lmer(y~x+u.full+(1|county))
 
 ```
 
@@ -236,7 +236,7 @@ This model is called a random intercepts and slopes model.
 
 ## Code to allow varying home floor term
 ```{r M3}
-M3<-lmer(y~x+u.full+(1+x|county),REML=FALSE)
+M3<-lmer(y~x+u.full+(1+x|county))
 ```
 
 ## Output
@@ -244,6 +244,7 @@ M3<-lmer(y~x+u.full+(1+x|county),REML=FALSE)
 ```{r M3out}
 summary(M3)
 ```
+Note the uncertainty around the random effect of floor is large; we may want to eliminate this random term from the model to simplify things.
 
 ## Estimates of county-level effects
 ```{r M3est}
@@ -254,4 +255,3 @@ coef(M3)
 
 ![Blue: fixed slopes, red: random slopes](figures/M3.jpg){width=40%}
 
-##CHECK HETEROGENEOUS VARIANCES CODE
