@@ -44,11 +44,17 @@ uranium <- cty[usa.rows,"Uppm"]
 u <- log (uranium)
 u.full<-u[county]
 ```
-## What to cover
+## Multilevel models
+
+Multilevel models are a natural way to handle correlated or clustered data. Our goals for studying multilevel modeling include the following.
+
+- Understanding consequences of ignoring correlation in data
+
+- Learning how to construct and apply multilevel models for correlated data
+
+- Using multilevel models to borrow information to inform predictions for continuous and categorical data.
 
 
-- MLM first in context of radon data -- a second set of notes
-- then talk about GLMM
 
 ## Clustered data
 Clustering of observations generally leads to positive correlation among members of the same unit due to shared characteristics.
@@ -178,6 +184,9 @@ M1<-lmer(y~x+(1|county))
 ```{r M1out}
 summary(M1)
 ```
+
+<small> The ratio of county-level variance to total variance is an estimate of the correlation of within-county measures. Here $\hat{\rho}=\frac{.1077}{.1077+.5709}=0.16$. </small>
+
 ## County-level estimates
 ```{r M1colevel}
 coef(M1)

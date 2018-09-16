@@ -494,11 +494,13 @@ document.getElementsByTagName('head')[0].appendChild(style);
     <h1 class="title">Introduction to Multilevel Models</h1>
 </section>
 
-<section id="what-to-cover" class="slide level2">
-<h2>What to cover</h2>
+<section id="multilevel-models" class="slide level2">
+<h2>Multilevel models</h2>
+<p>Multilevel models are a natural way to handle correlated or clustered data. Our goals for studying multilevel modeling include the following.</p>
 <ul>
-<li>MLM first in context of radon data – a second set of notes</li>
-<li>then talk about GLMM</li>
+<li><p>Understanding consequences of ignoring correlation in data</p></li>
+<li><p>Learning how to construct and apply multilevel models for correlated data</p></li>
+<li><p>Using multilevel models to borrow information to inform predictions for continuous and categorical data.</p></li>
 </ul>
 </section>
 <section id="clustered-data" class="slide level2">
@@ -637,6 +639,7 @@ M1&lt;-<span class="kw">lmer</span>(y<span class="op">~</span>x<span class="op">
 ## Correlation of Fixed Effects:
 ##   (Intr)
 ## x -0.288</code></pre>
+<p><small> The ratio of county-level variance to total variance is an estimate of the correlation of within-county measures. Here <span class="math inline">\(\hat{\rho}=\frac{.1077}{.1077+.5709}=0.16\)</span>. </small></p>
 </section>
 <section id="county-level-estimates" class="slide level2">
 <h2>County-level estimates</h2>
