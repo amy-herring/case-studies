@@ -45,10 +45,10 @@ Data Analysis Using Regression and Multilevel/Hierarchical Models by Gelman & Hi
 
 - [Binomial regression ](decks/cs03_2_deck.html)
 
+
+- [Multilevel Modeling for Gaussian Data](decks/cs03_3_deck.html)
+
 <!---
-[Multilevel Modeling Tutorial:  (including radon analysis from Gelman and Hill)](decks/cs03_3_deck.html)
-
-
 
 [Multilevel modeling with categorical data:](decks/cs03_4_deck.html)
 
