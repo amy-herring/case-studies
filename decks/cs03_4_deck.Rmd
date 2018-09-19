@@ -127,9 +127,9 @@ summary(m1)
 Now that we've warmed up, let's fit a more sophisticated model that includes other relevant survey factors, such as region, prior vote history (average Republican vote share in the three prior elections, adjusted for home-state and home-region candidate effects), age category, and education category.
 
 ```{r dataprocess}
-age.edu=n.edu*(polls.subset$age-1)+polls.subset$edu 
+polls.subset$age.edu=n.edu*(polls.subset$age-1)+polls.subset$edu 
 #distinct value for each age/edu combo
-region.full=region[polls.subset$state]
+polls.subset$region.full=region[polls.subset$state]
 ```
 
 ## Model specification
@@ -148,7 +148,7 @@ not.dc <- c(1:8,10:51)
 candidate.effects <- read.table ("data/candidate_effects.txt", header=T)
 v.prev[not.dc] <- v.prev[not.dc] +
  (candidate.effects$X76 + candidate.effects$X80 + candidate.effects$X84)/3
-v.prev.full=v.prev[state]
+polls.subset$v.prev.full=v.prev[polls.subset$state]*100 #rescaling so 1-unit is 1 % point
 
 ```
 
@@ -159,3 +159,34 @@ v.prev.full=v.prev[state]
 m2=glmer(bush ~ black + female + v.prev.full+ (1|state)+(1|age.edu)+(1|region.full), family=binomial(link="logit"), data=polls.subset)
 summary(m2)
 ```
+
+## Interpretation
+- For a fixed gender and state, a black respondent has $e^{-1.75}=0.17$ (95\% CI=(0.12,0.26)) times the odds of supporting Bush as a non-black respondent. 
+- For a given race and state, a female respondent has 0.91 (95\% CI=(0.75,1.09)) times the odds of supporting Bush as a male respondent.
+- For each percentage point increase in prior average Republican vote share, residents of a given state, race, and gender have 1.07 (95\%CI=(1.04,1.11)) times the odds of supporting Bush
+
+## Bayesian approach
+Because of the number of categories, the inference in the frequentist model is not entirely reliable as it does not fully account for uncertainty in the estimated variance parameters, and it uses an approximation for inference. We can fit the model in a Bayesian framework using mildly informative priors and quantify uncertainty based on the posterior samples.
+
+```{r brms, cache=TRUE}
+library(brms) #nice function for Bayes MLM using HMC
+m3=brm(bush ~ black + female + v.prev.full+ (1|state)+(1|age.edu)+(1|region.full), family=bernoulli(link="logit"), control = list(adapt_delta = 0.995), data=polls.subset)
+
+```
+
+## Extracting sampled values
+
+```{r brmssamp, cache=TRUE}
+
+```
+
+
+samples1 <- posterior_samples(fit, "^b")
+head(samples1)
+
+# extract posterior samples of group-level standard deviations
+samples2 <- posterior_samples(fit, "^sd_")
+head(samples2)
+
+
+## Plotting the results
