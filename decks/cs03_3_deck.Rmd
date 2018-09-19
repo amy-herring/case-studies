@@ -70,7 +70,7 @@ Clustering of observations generally leads to positive correlation among members
 
 ## Hierarchical linear model
 
-The *hierarchical linear model* is the dominant approach to analysis of multilevel data.  The correlation induced by clustering is described by random effects at each "level."  The higher levels in the hierarchy involve clusters of members at the lower levels.
+The *hierarchical model* is the dominant approach to analysis of multilevel data.  The correlation induced by clustering is described by random effects at each "level."  The higher levels in the hierarchy involve clusters of members at the lower levels.
 
 ## Pooling motivation
 
@@ -100,12 +100,12 @@ We wish to estimate the distribution of radon levels in houses $i$ within 85 cou
 
 ## Data exploration
 ![Estimates and SE's for log radon levels in MN versus the
-    (jittered) sample size (Gelman and Hill)](figures/gelman1.jpg){width=70%}
+    (jittered) sample size. The horizontal line indicates the complete pooling estimate (Gelman and Hill).](figures/gelman1.jpg){width=70%}
     
 ## Radon study
 
-The multilevel estimates in the previous slide represent a compromise between the two extremes.  In this simple setting (with no predictors), the multilevel estimate for county $j$ can be approximated as a weighted average of the mean of all observations in the county (the unpooled estimate $\overline{y}_j$), and the mean over all counties (the completely pooled estimate, $\overline{y}_{\cdot \cdot}$).
-}
+The multilevel estimates in the previous slide represent a compromise between the two extremes.  In this simple setting (with no predictors), the multilevel estimate for county $j$ can be approximated as a weighted average of the mean of all observations in the county, weighting both the unpooled estimate $\overline{y}_j$ and the mean over all counties $\overline{y}_{\cdot \cdot}$.
+
 
 ## Radon study
 
@@ -146,17 +146,17 @@ One important predictor of radon levels is the floor on which the measurement is
 First, we examine the complete-pooling regression, $y_i=\alpha+\beta x_i + \varepsilon_i$, and the no-pooling regression $y_i=\alpha_{j[i]}+\beta x_i + \varepsilon_i$, where $\alpha_{j[i]}$ is the mean log radon level from basement
 measures of homes (indexed by i) in county $j$. 
 
-The following plot shows the solid lines $\widehat{y}=\widehat{\alpha}+\widehat{\beta} x$ for eight selected counties from the no pooling model, and the dashed lines
-$\widehat{y}=\widehat{\alpha}_j+\widehat{\beta}x$ from the complete pooling model.
+The following plot shows the dashed lines $\widehat{y}=\widehat{\alpha}+\widehat{\beta} x$ for eight selected counties from the complete pooling model, and the solid lines
+$\widehat{y}=\widehat{\alpha}_j+\widehat{\beta}x$ from no pooling model.
 
 ## No pooling and pooling
 
-![Complete-pooling and no-pooling regression fits to radon
+![Complete-pooling (dashed) and no-pooling (solid) regression fits to radon
 data (Gelman and Hill)](figures/gelman2.jpg){width=70%}
   
 ## Interpretation
 
-The estimates of $\beta$ differ slightly for the two regressions, with $\widehat{\beta}=-0.61$ for the pooling model, and $\widehat{\beta}=-0.72$ for the no-pooling model. [(Click here for code)](radoncode.html) 
+The estimates of $\beta$ (the association between floor of home and radon level) differ slightly for the two regressions, with $\widehat{\beta}=-0.61$ for the pooling model, and $\widehat{\beta}=-0.72$ for the no-pooling model. [(Click here for code and output)](radoncode.html) As we might expect, we tend to have higher radon levels in the basement (p<0.0001).  (Note: the models differ a LOT in adjusted $R^2$:  0.07 in the complete pooling model, and 0.74 in the no pooling model.)
 
 Neither analysis is perfect.  The complete-pooling analysis ignores variation in radon levels between counties, which is undesirable because our goal is to identify counties with high-radon homes -- we can't pool away the main
 research question!  The no-pooling analysis is also problematic -- for example the Lac Qui Parle County line is estimated based on just two data points.
@@ -164,7 +164,7 @@ research question!  The no-pooling analysis is also problematic -- for example t
 ## Multilevel model
 
 We will start with a simple multilevel model, $y_i=\gamma_0 +
-\alpha_{j[i]}+\beta x_i + \varepsilon_i$, where now $\alpha_{j} \sim N(0,\sigma^2_\alpha)$.  We fit this model using the lmer() function in the lme4 package -- [click here for code](radoncode.html).
+\alpha_{j[i]}+\beta x_i + \varepsilon_i$, where now $\alpha_{j} \sim N(0,\sigma^2_\alpha)$ and $\varepsilon_i \sim N(0, \sigma^2_y)$.  We fit this model using the lmer() function in the lme4 package.
 
 This model can also be written $y_i \sim N(\alpha_{j[i]}+\beta x_i, \sigma_y^2),$ 
 
@@ -199,13 +199,13 @@ The first column gives estimates of $\alpha_j$, and the second column gives the 
     
 Note that there is strong pooling in counties with few data points (multilevel
 line is closer to the dashed line, as in Lac Qui Parle county), and weak
-pooling in counties with more data points (multilevel line essentially on top of no pooling line in St. Louis county).
+pooling in counties with more data points (multilevel line is on top of no pooling line in St. Louis county).
 
 ## Adding a county-level covariate
 
 Radon comes from uranium that has been in the ground since the earth's
 formation.  A measure of average uranium content of the soil was available at
-the county level (but not for each house).  We will extend our model to
+the county level (but not for each house).  Recall our current model to
 account for variability across counties due to uranium levels in the soil:
 $y_i=\alpha_{j[i]}+\beta x_i + \varepsilon_i,$ where $\alpha_{j} \sim
 N(\gamma_0,\sigma^2_\alpha)$ and $\varepsilon_i \sim N(0,\sigma^2_y)$.
