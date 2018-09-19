@@ -1,0 +1,7 @@
+base
+MASS
+Matrix
+lme4
+arm
+foreign
+R2OpenBUGS

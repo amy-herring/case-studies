@@ -48,3 +48,114 @@ Any given survey will have very few, or even no, data in many categories. Howeve
 
 If you want to know more about factors related to response rates on phone election surveys, check out [this extensive analysis by Pew](http://www.pewresearch.org/2017/05/15/what-low-response-rates-mean-for-telephone-surveys/).
 
+## Multilevel logistic regression
+
+Multilevel models can be used for binary outcomes (and those on other scales) using a similar approach to that used for normal data: we group coefficients into batches, and a probability distribution is assigned to each batch. Recall our normal data model:  $$y_i \sim N(\alpha_{j[i]}+\beta x_i, \sigma_y^2), ~~~ \alpha_j \sim N\left(\gamma_0,\sigma_\alpha^2 \right).$$  In this case we grouped the county-level intercepts and assigned them a normal distribution. This method is a compromise between complete pooling across counties (same intercept for each county) and no pooling (estimating a separate intercept for each county without borrowing information).
+
+## Multilevel linear regression
+
+Another way to think of this model is as a way of handling *correlated* responses -- due to geography (in the radon case), we expect homes closer together to have more similar radon levels than homes further apart. One rough way to account for this spatial correlation is by including a *random effect*, $\alpha_j$, for county. The model under each motivation (adjusting for correlation within counties, or borrowing information across counties) is the same.
+
+## Multilevel logistic regression
+
+We consider data from CBS News surveys conducted during the week before the 1988 election.  To start, we consider a simple example looking at the preferences of voters (with undecided voters excluded) for either the Republican candidate, Bush Sr. ($y_i=1$), or the Democrat, Dukakis ($y_i=0$). 
+
+```{r arm}
+# Load in data for region indicators
+# Use "state", an R data file (type ?state from the R command window for info)
+# Regions:  1=northeast, 2=south, 3=north central, 4=west, 5=d.c.
+# We have to insert d.c. (it is the 9th "state" in alphabetical order)
+library(arm)
+```
+
+## Multilevel logistic regression
+```{r state}
+data(state)                  # "state" is an R data file
+state.abbr<- c (state.abb[1:8], "DC", state.abb[9:50])
+dc <- 9; not.dc <- c(1:8,10:51)
+region <- c(3,4,4,3,4,4,1,1,5,3,3,4,4,2,2,2,2,3,3,1,1,1,2,2,3,2,4,2,4,1,1,4,1,3,2,2,3,
+            4,1,1,3,2,3,3,4,1,3,4,1,2,4)
+# Load in data from the CBS polls in 1988
+library(foreign)
+polls <- read.dta("data/polls.dta")
+library(R2OpenBUGS)
+# Select just the data from the last survey (#9158)
+ok=survey==9158            # define the condition
+polls.subset=polls[which(polls$survey==9158),]
+```
+
+## Multilevel logistic regression
+```{r state2}
+# define other data summaries
+y <- polls.subset$bush     # 1 if support bush, 0 if support dukakis
+n <- length(y)             # of survey respondents
+n.age <- max(polls.subset$age)    # of age categories
+n.edu <- max(polls.subset$edu)      # of education categories
+n.state <- max(polls.subset$state)  # of states
+n.region <- max(region)  # of regions
+```
+
+
+## Multilevel logistic regression
+To start, we'll consider a simple model with fixed effects of race-gender combinations and a random effect for state (50 states + the District of Columbia).
+
+$$\text{logit}(Pr(y_i=1))=\alpha_{j[i]}+\beta_{female}female_i+\beta_{black}black_i,$$ $$\alpha_j\sim N(\mu_\alpha,\sigma^2_{state})$$ for $i=1,\ldots,n$ $j=1,\ldots,51$
+
+```{r model1, eval=FALSE}
+library(lme4)
+m1=glmer(bush ~ black + female + (1|state), family=binomial(link="logit"),
+         data=polls.subset)
+summary(m1)
+```
+
+## Multilevel logistic regression
+<small>
+```{r model1b, echo=FALSE}
+library(lme4)
+m1=glmer(bush ~ black + female + (1|state), family=binomial(link="logit"), data=polls.subset)
+summary(m1)
+```
+</small>
+
+## Interpretation
+- For a fixed gender and state, a black respondent has $e^{-1.74}=0.18$ (95\% CI=($e^{-1.74-1.96(0.21)}$,$e^{1.74+1.96(0.21)}$)=(0.12,0.26)) times the odds of supporting Bush as a non-black respondent. 
+- For a given race and state, a female respondent has 0.91 (95\% CI=(0.75,1.09)) times the odds of supporting Bush as a male respondent.
+- The state-level variability is estimated at 0.17
+
+## Extending the model
+
+Now that we've warmed up, let's fit a more sophisticated model that includes other relevant survey factors, such as region, prior vote history (average Republican vote share in the three prior elections, adjusted for home-state and home-region candidate effects), age category, and education category.
+
+```{r dataprocess}
+age.edu=n.edu*(polls.subset$age-1)+polls.subset$edu 
+#distinct value for each age/edu combo
+region.full=region[polls.subset$state]
+```
+
+## Model specification
+
+$$\text{logit}(Pr(y_i=1))=\alpha_{j[i]}^{state}+\alpha_{k[i],l[i]}^{age.edu}+\beta_{female}female_i+\beta_{black}black_i,$$ $$\alpha_j^{state}\sim N(\alpha_{m[j]}^{region}+\beta_{v.prev}v.prev_j,\sigma^2_{state})$$ and $$\alpha_{k,l}^{age.edu} \sim N(0,\sigma^2_{age.edu})$$ for $i=1,\ldots,n$ $j=1,\ldots,51$
+
+The reason the age by education term is treated as *random* and not *fixed* is that there are quite a few levels (4 age groups and 4 education groups), similar to the case with the state variable.
+
+## Input data on prior election results
+
+```{r priorelection}
+# also include a measure of previous vote as a state-level predictor
+presvote <- read.dta("data/presvote.dta")
+v.prev <- presvote$g76_84pr
+not.dc <- c(1:8,10:51)
+candidate.effects <- read.table ("data/candidate_effects.txt", header=T)
+v.prev[not.dc] <- v.prev[not.dc] +
+ (candidate.effects$X76 + candidate.effects$X80 + candidate.effects$X84)/3
+v.prev.full=v.prev[state]
+
+```
+
+## Model specification
+
+```{r model2, eval=FALSE}
+
+m2=glmer(bush ~ black + female + v.prev.full+ (1|state)+(1|age.edu)+(1|region.full), family=binomial(link="logit"), data=polls.subset)
+summary(m2)
+```
