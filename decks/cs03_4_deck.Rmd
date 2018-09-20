@@ -26,10 +26,7 @@ While many of the best opinion polls are conducted at a national level, often es
 
 Well-designed polls are generally based on national random samples with corrections for nonresponse based on a variety of demographic factors (e.g., sex, ethnicity, race, age, education).
 
-## to do
-AMYAMY put the slide on results of response to my fake poll here (maybe happiness with Sakai? any way to get anonymous poll package?)
 
-AMY CHECK RESULTS AGAINST THOSE in GELMAN BOOK
 
 ## Breaking down polls by demographic factors
 
@@ -50,6 +47,10 @@ Any given survey will have very few, or even no, data in many categories. Howeve
 ![](figures/pewnonresp.png)
 
 If you want to know more about factors related to response rates on phone election surveys, check out [this extensive analysis by Pew](http://www.pewresearch.org/2017/05/15/what-low-response-rates-mean-for-telephone-surveys/).
+
+## More on nonresponse
+
+The response rate for my recent poll on usefulness of STA 440 is 75\% (you all are are much better than average -- thanks!)
 
 ## Multilevel logistic regression
 
