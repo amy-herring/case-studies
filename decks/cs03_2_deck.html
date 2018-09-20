@@ -516,7 +516,7 @@ document.getElementsByTagName('head')[0].appendChild(style);
 </section>
 <section id="logistic-regression-1" class="slide level2">
 <h2>Logistic regression</h2>
-<p>An attractive solution is to model the log odds (also called the <em>logit</em>) using <span class="math display">\[\ln\left(\frac{\pi_i}{1-\pi_i}\right)=\beta_0+\beta_1x_i,\]</span> which is equivalent to</p>
+<p>An attractive solution is to model the log odds (also called the <em>logit</em>) using <span class="math display">\[\log\frac{\pi_i}{1-\pi_i}=\beta_0+\beta_1x_i,\]</span> which is equivalent to</p>
 <p><span class="math display">\[\frac{\pi_i}{1-\pi_i}=\exp(\beta_0+\beta_1x_i),\]</span> which defines a multiplicative model for the odds. For example, if we change the <span class="math inline">\(j\)</span>th predictor by one unit while holding the other variables constant, we multiply the odds by <span class="math inline">\(\exp(\beta_j)\)</span> because <span class="math inline">\(\exp(\beta_j(x+1))=\exp(\beta_jx)\exp(\beta_j)\)</span>.</p>
 </section>
 <section id="logistic-regression-2" class="slide level2">
@@ -534,7 +534,7 @@ document.getElementsByTagName('head')[0].appendChild(style);
 </section>
 <section id="interpreting-parameters-in-logistic-regression" class="slide level2">
 <h2>Interpreting parameters in logistic regression</h2>
-<p>Typically we interpret functions of parameters in logistic regression rather than the parameters themselves. For the model <span class="math display">\[\log\frac{\pi_i}{1-\pi_i}=\beta_0+\beta_1x_i,\]</span> we note that the probability that <span class="math inline">\(y=1\)</span> when <span class="math inline">\(x=0\)</span> is <span class="math display">\[\frac{\exp(\beta_0)}{1+\exp(\beta_0)}.\]</span></p>
+<p>Typically we interpret functions of parameters in logistic regression rather than the parameters themselves. For the model <span class="math display">\[\log\frac{\pi_i}{1-\pi_i}=\beta_0+\beta_1x_i,\]</span> we note that the probability that <span class="math inline">\(y=1\)</span> when <span class="math inline">\(x=0\)</span> is <span class="math inline">\(\frac{\exp(\beta_0)}{1+\exp(\beta_0)}\)</span>, and the probability that <span class="math inline">\(y=1\)</span> when <span class="math inline">\(x=1\)</span> is <span class="math inline">\(\frac{\exp(\beta_0+\beta_1)}{1+\exp(\beta_0+\beta_1)}\)</span>.</p>
 </section>
 <section id="interpreting-parameters-in-logistic-regression-1" class="slide level2">
 <h2>Interpreting parameters in logistic regression</h2>
@@ -574,11 +574,128 @@ Thus researchers will fit the model
 \log\frac{\pi_i}{1-\pi_i}&amp;=&amp;\beta_0+\beta_1I(25\leq age_i \leq 29) + \beta_2I(30 \leq age_i \leq 39) \\ &amp; &amp; +\beta_3I(40 \leq age_i \leq 49) + \beta_4 I(morekids_i) \\ &amp; &amp; + \beta_5 I(lowedu_i) + \beta_6 I(25\leq age_i \leq 29)I(morekids_i) \\ &amp; &amp; + \beta_7I(30 \leq age_i \leq 39)I(morekids_i) \\ &amp; &amp; + \beta_8   I(40 \leq age_i \leq 49) I(morekids_i)
 \end{eqnarray*}\]</span>
 </section>
+<section id="understanding-the-model" class="slide level2">
+<h2>Understanding the model</h2>
+<p><small></p>
+<span class="math display">\[\begin{eqnarray*}
+\log\frac{\pi_i}{1-\pi_i}&amp;=&amp;\beta_0+\beta_1I(25\leq age_i \leq 29) + \beta_2I(30 \leq age_i \leq 39) +\beta_3I(40 \leq age_i \leq 49) \\ &amp; &amp; + \beta_4 I(morekids_i)  + \beta_5 I(lowedu_i) + \beta_6 I(25\leq age_i \leq 29)I(morekids_i) \\ &amp; &amp; + \beta_7I(30 \leq age_i \leq 39)I(morekids_i) + \beta_8   I(40 \leq age_i \leq 49) I(morekids_i)
+\end{eqnarray*}\]</span>
+<table>
+<thead>
+<tr class="header">
+<th>Age</th>
+<th>Wants more kids?</th>
+<th>Education</th>
+<th>Expected log odds</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>&lt;25</td>
+<td>no</td>
+<td>high</td>
+<td><span class="math inline">\(\beta_0\)</span></td>
+</tr>
+<tr class="even">
+<td>&lt;25</td>
+<td>no</td>
+<td>low</td>
+<td><span class="math inline">\(\beta_0+\beta_5\)</span></td>
+</tr>
+<tr class="odd">
+<td>&lt;25</td>
+<td>yes</td>
+<td>high</td>
+<td><span class="math inline">\(\beta_0+\beta_4\)</span></td>
+</tr>
+<tr class="even">
+<td>&lt;25</td>
+<td>yes</td>
+<td>low</td>
+<td><span class="math inline">\(\beta_0+\beta_4+\beta_5\)</span></td>
+</tr>
+<tr class="odd">
+<td>25-29</td>
+<td>no</td>
+<td>high</td>
+<td><span class="math inline">\(\beta_0+\beta_1\)</span></td>
+</tr>
+<tr class="even">
+<td>25-29</td>
+<td>no</td>
+<td>low</td>
+<td><span class="math inline">\(\beta_0+\beta_1+\beta_5\)</span></td>
+</tr>
+<tr class="odd">
+<td>25-29</td>
+<td>yes</td>
+<td>high</td>
+<td><span class="math inline">\(\beta_0+\beta_1+\beta_4+\beta_6\)</span></td>
+</tr>
+<tr class="even">
+<td>25-29</td>
+<td>yes</td>
+<td>low</td>
+<td><span class="math inline">\(\beta_0+\beta_1+\beta_4+\beta_5+\beta_6\)</span></td>
+</tr>
+<tr class="odd">
+<td>30-39</td>
+<td>no</td>
+<td>high</td>
+<td><span class="math inline">\(\beta_0+\beta_2\)</span></td>
+</tr>
+<tr class="even">
+<td>30-39</td>
+<td>no</td>
+<td>low</td>
+<td><span class="math inline">\(\beta_0+\beta_2+\beta_5\)</span></td>
+</tr>
+<tr class="odd">
+<td>30-39</td>
+<td>yes</td>
+<td>high</td>
+<td><span class="math inline">\(\beta_0+\beta_2+\beta_4+\beta_7\)</span></td>
+</tr>
+<tr class="even">
+<td>30-39</td>
+<td>yes</td>
+<td>low</td>
+<td><span class="math inline">\(\beta_0+\beta_2+\beta_4+\beta_5+\beta_7\)</span></td>
+</tr>
+<tr class="odd">
+<td>40-49</td>
+<td>no</td>
+<td>high</td>
+<td><span class="math inline">\(\beta_0+\beta_3\)</span></td>
+</tr>
+<tr class="even">
+<td>40-49</td>
+<td>no</td>
+<td>low</td>
+<td><span class="math inline">\(\beta_0+\beta_3+\beta_5\)</span></td>
+</tr>
+<tr class="odd">
+<td>40-49</td>
+<td>yes</td>
+<td>high</td>
+<td><span class="math inline">\(\beta_0+\beta_3+\beta_4+\beta_8\)</span></td>
+</tr>
+<tr class="even">
+<td>40-49</td>
+<td>yes</td>
+<td>low</td>
+<td><span class="math inline">\(\beta_0+\beta_3+\beta_4+\beta_5+\beta_8\)</span></td>
+</tr>
+</tbody>
+</table>
+<p></small></p>
+</section>
 <section id="fitting-the-model" class="slide level2">
 <h2>Fitting the model</h2>
 <p>When using summary counts, we can provide R with the outcome counts in a matrix, with the first column indicating counts of “successes” (these will be treated as <span class="math inline">\(y=1\)</span> occurrences) and the second column indicating counts of “failures” (<span class="math inline">\(y=0\)</span>). Note that when we specify binomial data, the default link is the logit link.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m1=<span class="kw">glm</span>( <span class="kw">cbind</span>(using,notUsing) <span class="op">~</span><span class="st"> </span>age <span class="op">*</span><span class="st"> </span>wantsMore <span class="op">+</span><span class="st"> </span>education , <span class="dt">family=</span>binomial, 
         <span class="dt">data=</span>cuse)</code></pre></div>
+<p>If instead of having grouped data, we had individual-level records with <span class="math inline">\(y=1\)</span> for using and <span class="math inline">\(y=0\)</span> for not using for each woman, we would replace <code>cbind(using,notUsing)</code> with <code>y</code> above.</p>
 </section>
 <section id="output" class="slide level2">
 <h2>Output</h2>
@@ -653,7 +770,7 @@ Thus researchers will fit the model
 <h2>Linear combinations of parameters in R</h2>
 <p>Let’s obtain the estimated odds ratio and its 95% CI comparing a woman aged 40-49 to a woman aged 30-39, assuming both do not want more children and have the same educational level, derived previously as <span class="math inline">\(e^{\beta_3-\beta_2}.\)</span></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">c=<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>) <span class="co">#beta3-beta2</span>
-m1.<span class="fl">40493039.</span>OR=<span class="kw">exp</span>(<span class="kw">t</span>(c)<span class="op">%*%</span><span class="kw">coef</span>(m1))
+m1.<span class="fl">40493039.</span>OR=<span class="kw">exp</span>(<span class="kw">t</span>(c)<span class="op">%*%</span><span class="kw">coef</span>(m1)) <span class="co">#what a long variable name, bad of me</span>
 m1.<span class="fl">40493039.</span>selogOR=<span class="kw">t</span>(c)<span class="op">%*%</span><span class="kw">vcov</span>(m1)<span class="op">%*%</span>c
 <span class="co">#print OR and 95% CI </span>
 <span class="kw">c</span>(<span class="kw">exp</span>(<span class="kw">t</span>(c)<span class="op">%*%</span><span class="kw">coef</span>(m1)<span class="op">-</span><span class="fl">1.96</span><span class="op">*</span><span class="kw">sqrt</span>(m1.<span class="fl">40493039.</span>selogOR)),m1.<span class="fl">40493039.</span>OR,
@@ -665,11 +782,11 @@ m1.<span class="fl">40493039.</span>selogOR=<span class="kw">t</span>(c)<span cl
 <h2>Linear combinations of parameters in R</h2>
 <p>Let’s obtain the odds ratio comparing a woman aged 30-39 to a woman aged 25-29, assuming both do not want more children and have the same educational level, which can be derived as <span class="math inline">\(e^{\beta_2-\beta_1}.\)</span></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">c=<span class="kw">c</span>(<span class="dv">0</span>,<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>) <span class="co">#beta3-beta2</span>
-m1.<span class="fl">30392029.</span>OR=<span class="kw">exp</span>(<span class="kw">t</span>(c)<span class="op">%*%</span><span class="kw">coef</span>(m1))
-m1.<span class="fl">30392029.</span>selogOR=<span class="kw">t</span>(c)<span class="op">%*%</span><span class="kw">vcov</span>(m1)<span class="op">%*%</span>c
+m1.<span class="fl">30392529.</span>OR=<span class="kw">exp</span>(<span class="kw">t</span>(c)<span class="op">%*%</span><span class="kw">coef</span>(m1))
+m1.<span class="fl">30392529.</span>selogOR=<span class="kw">t</span>(c)<span class="op">%*%</span><span class="kw">vcov</span>(m1)<span class="op">%*%</span>c
 <span class="co">#print OR and 95% CI </span>
-<span class="kw">c</span>(<span class="kw">exp</span>(<span class="kw">t</span>(c)<span class="op">%*%</span><span class="kw">coef</span>(m1)<span class="op">-</span><span class="fl">1.96</span><span class="op">*</span><span class="kw">sqrt</span>(m1.<span class="fl">30392029.</span>selogOR)),m1.<span class="fl">30392029.</span>OR,
-  <span class="kw">exp</span>(<span class="kw">t</span>(c)<span class="op">%*%</span><span class="kw">coef</span>(m1)<span class="op">+</span><span class="fl">1.96</span><span class="op">*</span><span class="kw">sqrt</span>(m1.<span class="fl">30392029.</span>selogOR)))</code></pre></div>
+<span class="kw">c</span>(<span class="kw">exp</span>(<span class="kw">t</span>(c)<span class="op">%*%</span><span class="kw">coef</span>(m1)<span class="op">-</span><span class="fl">1.96</span><span class="op">*</span><span class="kw">sqrt</span>(m1.<span class="fl">30392529.</span>selogOR)),m1.<span class="fl">30392529.</span>OR,
+  <span class="kw">exp</span>(<span class="kw">t</span>(c)<span class="op">%*%</span><span class="kw">coef</span>(m1)<span class="op">+</span><span class="fl">1.96</span><span class="op">*</span><span class="kw">sqrt</span>(m1.<span class="fl">30392529.</span>selogOR)))</code></pre></div>
 <pre><code>## [1] 1.734013 2.733388 4.308737</code></pre>
 <p>So the woman aged 30-39 who wants no more kids has 2.73 (95% CI=(1.73, 4.31)) times the odds of using contraceptives as her counterpart aged 25-29 who also wants no more kids and has the same level of education.</p>
 </section>

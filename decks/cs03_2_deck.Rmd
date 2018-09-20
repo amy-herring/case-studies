@@ -44,7 +44,7 @@ Note: statisticians often use $\ln$ and $\log$ interchangeably to mean the natur
 
 ## Logistic regression
 
-An attractive solution is to model the log odds (also called the *logit*) using $$\ln\left(\frac{\pi_i}{1-\pi_i}\right)=\beta_0+\beta_1x_i,$$ which is equivalent to
+An attractive solution is to model the log odds (also called the *logit*) using $$\log\frac{\pi_i}{1-\pi_i}=\beta_0+\beta_1x_i,$$ which is equivalent to
 
 $$\frac{\pi_i}{1-\pi_i}=\exp(\beta_0+\beta_1x_i),$$ which defines a multiplicative model for the odds.  For example, if we change the $j$th predictor by one unit while holding the other variables constant, we multiply the odds by $\exp(\beta_j)$ because $\exp(\beta_j(x+1))=\exp(\beta_jx)\exp(\beta_j)$.
 
@@ -68,7 +68,7 @@ The expression on the right is called a *logistic function* and cannot yield a v
 Other transformations (also called links) can be used to ensure the probabilities lie in $[0,1]$, including the probit (popular in econometrics) and complementary log-log. In practice these links all provide very similar fits to the data except at extreme values of $\pi_i$. 
 
 ## Interpreting parameters in logistic regression
-Typically we interpret functions of parameters in logistic regression rather than the parameters themselves.  For the model $$\log\frac{\pi_i}{1-\pi_i}=\beta_0+\beta_1x_i,$$ we note that the probability that $y=1$ when $x=0$ is $$\frac{\exp(\beta_0)}{1+\exp(\beta_0)}.$$
+Typically we interpret functions of parameters in logistic regression rather than the parameters themselves.  For the model $$\log\frac{\pi_i}{1-\pi_i}=\beta_0+\beta_1x_i,$$ we note that the probability that $y=1$ when $x=0$ is $\frac{\exp(\beta_0)}{1+\exp(\beta_0)}$, and the probability that $y=1$ when $x=1$ is $\frac{\exp(\beta_0+\beta_1)}{1+\exp(\beta_0+\beta_1)}$.
 
 
 
@@ -118,6 +118,37 @@ Thus researchers will fit the model  \begin{eqnarray*}
 \log\frac{\pi_i}{1-\pi_i}&=&\beta_0+\beta_1I(25\leq age_i \leq 29) + \beta_2I(30 \leq age_i \leq 39) \\ & & +\beta_3I(40 \leq age_i \leq 49) + \beta_4 I(morekids_i) \\ & & + \beta_5 I(lowedu_i) + \beta_6 I(25\leq age_i \leq 29)I(morekids_i) \\ & & + \beta_7I(30 \leq age_i \leq 39)I(morekids_i) \\ & & + \beta_8   I(40 \leq age_i \leq 49) I(morekids_i)
 \end{eqnarray*}
 
+## Understanding the model
+
+<small>
+
+ \begin{eqnarray*}
+\log\frac{\pi_i}{1-\pi_i}&=&\beta_0+\beta_1I(25\leq age_i \leq 29) + \beta_2I(30 \leq age_i \leq 39) +\beta_3I(40 \leq age_i \leq 49) \\ & & + \beta_4 I(morekids_i)  + \beta_5 I(lowedu_i) + \beta_6 I(25\leq age_i \leq 29)I(morekids_i) \\ & & + \beta_7I(30 \leq age_i \leq 39)I(morekids_i) + \beta_8   I(40 \leq age_i \leq 49) I(morekids_i)
+\end{eqnarray*}
+
+
+|Age           |Wants more kids?   | Education     | Expected log odds |
+| ----------    | -----------------         | --------------- | ---------------- |
+<25 | no | high | $\beta_0$ |
+<25 | no | low | $\beta_0+\beta_5$ |
+<25 | yes | high | $\beta_0+\beta_4$ |
+<25 | yes | low | $\beta_0+\beta_4+\beta_5$ |
+25-29 | no | high | $\beta_0+\beta_1$ |
+25-29  | no | low | $\beta_0+\beta_1+\beta_5$ |
+25-29  | yes | high | $\beta_0+\beta_1+\beta_4+\beta_6$ |
+25-29  | yes | low | $\beta_0+\beta_1+\beta_4+\beta_5+\beta_6$ |
+30-39 | no | high | $\beta_0+\beta_2$ |
+30-39  | no | low | $\beta_0+\beta_2+\beta_5$ |
+30-39  | yes | high | $\beta_0+\beta_2+\beta_4+\beta_7$ |
+30-39  | yes | low | $\beta_0+\beta_2+\beta_4+\beta_5+\beta_7$ |
+40-49 | no | high | $\beta_0+\beta_3$ |
+40-49  | no | low | $\beta_0+\beta_3+\beta_5$ |
+40-49  | yes | high | $\beta_0+\beta_3+\beta_4+\beta_8$ |
+40-49  | yes | low | $\beta_0+\beta_3+\beta_4+\beta_5+\beta_8$ |
+
+</small>
+
+
 ## Fitting the model
 
 When using summary counts, we can provide R with the outcome counts in a matrix, with the first column indicating counts of "successes" (these will be treated as $y=1$ occurrences) and the second column indicating counts of "failures" ($y=0$). Note that when we specify binomial data, the default link is the logit link.
@@ -127,6 +158,7 @@ m1=glm( cbind(using,notUsing) ~ age * wantsMore + education , family=binomial,
         data=cuse)
 ```
 
+If instead of having grouped data, we had individual-level records with $y=1$ for using and $y=0$ for not using for each woman, we would replace `cbind(using,notUsing)` with `y` above.
 
 ## Output
 ```{r fitcontsum}
@@ -173,7 +205,7 @@ Let's  obtain the estimated odds ratio and its 95\% CI comparing a woman aged 40
 
 ```{r cont1}
 c=c(0,0,-1,1,0,0,0,0,0) #beta3-beta2
-m1.40493039.OR=exp(t(c)%*%coef(m1))
+m1.40493039.OR=exp(t(c)%*%coef(m1)) #what a long variable name, bad of me
 m1.40493039.selogOR=t(c)%*%vcov(m1)%*%c
 #print OR and 95% CI 
 c(exp(t(c)%*%coef(m1)-1.96*sqrt(m1.40493039.selogOR)),m1.40493039.OR,
@@ -187,11 +219,11 @@ Let's  obtain the odds ratio comparing a woman aged 30-39 to a woman aged 25-29,
 
 ```{r cont2}
 c=c(0,-1,1,0,0,0,0,0,0) #beta3-beta2
-m1.30392029.OR=exp(t(c)%*%coef(m1))
-m1.30392029.selogOR=t(c)%*%vcov(m1)%*%c
+m1.30392529.OR=exp(t(c)%*%coef(m1))
+m1.30392529.selogOR=t(c)%*%vcov(m1)%*%c
 #print OR and 95% CI 
-c(exp(t(c)%*%coef(m1)-1.96*sqrt(m1.30392029.selogOR)),m1.30392029.OR,
-  exp(t(c)%*%coef(m1)+1.96*sqrt(m1.30392029.selogOR)))
+c(exp(t(c)%*%coef(m1)-1.96*sqrt(m1.30392529.selogOR)),m1.30392529.OR,
+  exp(t(c)%*%coef(m1)+1.96*sqrt(m1.30392529.selogOR)))
 ```
 So the woman aged 30-39 who wants no more kids has 2.73 (95\% CI=(1.73, 4.31)) times the odds of using contraceptives as her counterpart aged 25-29 who also wants no more kids and has the same level of education.
 
