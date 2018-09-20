@@ -15,3 +15,5 @@ rstan
 MASS
 arm
 foreign
+stringr
+forcats

@@ -598,83 +598,71 @@ Census<span class="op">$</span>cp.kerry.full &lt;-<span class="st">  </span>Stat
 <h2>Model</h2>
 <p>For the state effect, we model the mean for the state effect as a function of 3 state level variables: the region into which the state falls, the state’s conservative (defined as evangelical+LDS) religious percentage, and its Democratic 2004 presidential vote share:<a href="#/fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></p>
 <span class="math display">\[\begin{eqnarray*}
-\alpha^{state}_s &amp;\sim&amp; N(\alpha^{region}_{m[s]} + \beta^{relig}\cdot relig_s + \beta^{vote} \cdot vote_s, \sigma^2_{state}), \mathrm{s = 1, ..., 51} \\
-\alpha^{region}_m &amp;\sim&amp; N(0,\sigma^2_{region})
+\alpha^{state}_s &amp;\sim&amp; N(\alpha^{reg}_{m[s]} + \beta^{relig}\cdot relig_s + \beta^{vote} \cdot vote_s, \sigma^2_{state}), \mathrm{s = 1, ..., 51} \\
+\alpha^{reg}_m &amp;\sim&amp; N(0,\sigma^2_{region})
 \end{eqnarray*}\]</span>
-<p><span class="math display">\[
-\alpha^{state}_s \sim N(\alpha^{region}_{m[s]} + \beta^{relig}\cdot relig_s + \beta^{vote} \cdot vote_s, \sigma^2_{state}), \mathrm{s = 1, ..., 51}
-\]</span></p>
-<p>(Note: we model the region variable as we do the previous variables, e.g. poll.)</p>
-<p>Now we’re ready to code:</p>
+</section>
+<section id="model-coding" class="slide level2">
+<h2>Model Coding</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#run individual-level opinion model</span>
 
-individual.model &lt;-<span class="st"> </span><span class="kw">glmer</span>(<span class="dt">formula =</span> yes.of.all <span class="op">~</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>race.female) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>age.cat) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>edu.cat) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>age.edu.cat) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>state) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>region) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>poll) <span class="op">+</span><span class="st"> </span>p.relig.full <span class="op">+</span><span class="st"> </span>p.kerry.full,<span class="dt">data=</span>marriage.data, <span class="dt">family=</span><span class="kw">binomial</span>(<span class="dt">link=</span><span class="st">&quot;logit&quot;</span>)) <span class="co"># Note: (1|variable) denotes a random effect</span>
-<span class="kw">display</span>(individual.model)</code></pre></div>
-<pre><code>## glmer(formula = yes.of.all ~ (1 | race.female) + (1 | age.cat) + 
-##     (1 | edu.cat) + (1 | age.edu.cat) + (1 | state) + (1 | region) + 
-##     (1 | poll) + p.relig.full + p.kerry.full, data = marriage.data, 
-##     family = binomial(link = &quot;logit&quot;))
-##              coef.est coef.se
-## (Intercept)  -1.41     0.54  
-## p.relig.full -0.02     0.00  
-## p.kerry.full  0.02     0.01  
+individual.model &lt;-<span class="st"> </span><span class="kw">glmer</span>(<span class="dt">formula =</span> yes.of.all <span class="op">~</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>race.female) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>age.edu.cat) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>state) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>region) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>poll) <span class="op">+</span><span class="st"> </span>p.relig.full <span class="op">+</span><span class="st"> </span>p.kerry.full,<span class="dt">data=</span>marriage.data, <span class="dt">family=</span><span class="kw">binomial</span>(<span class="dt">link=</span><span class="st">&quot;logit&quot;</span>)) 
+<span class="co"># Note: (1|variable) denotes a random effect</span>
+<span class="kw">summary</span>(individual.model)</code></pre></div>
+<pre><code>## Generalized linear mixed model fit by maximum likelihood (Laplace
+##   Approximation) [glmerMod]
+##  Family: binomial  ( logit )
+## Formula: 
+## yes.of.all ~ (1 | race.female) + (1 | age.edu.cat) + (1 | state) +  
+##     (1 | region) + (1 | poll) + p.relig.full + p.kerry.full
+##    Data: marriage.data
 ## 
-## Error terms:
-##  Groups      Name        Std.Dev.
-##  state       (Intercept) 0.04    
-##  age.edu.cat (Intercept) 0.09    
-##  race.female (Intercept) 0.23    
-##  poll        (Intercept) 0.21    
-##  region      (Intercept) 0.20    
-##  edu.cat     (Intercept) 0.36    
-##  age.cat     (Intercept) 0.55    
-##  Residual                1.00    
-## ---
-## number of obs: 6341, groups: state, 49; age.edu.cat, 16; race.female, 6; poll, 5; region, 5; edu.cat, 4; age.cat, 4
-## AIC = 7459.4, DIC = 7276
-## deviance = 7357.7</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">individual.model.<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw">glmer</span>(<span class="dt">formula =</span> yes.of.all <span class="op">~</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>race.female) <span class="op">+</span><span class="st">  </span>(<span class="dv">1</span><span class="op">|</span>age.edu.cat) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>state) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>region) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>poll) <span class="op">+</span><span class="st"> </span>p.relig.full <span class="op">+</span><span class="st"> </span>p.kerry.full,<span class="dt">data=</span>marriage.data, <span class="dt">family=</span><span class="kw">binomial</span>(<span class="dt">link=</span><span class="st">&quot;logit&quot;</span>)) <span class="co"># Note: (1|variable) denotes a random effect</span>
-<span class="kw">display</span>(individual.model)</code></pre></div>
-<pre><code>## glmer(formula = yes.of.all ~ (1 | race.female) + (1 | age.cat) + 
-##     (1 | edu.cat) + (1 | age.edu.cat) + (1 | state) + (1 | region) + 
-##     (1 | poll) + p.relig.full + p.kerry.full, data = marriage.data, 
-##     family = binomial(link = &quot;logit&quot;))
-##              coef.est coef.se
-## (Intercept)  -1.41     0.54  
-## p.relig.full -0.02     0.00  
-## p.kerry.full  0.02     0.01  
+##      AIC      BIC   logLik deviance df.resid 
+##   7476.5   7530.5  -3730.2   7460.5     6333 
 ## 
-## Error terms:
-##  Groups      Name        Std.Dev.
-##  state       (Intercept) 0.04    
-##  age.edu.cat (Intercept) 0.09    
-##  race.female (Intercept) 0.23    
-##  poll        (Intercept) 0.21    
-##  region      (Intercept) 0.20    
-##  edu.cat     (Intercept) 0.36    
-##  age.cat     (Intercept) 0.55    
-##  Residual                1.00    
+## Scaled residuals: 
+##     Min      1Q  Median      3Q     Max 
+## -2.0390 -0.7076 -0.4777  0.9761  3.9565 
+## 
+## Random effects:
+##  Groups      Name        Variance  Std.Dev.
+##  state       (Intercept) 0.0008883 0.0298  
+##  age.edu.cat (Intercept) 0.4029543 0.6348  
+##  race.female (Intercept) 0.0534671 0.2312  
+##  poll        (Intercept) 0.0410264 0.2025  
+##  region      (Intercept) 0.0356538 0.1888  
+## Number of obs: 6341, groups:  
+## state, 49; age.edu.cat, 16; race.female, 6; poll, 5; region, 5
+## 
+## Fixed effects:
+##               Estimate Std. Error z value Pr(&gt;|z|)   
+## (Intercept)  -1.427254   0.453639  -3.146  0.00165 **
+## p.relig.full -0.015261   0.004964  -3.074  0.00211 **
+## p.kerry.full  0.018603   0.006882   2.703  0.00687 **
 ## ---
-## number of obs: 6341, groups: state, 49; age.edu.cat, 16; race.female, 6; poll, 5; region, 5; edu.cat, 4; age.cat, 4
-## AIC = 7459.4, DIC = 7276
-## deviance = 7357.7</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#examine random effects and standard errors for race-female</span>
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Correlation of Fixed Effects:
+##             (Intr) p.rlg.
+## p.relig.fll -0.645       
+## p.kerry.fll -0.850  0.654</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#examine random effects and standard errors for race-gender</span>
 <span class="kw">ranef</span>(individual.model)<span class="op">$</span>race.female</code></pre></div>
 <pre><code>##   (Intercept)
-## 1 -0.21041983
-## 2 -0.08701354
-## 3  0.04904947
-## 4  0.23019628
-## 5 -0.22601715
-## 6  0.24576228</code></pre>
+## 1 -0.20964357
+## 2 -0.09202447
+## 3  0.05222314
+## 4  0.23284739
+## 5 -0.22215434
+## 6  0.24465717</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">se.ranef</span>(individual.model)<span class="op">$</span>race.female</code></pre></div>
 <pre><code>##   (Intercept)
-## 1   0.1083278
-## 2   0.1454986
-## 3   0.1472982
-## 4   0.1080311
-## 5   0.1362828
-## 6   0.1485565</code></pre>
+## 1   0.1012534
+## 2   0.1424085
+## 3   0.1441592
+## 4   0.1008716
+## 5   0.1323362
+## 6   0.1454575</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Since we do not have any respondents from Alaska or Hawaii, we have to create a vector of state random effects that accounts for these states.</span>
 state.ranefs &lt;-<span class="st"> </span><span class="kw">array</span>(<span class="ot">NA</span>,<span class="kw">c</span>(<span class="dv">51</span>,<span class="dv">1</span>))
 <span class="kw">dimnames</span>(state.ranefs) &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="kw">c</span>(Statelevel<span class="op">$</span>sstate),<span class="st">&quot;effect&quot;</span>)
@@ -688,8 +676,6 @@ state.ranefs[,<span class="dv">1</span>][<span class="kw">is.na</span>(state.ran
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#create a prediction for each cell in Census data</span>
 cellpred &lt;-<span class="st"> </span><span class="kw">invlogit</span>(<span class="kw">fixef</span>(individual.model)[<span class="st">&quot;(Intercept)&quot;</span>]
                      <span class="op">+</span><span class="kw">ranef</span>(individual.model)<span class="op">$</span>race.female[Census<span class="op">$</span>crace.female,<span class="dv">1</span>]
-                     <span class="op">+</span><span class="kw">ranef</span>(individual.model)<span class="op">$</span>age.cat[Census<span class="op">$</span>cage.cat,<span class="dv">1</span>]
-                     <span class="op">+</span><span class="kw">ranef</span>(individual.model)<span class="op">$</span>edu.cat[Census<span class="op">$</span>cedu.cat,<span class="dv">1</span>]
                      <span class="op">+</span><span class="kw">ranef</span>(individual.model)<span class="op">$</span>age.edu.cat[Census<span class="op">$</span>cage.edu.cat,<span class="dv">1</span>]
                      <span class="op">+</span>state.ranefs[Census<span class="op">$</span>cstate,<span class="dv">1</span>]
                      <span class="op">+</span><span class="kw">ranef</span>(individual.model)<span class="op">$</span>region[Census<span class="op">$</span>cregion,<span class="dv">1</span>]   
@@ -705,34 +691,77 @@ cellpredweighted &lt;-<span class="st"> </span>cellpred <span class="op">*</span
 
 <span class="co">#calculates the percent within each state (weighted average of responses)</span>
 statepred &lt;-<span class="st"> </span><span class="dv">100</span><span class="op">*</span><span class="st"> </span><span class="kw">as.vector</span>(<span class="kw">tapply</span>(cellpredweighted,Census<span class="op">$</span>cstate,sum))
-statepred</code></pre></div>
-<pre><code>##  [1] 35.68605 18.34818 19.56874 38.62509 45.52374 41.87638 42.97196
-##  [8] 51.11665 34.60457 28.89359 24.00980 43.09559 32.24169 27.06452
-## [15] 35.83593 27.64564 27.39420 21.23864 24.50546 47.08487 35.18203
-## [22] 40.57050 33.87580 34.42007 27.23455 19.27549 34.98474 24.97002
-## [29] 27.99880 26.04115 41.51005 42.01405 40.39234 40.00020 44.13284
-## [36] 32.80594 18.08791 40.87434 37.88619 45.17418 22.35097 27.55108
-## [43] 21.27458 24.61370 19.00481 28.81052 44.69614 43.00388 32.69952
-## [50] 27.27826 30.16835</code></pre>
-<p>This result is a set a state-level opinion estimates that you could use to help make predictions regarding the election.</p>
+<span class="kw">cbind</span>(Statelevel<span class="op">$</span>sstate,statepred)</code></pre></div>
+<pre><code>##            statepred         
+##  [1,] &quot;AK&quot; &quot;35.6293328938845&quot;
+##  [2,] &quot;AL&quot; &quot;18.4268272653684&quot;
+##  [3,] &quot;AR&quot; &quot;19.7053591420498&quot;
+##  [4,] &quot;AZ&quot; &quot;38.528086752569&quot; 
+##  [5,] &quot;CA&quot; &quot;45.5272885683771&quot;
+##  [6,] &quot;CO&quot; &quot;41.8363384291026&quot;
+##  [7,] &quot;CT&quot; &quot;42.9272361559931&quot;
+##  [8,] &quot;DC&quot; &quot;51.3486581154549&quot;
+##  [9,] &quot;DE&quot; &quot;34.7979777754228&quot;
+## [10,] &quot;FL&quot; &quot;28.9232425252337&quot;
+## [11,] &quot;GA&quot; &quot;24.0085038569501&quot;
+## [12,] &quot;HI&quot; &quot;43.1487535921527&quot;
+## [13,] &quot;IA&quot; &quot;32.3351349003615&quot;
+## [14,] &quot;ID&quot; &quot;26.9666749036658&quot;
+## [15,] &quot;IL&quot; &quot;35.9430249138616&quot;
+## [16,] &quot;IN&quot; &quot;27.6188689111572&quot;
+## [17,] &quot;KS&quot; &quot;27.3625360111871&quot;
+## [18,] &quot;KY&quot; &quot;21.3252109873067&quot;
+## [19,] &quot;LA&quot; &quot;24.6498474083994&quot;
+## [20,] &quot;MA&quot; &quot;47.0049745066665&quot;
+## [21,] &quot;MD&quot; &quot;35.4612311855808&quot;
+## [22,] &quot;ME&quot; &quot;40.5642570280133&quot;
+## [23,] &quot;MI&quot; &quot;33.9225010101693&quot;
+## [24,] &quot;MN&quot; &quot;34.5179887348805&quot;
+## [25,] &quot;MO&quot; &quot;27.2273210081734&quot;
+## [26,] &quot;MS&quot; &quot;19.3430466320149&quot;
+## [27,] &quot;MT&quot; &quot;34.9454569891473&quot;
+## [28,] &quot;NC&quot; &quot;25.0135140183413&quot;
+## [29,] &quot;ND&quot; &quot;28.0093816333707&quot;
+## [30,] &quot;NE&quot; &quot;25.9981963114434&quot;
+## [31,] &quot;NH&quot; &quot;41.4356014223264&quot;
+## [32,] &quot;NJ&quot; &quot;41.9098808395661&quot;
+## [33,] &quot;NM&quot; &quot;40.4101557233682&quot;
+## [34,] &quot;NV&quot; &quot;39.9911062774749&quot;
+## [35,] &quot;NY&quot; &quot;44.0277464546134&quot;
+## [36,] &quot;OH&quot; &quot;32.8397464729835&quot;
+## [37,] &quot;OK&quot; &quot;18.1360763683574&quot;
+## [38,] &quot;OR&quot; &quot;40.8809765355177&quot;
+## [39,] &quot;PA&quot; &quot;37.9091210806222&quot;
+## [40,] &quot;RI&quot; &quot;45.1625606773741&quot;
+## [41,] &quot;SC&quot; &quot;22.4385333957129&quot;
+## [42,] &quot;SD&quot; &quot;27.582404313147&quot; 
+## [43,] &quot;TN&quot; &quot;21.3291751828375&quot;
+## [44,] &quot;TX&quot; &quot;24.68479124348&quot;  
+## [45,] &quot;UT&quot; &quot;18.8889424976292&quot;
+## [46,] &quot;VA&quot; &quot;28.885943605455&quot; 
+## [47,] &quot;VT&quot; &quot;44.6780996118449&quot;
+## [48,] &quot;WA&quot; &quot;43.0500699761418&quot;
+## [49,] &quot;WI&quot; &quot;32.7171563369447&quot;
+## [50,] &quot;WV&quot; &quot;27.4021138174021&quot;
+## [51,] &quot;WY&quot; &quot;30.0711469166055&quot;</code></pre>
+<p>This result is a set of state-level opinion estimates that you could use to help make predictions regarding the election.</p>
 </section>
 <section id="bayesian-model" class="slide level2">
 <h2>Bayesian Model</h2>
-<p>We could also implement this model using Stan which allows for quantifying model uncertainity. The model specification will be the same our other section, except for some weakly informative priors on the standard deviations of the varying intercepts useful for convergence.</p>
+<p>We could also implement this model using Stan, which allows us to quantify uncertainity. The model specification will be the same as in our other section, except for some weakly informative priors in our Bayesian specification. You can read more about the selection of these “default” priors, developed by Andrew Gelman, in the <code>BRMS</code> documentation.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(rstan)
 <span class="kw">library</span>(brms)
 
 <span class="co"># the model</span>
-bayes.mod &lt;-<span class="st"> </span><span class="kw">brm</span>(yes.of.all <span class="op">~</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>race.female) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>age.cat) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>edu.cat)
+bayes.mod &lt;-<span class="st"> </span><span class="kw">brm</span>(yes.of.all <span class="op">~</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>race.female) 
                  <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>age.edu.cat) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>state) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>region)
-                 <span class="op">+</span><span class="st"> </span>p.relig.full <span class="op">+</span><span class="st"> </span>p.kerry.full,
+                 <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>poll) <span class="op">+</span><span class="st"> </span>p.relig.full <span class="op">+</span><span class="st"> </span>p.kerry.full,
                  <span class="dt">data=</span>marriage.data, <span class="dt">family=</span><span class="kw">bernoulli</span>(),
                  <span class="dt">prior=</span><span class="kw">c</span>(<span class="kw">set_prior</span>(<span class="st">&quot;normal(0,0.2)&quot;</span>, <span class="dt">class=</span><span class="st">'b'</span>),
                          <span class="kw">set_prior</span>(<span class="st">&quot;normal(0,0.2)&quot;</span>, <span class="dt">class=</span><span class="st">'sd'</span>, <span class="dt">group=</span><span class="st">&quot;race.female&quot;</span>),
-                         <span class="kw">set_prior</span>(<span class="st">&quot;normal(0,0.2)&quot;</span>, <span class="dt">class=</span><span class="st">'sd'</span>, <span class="dt">group=</span><span class="st">&quot;age.cat&quot;</span>),
-                         <span class="kw">set_prior</span>(<span class="st">&quot;normal(0,0.2)&quot;</span>, <span class="dt">class=</span><span class="st">'sd'</span>, <span class="dt">group=</span><span class="st">&quot;edu.cat&quot;</span>),
                          <span class="kw">set_prior</span>(<span class="st">&quot;normal(0,0.2)&quot;</span>, <span class="dt">class=</span><span class="st">'sd'</span>, <span class="dt">group=</span><span class="st">&quot;age.edu.cat&quot;</span>),
                          <span class="kw">set_prior</span>(<span class="st">&quot;normal(0,0.2)&quot;</span>, <span class="dt">class=</span><span class="st">'sd'</span>, <span class="dt">group=</span><span class="st">&quot;state&quot;</span>),
+                         <span class="kw">set_prior</span>(<span class="st">&quot;normal(0,0.2)&quot;</span>, <span class="dt">class=</span><span class="st">'sd'</span>, <span class="dt">group=</span><span class="st">&quot;poll&quot;</span>),
                          <span class="kw">set_prior</span>(<span class="st">&quot;normal(0,0.2)&quot;</span>, <span class="dt">class=</span><span class="st">'sd'</span>, <span class="dt">group=</span><span class="st">&quot;region&quot;</span>)))
 
 <span class="kw">summary</span>(bayes.mod)

@@ -58,13 +58,13 @@ Note: this schedule is approximate and is likely to be modified as the course pr
 | September 21  | CS3: Birth Weight Disparities \& Binomial regression | CS1 Final Report: Smoking and Birth Weight|
 | September 26  | CS3: Multilevel Models | |
 | September 28  | Group Presentations of CS2 | CS2 Final Report: Our World in Data  |
-| October 3     | CS3: Generalized Linear Mixed Effects Models | CS3 Interim Report: Infant Mortality Visualization| 
-| October 5     | CS3: Bayesian Hierarchical Models | Midsemester Grades Due (my deliverable)  & CS4 Evaluation Criteria |
-| October 10    | CS4: Election Forecasting | CS3 Interim Report: County-Specific Mortality by Group|
-| October 12    | CS4: Election Forecasting with "Mr. P" | CS4 Election Predictions |
+| October 3     | CS3: Generalized Linear Multilevel Models | CS3 Interim Report: Infant Mortality Visualization| 
+| October 5     | CS4: Election Forecasting | Midsemester Grades Due (my deliverable)  |
+| October 10    | CS4: Election Forecasting with "Mr. P" | CS3 Interim Report: County-Specific Mortality by Group|
+| October 12    | Lab: Multilevel Models for CS3 and CS4 | CS4 Election Predictions |
 | October 17    | CS4: Who Votes in NC? | CS3 Final Report: Infant Mortality Trends |
 | October 19    | CS4: Election Modeling Workshop | CS4 Election Predictions Update|
-| October 24    | CS4: Presentations: Who Votes in NC? | CS4 Interim Report: Who Votes in NC? |
+| October 24    | CS4: Group Presentations: Who Votes in NC? | CS4 Interim Report: Who Votes in NC? |
 | October 26    | Individual CS: Web Scraping | CS4 Election Predictions Update| 
 | October 31    | Individual CS: Web Scraping |  CS4 Interim Report: Election Prediction Models |
 | November 2    | Individual CS: Web Scraping Work in Groups | CS4 Election Predictions Update; CS4 Final Report Due by Midnight Nov 5|

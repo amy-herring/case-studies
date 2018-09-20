@@ -5,3 +5,6 @@ lme4
 arm
 foreign
 R2OpenBUGS
+Rcpp
+ggplot2
+brms

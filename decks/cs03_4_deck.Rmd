@@ -26,7 +26,10 @@ While many of the best opinion polls are conducted at a national level, often es
 
 Well-designed polls are generally based on national random samples with corrections for nonresponse based on a variety of demographic factors (e.g., sex, ethnicity, race, age, education).
 
+## to do
 AMYAMY put the slide on results of response to my fake poll here (maybe happiness with Sakai? any way to get anonymous poll package?)
+
+AMY CHECK RESULTS AGAINST THOSE in GELMAN BOOK
 
 ## Breaking down polls by demographic factors
 
@@ -61,15 +64,15 @@ Another way to think of this model is as a way of handling *correlated* response
 We consider data from CBS News surveys conducted during the week before the 1988 election.  To start, we consider a simple example looking at the preferences of voters (with undecided voters excluded) for either the Republican candidate, Bush Sr. ($y_i=1$), or the Democrat, Dukakis ($y_i=0$). 
 
 ```{r arm}
-# Load in data for region indicators
-# Use "state", an R data file (type ?state from the R command window for info)
-# Regions:  1=northeast, 2=south, 3=north central, 4=west, 5=d.c.
-# We have to insert d.c. (it is the 9th "state" in alphabetical order)
 library(arm)
 ```
 
 ## Multilevel logistic regression
 ```{r state}
+# Load in data for region indicators
+# Use "state", an R data file (type ?state from the R command window for info)
+# Regions:  1=northeast, 2=south, 3=north central, 4=west, 5=d.c.
+# We have to insert d.c. (it is the 9th "state" in alphabetical order)
 data(state)                  # "state" is an R data file
 state.abbr<- c (state.abb[1:8], "DC", state.abb[9:50])
 dc <- 9; not.dc <- c(1:8,10:51)
@@ -93,6 +96,7 @@ n.age <- max(polls.subset$age)    # of age categories
 n.edu <- max(polls.subset$edu)      # of education categories
 n.state <- max(polls.subset$state)  # of states
 n.region <- max(region)  # of regions
+polls.subset$state.lab=factor(polls.subset$state,levels=1:51,labels=state.abbr)
 ```
 
 
@@ -103,7 +107,7 @@ $$\text{logit}(Pr(y_i=1))=\alpha_{j[i]}+\beta_{female}female_i+\beta_{black}blac
 
 ```{r model1, eval=FALSE}
 library(lme4)
-m1=glmer(bush ~ black + female + (1|state), family=binomial(link="logit"),
+m1=glmer(bush ~ black + female + (1|state.lab), family=binomial(link="logit"),
          data=polls.subset)
 summary(m1)
 ```
@@ -112,7 +116,7 @@ summary(m1)
 <small>
 ```{r model1b, echo=FALSE}
 library(lme4)
-m1=glmer(bush ~ black + female + (1|state), family=binomial(link="logit"), data=polls.subset)
+m1=glmer(bush ~ black + female + (1|state.lab), family=binomial(link="logit"), data=polls.subset)
 summary(m1)
 ```
 </small>
@@ -127,9 +131,16 @@ summary(m1)
 Now that we've warmed up, let's fit a more sophisticated model that includes other relevant survey factors, such as region, prior vote history (average Republican vote share in the three prior elections, adjusted for home-state and home-region candidate effects), age category, and education category.
 
 ```{r dataprocess}
-polls.subset$age.edu=n.edu*(polls.subset$age-1)+polls.subset$edu 
+polls.subset$age.edu=n.edu*(polls.subset$age-1)+polls.subset$edu
+polls.subset$age.edu.lab=factor(polls.subset$age.edu,levels=1:16,
+                              labels=c("18-29,nohs","18-29,hs","18-29,sc","18-29,cg",
+                                       "30-44,nohs","30-44,hs","30-44,sc","30-44,cg",
+                                       "45-64,nohs","45-64,hs","45-64,sc","45-64,cg",
+                                       "65+,nohs","65+,hs","65+,sc","65+,cg"))
 #distinct value for each age/edu combo
 polls.subset$region.full=region[polls.subset$state]
+polls.subset$region.full.lab=factor(polls.subset$region.full,
+                                    levels=1:5,labels=c("NE","S","N","W","DC"))
 ```
 
 ## Model specification
@@ -148,15 +159,16 @@ not.dc <- c(1:8,10:51)
 candidate.effects <- read.table ("data/candidate_effects.txt", header=T)
 v.prev[not.dc] <- v.prev[not.dc] +
  (candidate.effects$X76 + candidate.effects$X80 + candidate.effects$X84)/3
-polls.subset$v.prev.full=v.prev[polls.subset$state]*100 #rescaling so 1-unit is 1 % point
-
+#rescaling so 1-unit is 1 % point
+polls.subset$v.prev.full=v.prev[polls.subset$state]*100 
 ```
 
 ## Model specification
 
 ```{r model2, eval=FALSE}
 
-m2=glmer(bush ~ black + female + v.prev.full+ (1|state)+(1|age.edu)+(1|region.full), family=binomial(link="logit"), data=polls.subset)
+m2=glmer(bush ~ black + female + v.prev.full+ (1|state.lab)+(1|age.edu.lab)+
+           (1|region.full.lab), family=binomial(link="logit"), data=polls.subset)
 summary(m2)
 ```
 
@@ -167,26 +179,57 @@ summary(m2)
 
 ## Bayesian approach
 Because of the number of categories, the inference in the frequentist model is not entirely reliable as it does not fully account for uncertainty in the estimated variance parameters, and it uses an approximation for inference. We can fit the model in a Bayesian framework using mildly informative priors and quantify uncertainty based on the posterior samples.
-
-```{r brms, cache=TRUE}
+```{r brms, eval=FALSE}
 library(brms) #nice function for Bayes MLM using HMC
-m3=brm(bush ~ black + female + v.prev.full+ (1|state)+(1|age.edu)+(1|region.full), family=bernoulli(link="logit"), control = list(adapt_delta = 0.995), data=polls.subset)
+m3=brm(bush ~ black + female + v.prev.full+ (1|state.lab)+(1|age.edu.lab)+(1|region.full.lab), family=bernoulli(link="logit"), control = list(adapt_delta = 0.995), data=polls.subset)
 
 ```
 
-## Extracting sampled values
+## Bayesian approach
 
-```{r brmssamp, cache=TRUE}
+```{r brms3, echo=FALSE}
+library(brms) #nice function for Bayes MLM using HMC
+```
+
+```{r brms11, cache=TRUE}
+m3=brm(bush ~ black + female + v.prev.full+ (1|state.lab)+(1|age.edu.lab)+(1|region.full.lab), family=bernoulli(link="logit"), control = list(adapt_delta = 0.995), data=polls.subset)
 
 ```
 
+## Summary of fit
 
-samples1 <- posterior_samples(fit, "^b")
-head(samples1)
+```{r brmssummary}
+summary(m3)
+```
 
-# extract posterior samples of group-level standard deviations
-samples2 <- posterior_samples(fit, "^sd_")
-head(samples2)
+## Visualize fitted values
+```{r brms2, eval=FALSE}
+#Plot estimated OR's with 2 SD error bars ea. side
+library(sjPlot)
+plot_model(m3)
+plot_model(m3,type="re")
+```
+
+## Fixed effects
+![](figures/fixef.png)
+
+## Random effects
+![](figures/a1829.png)
+
+## Random effects
+![](figures/a3044.png)
+
+## Random effects
+![](figures/14564.png)
+
+## Random effects
+![](figures/a65plus.png)
+
+## Random effects
+![](figures/region.png)
 
 
-## Plotting the results
+## Random effects
+![](figures/state.png)
+
+
