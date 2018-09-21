@@ -233,4 +233,8 @@ plot_model(m3,type="re")
 ## Random effects
 ![](figures/state.png)
 
+## Making predictions
 
+https://rdrr.io/cran/brms/man/predict.brmsfit.html
+
+Finally, can feed it new data for predictions at that link!  Show how to get predictions for state in the mix as well as for Alaska, which provided no data there!
