@@ -266,3 +266,6 @@ coef(M3)
 
 ![Blue: fixed slopes, red: random slopes](figures/M3.jpg){width=40%}
 
+## Summary
+
+Multilevel models can provide a good fit to the data that is a compromise between complete and no pooling across groups. We will delve more deeply into the topic with a focus on multilevel models for binary data.
