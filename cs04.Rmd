@@ -18,7 +18,7 @@ library(tidyverse)
 - combine data on a variety of levels (national, state, individual) to predict election outcomes
 
 # Case Study Goals
-Goals of this case study are (1) to predict whether the US House of Representatives remains in Republican control, and (2) to predict the outcomes of all NC Congressional elections, including characterization of uncertainty in predictions.
+Goals of this case study are (1) to predict whether the US House of Representatives remains in Republican control, and (2) to predict the outcomes of all NC Congressional elections (the 13 federal Representatives to Congress), including characterization of uncertainty in predictions.
 
 # Data (coming soon)
 <!---
@@ -30,7 +30,7 @@ Goals of this case study are (1) to predict whether the US House of Representati
 
 # Reports
 
-- Interim report 1: who votes in NC? Using the NC voter files, identify who votes in NC so that these data can be used with election surveys in order to predict outcomes of NC congressional elections. Present results in short in-class presentation.
+- Interim report 1: who votes in NC? Using the NC voter files, identify who votes in NC so that these data can be used with election surveys in order to predict outcomes of NC congressional elections. Present results in short in-class presentation and in accompanying report not to exceed 5 pages.  Results should be fully reproducible. 
 - Interim report 2: in 5 pages (maximum), outline your models and general strategy for predicting the outcome of the 2018 elections.
 - Final report: provide point and interval estimates of the % of votes won by each NC Congressional candidate, predicting the winner of each race. Provide point and interval estimates of the probability that the US House of Representatives remains under Republican control after the 2018 election.
 
@@ -45,6 +45,8 @@ Goals of this case study are (1) to predict whether the US House of Representati
 + [Potentially helpful blog 1]( https://www.r-statistics.com/2016/08/presidential-election-predictions-2016/)
 + [Potentially helpful blog 2]( https://github.com/hardin47/prediction2016/blob/master/predblog.pdf)
 + [Worst 2016 Political Predictions](https://www.politico.com/magazine/story/2016/12/the-worst-political-predictions-of-2016-214555)
++ [Google Street View and Voting](https://www.citylab.com/transportation/2017/12/google-street-view-data-demographics-cars-research/547436/)
++ [Pickup Trucks and Voting](http://www.thedrive.com/news/16712/trump-supporting-towns-more-likely-to-be-filled-with-pickup-trucks-study-claims)
 
 # Slides (coming soon)
 
@@ -54,6 +56,14 @@ Goals of this case study are (1) to predict whether the US House of Representati
 [MRP Tutorial](decks/cs04_2_deck.html)
 
 --->
+
+# Prizes
+
+Prediction prizes will be awarded in the following categories:
+
+(1) best prediction
+(2) most creative data source
+
 
 
 

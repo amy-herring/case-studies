@@ -535,10 +535,11 @@ document.getElementsByTagName('head')[0].appendChild(style);
 <h2>Radon study</h2>
 <p>Radon, a naturally-occurring radioactive gas, is a carcinogen known to cause lung cancer in high concentrations. Several thousand lung cancer deaths in the US per year are attributable to radon exposure.</p>
 <p>Radon levels in US homes varies greatly, and some homes have dangerously high radon levels. In order to identify areas of the US with high radon exposures, the US EPA conducted a study of radon levels in a random sample of more than 80,000 homes.</p>
+<p><a href="http://www.ncradon.org/ncradon/">Click here</a> to check highest recorded radon levels in your area. Note that these levels may come from short-term home test kits, which vary widely in accuracy.</p>
 </section>
 <section id="radon-study-1" class="slide level2">
 <h2>Radon study</h2>
-<p>We wish to estimate the distribution of radon levels in houses <span class="math inline">\(i\)</span> within 85 counties <span class="math inline">\(j\)</span> in Minnesota.</p>
+<p>We wish to estimate the distribution of radon levels in houses <span class="math inline">\(i\)</span> within 85 counties <span class="math inline">\(j\)</span> in Minnesota. The outcome <span class="math inline">\(y_i\)</span> is the natural log of measured radon levels.</p>
 <ul>
 <li><p>One estimate would be the average of all radon levels in Minnesota (same estimate for all counties), <span class="math inline">\(\overline{y}_{\cdot \cdot}\)</span>, but this ignores variation across counties, and some counties may have higher radon levels naturally than others (radon is more commonly found in soils with granite rock, as opposed to some other soil types).</p></li>
 <li><p>Another estimate would be just to average the radon level in each county, <span class="math inline">\(\overline{y}_j\)</span>, which can over-fit the data within county (for example, Lac Qui Parle County, which has the highest radon level of all the 85 MN counties, has radon measures from only 2 homes).</p></li>
@@ -576,7 +577,7 @@ document.getElementsByTagName('head')[0].appendChild(style);
 <section id="radon-study-5" class="slide level2">
 <h2>Radon study</h2>
 <p>In practice, we carry out all estimation together (estimate variances along with the <span class="math inline">\(\alpha\)</span> parameters), but we won’t worry about this yet.</p>
-<p>Code for the radon analysis <a href="http://www.stat.columbia.edu/~gelman/arm/examples/radon/radon_chap12.R">is available at this link</a> .</p>
+<p>Code for the radon analysis as presented in Gelman and Hill <a href="http://www.stat.columbia.edu/~gelman/arm/examples/radon/radon_chap12.R">is available at this link</a> .</p>
 </section>
 <section id="location-of-measurement-in-radon-study" class="slide level2">
 <h2>Location of measurement in radon study</h2>
