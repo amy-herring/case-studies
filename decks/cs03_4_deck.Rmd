@@ -114,13 +114,13 @@ summary(m1)
 ```
 
 ## Multilevel logistic regression
-<small>
+
 ```{r model1b, echo=FALSE}
 library(lme4)
 m1=glmer(bush ~ black + female + (1|state.lab), family=binomial(link="logit"), data=polls.subset)
 summary(m1)
 ```
-</small>
+
 
 ## Interpretation
 - For a fixed gender and state, a black respondent has $e^{-1.74}=0.18$ (95\% CI=($e^{-1.74-1.96(0.21)}$,$e^{1.74+1.96(0.21)}$)=(0.12,0.26)) times the odds of supporting Bush as a non-black respondent. 
@@ -133,6 +133,7 @@ Now that we've warmed up, let's fit a more sophisticated model that includes oth
 
 ```{r dataprocess}
 polls.subset$age.edu=n.edu*(polls.subset$age-1)+polls.subset$edu
+#sc=some college, cg=college grad
 polls.subset$age.edu.lab=factor(polls.subset$age.edu,levels=1:16,
                               labels=c("18-29,nohs","18-29,hs","18-29,sc","18-29,cg",
                                        "30-44,nohs","30-44,hs","30-44,sc","30-44,cg",
@@ -212,29 +213,50 @@ plot_model(m3,type="re")
 ```
 
 ## Fixed effects
-![](figures/fixef.png)
+![](figures/fixef.png){width=80%}
 
 ## Random effects
-![](figures/a1829.png)
+![](figures/a1829.png){width=80%}
 
 ## Random effects
-![](figures/a3044.png)
+![](figures/a3044.png){width=80%}
 
 ## Random effects
-![](figures/14564.png)
+![](figures/14564.png){width=80%}
 
 ## Random effects
-![](figures/a65plus.png)
+![](figures/a65plus.png){width=80%}
 
 ## Random effects
-![](figures/region.png)
+![](figures/region.png){width=80%}
 
 
 ## Random effects
-![](figures/state.png)
+![](figures/state.png){width=80%}
 
 ## Making predictions
 
-https://rdrr.io/cran/brms/man/predict.brmsfit.html
+If you look at the y-axis carefully, you'll note that estimates are not presented for states not present in the data. If we are interested in making a prediction for Alaska, for example, we can use the multilevel model to do so. While this may seem a bit flaky, note that we do have a lot of information about survey responses in other states for the election of interest, and we also have historical data specific to Alaska.
 
-Finally, can feed it new data for predictions at that link!  Show how to get predictions for state in the mix as well as for Alaska, which provided no data there!
+Let's make a prediction for a non-black male from Alaska, aged 30-44 with a high school diploma.  (Values of prior vote, state, and region are determined by the state.)
+
+```{r predictAK}
+newdata <- data.frame(black=0,female=0,v.prev.full=62.97,state.lab="AK",
+                      age.edu.lab="30-44,hs",region.full.lab="W")
+                      
+predict(m3,newdata=newdata,allow_new_levels=TRUE)
+```
+                      
+    
+## Predictions
+
+Now let's compare that prediction to what we might predict for a similar participant who is from Massachusetts instead.
+
+```{r predictMA}
+newdata2 <- data.frame(black=0,female=0,v.prev.full=48.98,state.lab="MA",
+                       age.edu.lab="30-44,hs",region.full.lab="NE")
+                      
+predict(m3,newdata=newdata2,allow_new_levels=TRUE)
+```
+
+
