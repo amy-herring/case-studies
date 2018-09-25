@@ -46,14 +46,11 @@ Data Analysis Using Regression and Multilevel/Hierarchical Models by Gelman & Hi
 - [Binomial regression ](decks/cs03_2_deck.html)
 
 
-- [Multilevel Modeling for Gaussian Data](decks/cs03_3_deck.html)
+- [Multilevel models for Gaussian data](decks/cs03_3_deck.html)
 
-<!---
+- [Multilevel models for binary data](decks/cs03_4_deck.html)
 
-[Multilevel modeling with categorical data:](decks/cs03_4_deck.html)
+- [MLM case study: Red State, Blue State](decks/cs03_5_deck.html)
 
-[Bayesian Hierarchical Modeing Using BMRS:](decks/cs03_5_deck.html)
-
---->
 
 
