@@ -40,7 +40,7 @@ Using a series of models, Gelman and colleagues (in an analysis also described i
 
 First we examine results of a regression model predicting the Republican share of the two-party vote as a function of state average per capital income (in tens of thousands of dollars, adjusted to 1996 dollars).  The figure shows how the income coefficient estimates are decreasing over time, indicating that richer states have become less likely to vote Republican, and poorer states have become more likely to vote Republican. These patterns have been consistent in the South (and elsewhere) for the past 20 years.
 
-<!--- ![](figures/gh14.7.png){width=80%}   --->
+![Fig](figures/gh147.png){width=80%} 
 
 ## Logistic regression models of individual votes
 
@@ -48,7 +48,7 @@ Using individual-level data from National Election Study polls, a logistic regre
 
 ## Individual voter preference by income level
 
-<!--- ![](figures/gh14.8.png){width=80%}   --->
+![ ](figures/gh148.png){width=100%} 
 
 
 ## Reconciling state-level and individual-level trends
@@ -64,21 +64,47 @@ This model assumes the relationship between individual income and voter preferen
 ## State-level intercepts
 States with higher average income levels are less likely to support Republican candidates.
 
-<!--- ![](figures/gh14.9.png){width=80%}   --->
+![ ](figures/gh149.png){width=80%} 
 
 ## Individual income relationships
 <small> 
 Individuals with higher family income levels are more likely to vote Republican. Represented here are a poor state (MS), rich state (CT), and a medium state (OH). The size of open circles represents the relative proportion of households (as compared to national average) in each income level, and the solid circles show the average income level and estimated average support for Bush in each state. Within each state, richer people are more likely to support Bush, but the states with higher income give more overall support to Democrats. </small>
 
-<!--- ![](figures/gh14.10.png){width=80%}   --->
+![ ](figures/gh1410.png){width=80%}   
 
 ## Overall income relationships in this model
 
-<!--- ![](figures/gh14.10.png){width=40%}   --->
+![ ](figures/gh1410.png){width=40%}  
 
 - Within a state, personal income is positively correlated with Republican vote choice
 - Average income varies by state, and the states that support Republicans have more lower-income people
 - Poor people in Republican-leaning states tend to be Democrats; rich people in Democratic-leaning states tend to be Republicans
 
 ## Varying-intercept, varying-slope model
+
+One question is whether the association between personal income and voting preference depends on the context/state. We can address this question in a model that allows slopes to vary across states.
+
+$$\text{logit}(Pr(y_i=1))=\alpha_{j[i]}+\beta_{j[i]} x_i$$
+
+$$\alpha_j \sim N(\gamma_0+\gamma_1u_j, \sigma^2_\alpha)$$ 
+$$\beta_j \sim N(\eta_0+\eta_1u_j, \sigma^2_\beta)$$
+
+## Varying-intercept, varying-slope model
+
+This model can equivalently be expressed as below.
+
+$$\text{logit}(Pr(y_i=1))=\alpha_{j[i]}+\beta_{j[i]} x_i$$
+
+$$\alpha_j = \gamma_0+\gamma_1u_j + \varepsilon_j^\alpha$$
+
+$$\beta_j = \eta_0+\eta_1u_j + \varepsilon_j^\beta$$
+
+$$\varepsilon_j^\alpha \sim N(0,\sigma^2_\alpha), ~~~  \varepsilon_j^\beta \sim N(0,\sigma^2_\beta)$$
+
+## New insights from model
+
+This model reveals variation in within-state slopes, with steeper slopes in poorer states, and shallower slopes in richer states.  Thus income matters more in "red America" than in "blue America."
+
+![ ](figures/gh1411.png){width=75%}  
+
 
