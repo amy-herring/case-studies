@@ -1,0 +1,465 @@
+---
+title: Multilevel Regression and Poststratification
+output: 
+  revealjs::revealjs_presentation:
+    theme: night
+    highlight: espresso
+    center: true
+    transition: none
+    css: styles.css
+    fig_caption: true
+    reveal_options:
+      progress: true
+      slideNumber: true
+      
+  
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(lme4)
+library(brms)
+library(rstan)
+library(albersusa)
+library(cowplot)
+rstan_options(auto_write=TRUE)
+options(mc.cores=parallel::detectCores())
+```
+
+## Introduction
+
+- It is often of interest to researchers to consider state-level opinion, in addition to/instead of national-level opinion. 
+- Finding surveys that are uniform across all or most states is extremely challenging. 
+- One method of estimating state-level opinion using national survey data is called **multilevel modeling with poststratification**. 
+- We will compare this approach with a simple approach of using empirical means and poststratifying.
+
+## Multilevel Modeling with Poststratification
+
+This method begins by using multilevel regression to model individual survey responses as a function of demographic and geographic predictors. Then poststratification occurs, in which the estimates for each demographic-geographic respondent type are weighted (poststratified) by the percentages of each type in the actual state populations.
+
+## Tutorial
+
+This tutorial draws heavily on Jonathan Kastellec's [MrP primer](http://www.princeton.edu/~jkastell/mrp_primer.html). You may find the paper at their website useful in addition to the shorter version presented here. [In addition, Tim Mastney has a nice tutorial on MRP using Stan](https://timmastny.rbind.io/blog/multilevel-mrp-tidybayes-brms-stan/). First, download all three datasets at the link.
+
+## Add a Few More R Packages
+
+
+```{r morepackages, message=FALSE}
+library("arm")
+library("foreign")
+```
+
+
+## Step 1: Gather National Opinion Poll(s)
+
+These polls should include some respondent demographic information and some type of geographic indicator such as state (assuming we want to make state-level inferences).
+
+We will consider [data used by Kastellec et al. (2016)](data/gay_marriage_megapoll.dta) on opinions about gay marriage. These data contain results from five national polls that were conducted in 2004 and include information on state, gender, race/ethnicity, education, age, and party identification.
+
+## Step 2: Create a Single Internally-Consistent Dataset.
+
+Our separate polls have already been combined for us with synchronization of variable names, but generally you may need to do this yourself.
+
+```{r gaymarrdata}
+#read in megapoll
+# Note: replace with the location of the file on your local computer
+marriage.data <- read.dta("data/gay_marriage_megapoll.dta",
+          convert.underscore = TRUE)
+#(convert variables names with underscores to periods)
+
+```
+
+## Step 3: Create Dataset of State-Level Predictors
+
+We may wish to model state-level effects in our multilevel regression. To do this we will use state-level predictiors, such as historical party leanings, religious values, or income. This can help reduce unexplained group level variation. In this tutorial, we already have a data set with state-level information in it.
+
+```{r statedata}
+#read in state-level dataset
+Statelevel <- read.dta("data/state_level_update.dta",convert.underscore = TRUE)
+Statelevel <- Statelevel[order(Statelevel$sstate.initnum),]
+```
+
+## Step 4: Use Census Data for Poststratification
+
+We will need census data to complete the poststratification later in the tutorial. These data must correspond to all individual-level demographic variables included in our model. Ultimately, we need a dataset of the population counts for each cluster of interest, e.g. how many African Americans between 18-25 went to college and reside in North Carolina. For this tutorial, we will use the 5% Public Use Microdata Sample from the 2000 census. 
+
+```{r census}
+#read in Census data
+Census <- read.dta("data/poststratification 2000.dta",convert.underscore = TRUE)
+Census <- Census[order(Census$cstate),]
+Census$cstate.initnum <-  match(Census$cstate, Statelevel$sstate)
+```
+
+## Step 5: Create Indices
+
+Next we will create index variables so that we can use our individual-level model and in the poststratification step.
+
+```{r indices}
+# Create index variables
+
+#At level of megapoll
+
+marriage.data$race.female <- (marriage.data$female *3) + marriage.data$race.wbh
+marriage.data$race.female=factor(marriage.data$race.female,levels=1:6,
+                           labels=c("WhMale","BlMale","HMale","WhFem","BlFem","HFem"))
+marriage.data$age.edu.cat <- 4 * (marriage.data$age.cat -1) + marriage.data$edu.cat
+marriage.data$age.edu.cat=factor(marriage.data$age.edu.cat,levels=1:16,
+                           labels=c("18-29,<HS","18-29,HS","18-29,SC","18-29,CG",
+                                    "30-44,<HS","30-44,HS","30-44,SC","30-44,CG",
+                                    "45-64,<HS","45-64,HS","45-64,SC","45-64,CG",
+                                    "65+,<HS","65+,HS","65+,SC","65+,CG"))
+
+marriage.data$p.evang.full <- Statelevel$p.evang[marriage.data$state.initnum]
+# proportion of evangelicals in respondent's state
+marriage.data$p.mormon.full <-Statelevel$p.mormon[marriage.data$state.initnum]
+# proportion of LDS church members in respondent's state
+marriage.data$p.relig.full <- marriage.data$p.evang.full + marriage.data$p.mormon.full
+# combined evangelical + LDS proportions
+marriage.data$p.kerry.full <- Statelevel$kerry.04[marriage.data$state.initnum]
+# John Kerry's % of 2-party vote in respondent's state in 2004
+```
+## Indices
+
+```{r indices2}
+
+#At census level (same coding as above for all variables)
+
+Census$crace.female <- (Census$cfemale *3) + Census$crace.WBH 
+Census$crace.female=factor(Census$crace.female,levels=1:6,
+                           labels=c("WhMale","BlMale","HMale","WhFem","BlFem","HFem"))
+Census$cage.edu.cat <- 4 * (Census$cage.cat -1) + Census$cedu.cat 
+Census$cage.edu.cat=factor(Census$cage.edu.cat,levels=1:16,
+                           labels=c("18-29,<HS","18-29,HS","18-29,SC","18-29,CG",
+                                    "30-44,<HS","30-44,HS","30-44,SC","30-44,CG",
+                                    "45-64,<HS","45-64,HS","45-64,SC","45-64,CG",
+                                    "65+,<HS","65+,HS","65+,SC","65+,CG"))
+Census$cp.evang.full<-  Statelevel$p.evang[Census$cstate.initnum]
+Census$cp.mormon.full <- Statelevel$p.mormon[Census$cstate.initnum]
+Census$cp.relig.full <- Census$cp.evang.full + Census$cp.mormon.full
+Census$cp.kerry.full <-  Statelevel$kerry.04[Census$cstate.initnum]
+```
+
+## Step 6: Fitting Individual-level Regression Model
+
+Now we are ready to fit a regression model for an individual survey responses on gay marriage rights given demographics and geography, i.e. each individual's response will be a function of their demographics and state. We'll denote each individual as *i* with indices for race-gender combination, age-education combination, region, state, and poll. We denote $y_i$ as 1 for supporters of same-sex marriage and 0 for opponents and those with no opinion. 
+
+## Model
+
+\[
+\mathrm{logit}\left(\mathrm{Pr}(y_i = 1)\right) = \beta^0 + \alpha^{race,gender}_{j[i]} +  \alpha^{age,edu}_{k[i]} + \alpha^{state}_{s[i]} + \alpha^{poll}_{p[i]}
+\]
+
+We can think of the terms after the intercept as modeled effects for different groups of respondents such as individuals who are a specific age. All of them except the state coefficient will be modeled as drawn from a normal distribution with mean zero and some estimated variance specific to that variable. For example,
+
+\begin{eqnarray*}
+\alpha^{race,gender}_j &\sim& N(0, \sigma^2_{race,gender}), ~~~\mathrm{j=1, ..., 6} \\
+\alpha^{age,edu}_k &\sim& N(0, \sigma^2_{age,edu}), ~~~\mathrm{k=1,...,16} \\ 
+\alpha^{poll}_p &\sim& N(0, \sigma^2_{poll}), ~~~\mathrm{p = 1, ..., 5}
+\end{eqnarray*}
+
+
+## Model
+
+For the state effect, we model the mean for the state effect as a function of 3 state level variables: the region into which the state falls, the state’s conservative (defined as evangelical+LDS) religious percentage, and its Democratic 2004 presidential vote share:^[These are just some examples of group-level predictors which reduce unexplained group-level variation, and thus lead to more precise estimation (Gelman and Hill 2007, 271)]
+
+\begin{eqnarray*}
+\alpha^{state}_s &\sim& N(\alpha^{reg}_{m[s]} + \beta^{relig}\cdot relig_s + \beta^{vote} \cdot vote_s, \sigma^2_{state}), \mathrm{s = 1, ..., 51} \\
+\alpha^{reg}_m &\sim& N(0,\sigma^2_{region})
+\end{eqnarray*}
+
+
+## Model coding
+
+
+```{r indiv1}
+#run individual-level opinion model
+
+individual.model <- glmer(formula = yes.of.all ~ (1|race.female) + (1|age.edu.cat) 
+                          + (1|state) + (1|region) + (1|poll) + p.relig.full + 
+                            p.kerry.full,data=marriage.data, 
+                          family=binomial(link="logit")) 
+# Note: (1|variable) denotes a random effect
+summary(individual.model)
+```
+
+## Model coding
+```{r indiv2}
+#examine random effects and standard errors for race-gender
+ranef(individual.model)$race.female
+se.ranef(individual.model)$race.female
+```
+
+## Model coding
+```{r indiv3}
+# Since we do not have any respondents from Alaska or Hawaii, we have to create 
+# a vector of state random effects that includes these states.
+state.ranefs <- array(NA,c(51,1))
+dimnames(state.ranefs) <- list(c(Statelevel$sstate),"effect")
+for(i in Statelevel$sstate){
+  state.ranefs[i,1] <- ranef(individual.model)$state[i,1]
+}
+state.ranefs[,1][is.na(state.ranefs[,1])] <- 0 
+#set states with missing REs (b/c not in data) to zero
+```
+
+
+## Step 7: Poststatify the Demographic-Geographic Types
+
+To complete this method, we need to compute a weighted average of the probabilities from the logistic regression to estimate the proportion of same-sex marriage supporters in each state. First, need to create a prediction for each demographic-state combination (each cell in Census data):
+
+```{r createpred}
+#create a prediction for each cell in Census data
+cellpred <- invlogit(fixef(individual.model)["(Intercept)"]
+                     +ranef(individual.model)$race.female[Census$crace.female,1]
+                     +ranef(individual.model)$age.edu.cat[Census$cage.edu.cat,1]
+                     +state.ranefs[Census$cstate,1]
+                     +ranef(individual.model)$region[Census$cregion,1]   
+                     +(fixef(individual.model)["p.relig.full"] *Census$cp.relig.full)
+                     +(fixef(individual.model)["p.kerry.full"] *Census$cp.kerry.full)
+)
+```
+
+## Poststratification
+
+Then this prediction needs to be weighted by the actual population frequency of that state. Using this we can then calculate the average response, over each cell *j* in state *s*: $$y^{MRP}_{s} = \frac{\sum_{c\in s}N_c\theta_c}{\sum_{c \in s} N_c}$$
+
+More concretely, we would compute this using the following code:
+
+```{r predictions}
+#weights the prediction by the freq of cell                                       
+cellpredweighted <- cellpred * Census$cpercent.state
+
+#calculates the percent within each state (weighted average of responses)
+statepred <- 100* as.vector(tapply(cellpredweighted,Census$cstate,sum))
+cbind(Statelevel$sstate,statepred)
+```
+
+This result is a set of state-level opinion estimates that you could use to help make predictions regarding the election. 
+
+## Bayesian Model
+We could also implement this model using Stan, which allows us to quantify uncertainity. The model specification will be the same as in our other section, except for some weakly informative priors in our Bayesian specification. You can read more about the selection of these "default" priors, developed by Andrew Gelman, in the `BRMS` documentation.
+
+```{r brms, eval=FALSE}
+library(rstan)
+library(brms)
+# the model
+bayes.mod <- brm(yes.of.all ~ (1|race.female) 
+                 + (1|age.edu.cat) + (1|state) + (1|region)
+                 + (1|poll) + p.relig.full + p.kerry.full,
+                 data=marriage.data, family=bernoulli(),
+                 prior=c(set_prior("normal(0,0.2)", class='b'),
+                         set_prior("normal(0,0.2)", class='sd', group="race.female"),
+                         set_prior("normal(0,0.2)", class='sd', group="age.edu.cat"),
+                         set_prior("normal(0,0.2)", class='sd', group="state"),
+                         set_prior("normal(0,0.2)", class='sd', group="poll"),
+                         set_prior("normal(0,0.2)", class='sd', group="region")))
+
+summary(bayes.mod)
+```
+
+## Bayesian model
+
+```{r brms2, cache = TRUE, echo=FALSE, message=FALSE, warnings=FALSE}
+library(rstan)
+library(brms)
+# the model
+bayes.mod <- brm(yes.of.all ~ (1|race.female) 
+                 + (1|age.edu.cat) + (1|state) + (1|region)
+                 + (1|poll) + p.relig.full + p.kerry.full,
+                 data=marriage.data, family=bernoulli(),
+                 prior=c(set_prior("normal(0,0.2)", class='b'),
+                         set_prior("normal(0,0.2)", class='sd', group="race.female"),
+                         set_prior("normal(0,0.2)", class='sd', group="age.edu.cat"),
+                         set_prior("normal(0,0.2)", class='sd', group="state"),
+                         set_prior("normal(0,0.2)", class='sd', group="poll"),
+                         set_prior("normal(0,0.2)", class='sd', group="region")))
+
+```
+
+## Bayesian model
+```{r brms3b}
+
+summary(bayes.mod)
+```
+
+## Bayesian model NOTE THIS NOT WORKING GREAT REDO USING MASTNY STUFF
+
+```{r brms3, cache=TRUE}
+# Model Uncertainity: standard deviation of group-level intercepts
+# install.packages("devtools")
+# devtools::install_github("mjskay/tidybayes")
+library(tidybayes)
+
+approx_sd <- broom::tidy(individual.model) %>% filter(stringr::str_detect(term, "sd_"))
+
+bayes.mod %>%
+  gather_samples(`sd_.*`, regex=TRUE) %>%
+  ungroup() %>%
+  mutate(group = stringr::str_replace_all(term, c("sd_" = "","__Intercept"=""))) %>%
+  ggplot(aes(y=group, x = estimate)) + 
+  ggridges::geom_density_ridges(aes(height=..density..),
+                                rel_min_height = 0.01, stat = "density",
+                                scale=1.5) + geom_point(data=approx_sd)
+
+# Edit Census data for use
+Census$p.relig.full <- Census$cp.relig.full
+Census$p.kerry.full <-  Census$cp.kerry.full
+```
+
+# Bayesian model
+
+```{r brms4, cache=TRUE}
+# point estimate for the level of state support for gay marriage and poststratify
+ps.bayes.mod <- bayes.mod %>%
+  add_predicted_draws(newdata=Census, allow_new_levels=TRUE) %>%
+  rename(support = .prediction) %>%
+  mean_qi() %>%
+  mutate(support = support * cpercent.state) %>%
+  group_by(cstate) %>%
+  summarise(support = sum(support))
+```
+
+
+
+<!--- old stuff with overparameterized model in age and edu
+## Step 6: Fitting Individual-level Regression Model
+
+Now we are ready to fit a regression model for an individual survey responses on gay marriage rights given demographics and geography, i.e. each individual's response will be a function of their demographics and state. We'll denote each individual as *i* with indices *j, k, l, m, s,* and *p* for race-gender combination, age category, education category, region, state, and poll respectively, and including an age-education interaction. More specifically, we denote $y_i$ as 1 for supporters of same-sex marriage and 0 for opponents and those with no opinion. Remember that since we're modeling a binary variables we ought to use logistic regression, and thus our model will be as follows:
+
+\[
+\mathrm{Pr}(y_i = 1) = \mathrm{logit}^{-1}(\beta^0 + \alpha^{race,gender}_{j[i]} + \alpha^{age}_{k[i]} + \alpha^{edu}_{l[i]} + \alpha^{age,edu}_{k[i],l[i]} + \alpha^{state}_{s[i]} + \alpha^{year}_{p[i]})
+\]
+
+We can think of the terms after the intercept as modeled effects for different groups of respondents such as individuals who are a specific age. All of them except the state coefficient will be model as drawn from a normal distribution with mean zero and some estimated variance specific to that variable. For example,
+
+\[
+\alpha^{poll}_p \sim N(0, \sigma^2_{poll}), \mathrm{p = 1, ..., n}
+\]
+
+For the state effect, we'll be doing something slightly different. Instead of having a distribution with mean equaling zero, we will be modeling it as a function of the the region into which the state falls and the state’s conservative religious percentage and Democratic 2004 presidential vote share:^[These are just some examples of group-level predictors which reduce unexplained group-level variation, and thus lead to more precise estimation (Gelman and Hill 2007, 271)]
+
+\[
+\alpha^{state}_s \sim N(\alpha^{region}_{m[s]} + \beta^{relig}\cdot relig_s + \beta^{presvote} \cdot presvote_s, \sigma^2_{state}), \mathrm{s = 1, ..., 51}
+\]
+
+(Note: we model the region variable identically to the previous variables, e.g. poll.)
+
+Now we're ready to move onto coding up this model:
+
+```{r whynotcommentedout, cache=TRUE}
+#run individual-level opinion model
+
+individual.model <- glmer(formula = yes.of.all ~ (1|race.female) + (1|age.cat) + (1|edu.cat) + (1|age.edu.cat) + (1|state) + (1|region) + (1|poll) + p.relig.full + p.kerry.full,data=marriage.data, family=binomial(link="logit")) # Note: (1|variable) denotes a random effect
+display(individual.model)
+
+individual.model.2 <- glmer(formula = yes.of.all ~ (1|race.female) +  (1|age.edu.cat) + (1|state) + (1|region) + (1|poll) + p.relig.full + p.kerry.full,data=marriage.data, family=binomial(link="logit")) # Note: (1|variable) denotes a random effect
+display(individual.model)
+
+#examine random effects and standard errors for race-female
+ranef(individual.model)$race.female
+se.ranef(individual.model)$race.female
+
+# Since we do not have any respondents from Alaska or Hawaii, we have to create a vector of state random effects that accounts for these states.
+state.ranefs <- array(NA,c(51,1))
+dimnames(state.ranefs) <- list(c(Statelevel$sstate),"effect")
+for(i in Statelevel$sstate){
+  state.ranefs[i,1] <- ranef(individual.model)$state[i,1]
+}
+state.ranefs[,1][is.na(state.ranefs[,1])] <- 0 #set states with missing REs (b/c not in data) to zero
+```
+
+This logistic regression gives the probability that any adult will support same-sex marriage given the person’s sex, race, age, education, and state.
+
+### Step 7: Poststatify the Demographic-Geographic Types
+
+To complete this method, we need to compute a weighted average of the probabilities from the logistic regression to estimate the proportin of same-sex marriage supporters in each state. First, need to create a prediction for each demographic-state combination (each cell in Census data):
+
+```{r}
+#create a prediction for each cell in Census data
+cellpred <- invlogit(fixef(individual.model)["(Intercept)"]
+                     +ranef(individual.model)$race.female[Census$crace.female,1]
+                     +ranef(individual.model)$age.cat[Census$cage.cat,1]
+                     +ranef(individual.model)$edu.cat[Census$cedu.cat,1]
+                     +ranef(individual.model)$age.edu.cat[Census$cage.edu.cat,1]
+                     +state.ranefs[Census$cstate,1]
+                     +ranef(individual.model)$region[Census$cregion,1]   
+                     +(fixef(individual.model)["p.relig.full"] *Census$cp.relig.full)
+                     +(fixef(individual.model)["p.kerry.full"] *Census$cp.kerry.full)
+)
+```
+
+Then this prediction needs to be weighted by the actual population frequency of that state. Using this we can then calculate the average response, over each cell *j* in state *s*:
+
+\[
+
+y^{MRP}_{s} = \frac{\sum_{c\in s}N_c\theta_c}{\sum_{c \in s} N_c}
+\]
+
+More concretely, we would compute this using the following code:
+
+```{r}
+#weights the prediction by the freq of cell                                       
+cellpredweighted <- cellpred * Census$cpercent.state
+
+#calculates the percent within each state (weighted average of responses)
+statepred <- 100* as.vector(tapply(cellpredweighted,Census$cstate,sum))
+statepred
+```
+
+This result is a set a state-level opinion estimates that you could use to help make predictions regarding the election. 
+
+## Bayesian Model
+We could also implement this model using Stan which allows for quantifying model uncertainity. The model specification will be the same our other section, except for some weakly informative priors on the standard deviations of the varying intercepts useful for convergence.
+
+```{r, eval=FALSE, cache = TRUE}
+library(rstan)
+library(brms)
+
+# the model
+bayes.mod <- brm(yes.of.all ~ (1|race.female) + (1|age.cat) + (1|edu.cat)
+                 + (1|age.edu.cat) + (1|state) + (1|region)
+                 + p.relig.full + p.kerry.full,
+                 data=marriage.data, family=bernoulli(),
+                 prior=c(set_prior("normal(0,0.2)", class='b'),
+                         set_prior("normal(0,0.2)", class='sd', group="race.female"),
+                         set_prior("normal(0,0.2)", class='sd', group="age.cat"),
+                         set_prior("normal(0,0.2)", class='sd', group="edu.cat"),
+                         set_prior("normal(0,0.2)", class='sd', group="age.edu.cat"),
+                         set_prior("normal(0,0.2)", class='sd', group="state"),
+                         set_prior("normal(0,0.2)", class='sd', group="region")))
+
+summary(bayes.mod)
+
+# Model Uncertainity: standard deviation of group-level intercepts
+# install.packages("devtools")
+# devtools::install_github("mjskay/tidybayes")
+library(tidybayes)
+
+approx_sd <- broom::tidy(individual.model) %>%
+  filter(stringr::str_detect(term, "sd_"))
+
+bayes.mod %>%
+  gather_samples(`sd_.*`, regex=TRUE) %>%
+  ungroup() %>%
+  mutate(group = stringr::str_replace_all(term, c("sd_" = "","__Intercept"=""))) %>%
+  ggplot(aes(y=group, x = estimate)) + 
+  ggridges::geom_density_ridges(aes(height=..density..),
+                                rel_min_height = 0.01, stat = "density",
+                                scale=1.5) + 
+  geom_point(data=approx_sd)
+
+# Edit Census data for use
+Census$p.relig.full <- Census$cp.relig.full
+Census$p.kerry.full <-  Census$cp.kerry.full
+
+# point estimate for the level of state support for gay marriage and poststratify
+ps.bayes.mod <- bayes.mod %>%
+  add_predicted_draws(newdata=Census, allow_new_levels=TRUE) %>%
+  rename(support = .prediction) %>%
+  mean_qi() %>%
+  mutate(support = support * cpercent.state) %>%
+  group_by(cstate) %>%
+  summarise(support = sum(support))
+```
+--->

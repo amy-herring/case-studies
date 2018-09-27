@@ -17,3 +17,5 @@ arm
 foreign
 stringr
 forcats
+tidybayes
+bindrcpp
