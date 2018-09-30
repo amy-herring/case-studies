@@ -14,10 +14,6 @@ output:
       
   
 ---
-## Introduction
-
-Use the interesting example from Carl Morris about elections and when you should be more confident...from 779 notes on binomial proportions?
-
 
 ## Methods for prediction
 

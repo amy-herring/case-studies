@@ -42,27 +42,35 @@ This method begins by using multilevel regression to model individual survey res
 
 This tutorial draws heavily on Jonathan Kastellec's [MrP primer](http://www.princeton.edu/~jkastell/mrp_primer.html). You may find the paper at their website useful in addition to the shorter version presented here. [In addition, Tim Mastney has a nice tutorial on MRP using Stan](https://timmastny.rbind.io/blog/multilevel-mrp-tidybayes-brms-stan/). First, download all three datasets at the link.
 
-## Add a Few More R Packages
+## Add a few more R packages
 
 
-```{r morepackages, message=FALSE}
-library("arm")
-library("foreign")
+```{r morepackages, message=FALSE,cache=TRUE}
+library(tidyverse)
+library(lme4)
+library(brms)
+library(rstan)
+devtools::install_github("hrbrmstr/albersusa")
+library(albersusa) #plotting
+library(cowplot) # plotting
+rstan_options(auto_write=TRUE)
+options(mc.cores=parallel::detectCores())
 ```
 
 
-## Step 1: Gather National Opinion Poll(s)
+## Gather national opinion poll(s)
 
 These polls should include some respondent demographic information and some type of geographic indicator such as state (assuming we want to make state-level inferences).
 
 We will consider [data used by Kastellec et al. (2016)](data/gay_marriage_megapoll.dta) on opinions about gay marriage. These data contain results from five national polls that were conducted in 2004 and include information on state, gender, race/ethnicity, education, age, and party identification.
 
-## Step 2: Create a Single Internally-Consistent Dataset.
+## Create a single internally-consistent dataset.
 
 Our separate polls have already been combined for us with synchronization of variable names, but generally you may need to do this yourself.
 
 ```{r gaymarrdata}
 #read in megapoll
+library(foreign)
 # Note: replace with the location of the file on your local computer
 marriage.data <- read.dta("data/gay_marriage_megapoll.dta",
           convert.underscore = TRUE)
@@ -70,7 +78,7 @@ marriage.data <- read.dta("data/gay_marriage_megapoll.dta",
 
 ```
 
-## Step 3: Create Dataset of State-Level Predictors
+## Create dataset of state-level predictors
 
 We may wish to model state-level effects in our multilevel regression. To do this we will use state-level predictiors, such as historical party leanings, religious values, or income. This can help reduce unexplained group level variation. In this tutorial, we already have a data set with state-level information in it.
 
@@ -80,7 +88,7 @@ Statelevel <- read.dta("data/state_level_update.dta",convert.underscore = TRUE)
 Statelevel <- Statelevel[order(Statelevel$sstate.initnum),]
 ```
 
-## Step 4: Use Census Data for Poststratification
+## Gather census data for poststratification
 
 We will need census data to complete the poststratification later in the tutorial. These data must correspond to all individual-level demographic variables included in our model. Ultimately, we need a dataset of the population counts for each cluster of interest, e.g. how many African Americans between 18-25 went to college and reside in North Carolina. For this tutorial, we will use the 5% Public Use Microdata Sample from the 2000 census. 
 
@@ -91,7 +99,7 @@ Census <- Census[order(Census$cstate),]
 Census$cstate.initnum <-  match(Census$cstate, Statelevel$sstate)
 ```
 
-## Step 5: Create Indices
+## Create indices
 
 Next we will create index variables so that we can use our individual-level model and in the poststratification step.
 
@@ -140,7 +148,45 @@ Census$cp.relig.full <- Census$cp.evang.full + Census$cp.mormon.full
 Census$cp.kerry.full <-  Statelevel$kerry.04[Census$cstate.initnum]
 ```
 
-## Step 6: Fitting Individual-level Regression Model
+## Obtain estimates based on empirical averages
+
+We'll call these averages a disaggregate model -- just taking the mean responses within each state. 
+
+```{r empirical}
+mod.disag=marriage.data%>%
+  group_by(state) %>%
+  summarise(support=mean(yes.of.all)) %>%
+  mutate(model="no_ps")
+```
+
+These averages will not be representative of the actual state mean if the sampled respondents are not in proportion to each group's percentage of the total state population. So we'll next poststratify.
+
+## Poststratifying sample estimates
+
+First, we find within-group averages.
+
+```{r groupmeans}
+grp.means=marriage.data %>% 
+  group_by(state,region,race.female,age.edu.cat,p.relig.full,p.kerry.full) %>%
+  summarise(support=mean(yes.of.all,na.rm=TRUE))
+
+```
+
+## Poststratifying sample estimates
+
+Next we add the group's percentage in each state.
+
+```{r grouppct}
+grp.means=Census %>%
+  select(cstate,cage.edu.cat,cregion,kerry.04,race.female,p.relig,cpercent.state) %>%
+  right_join(grp.means)
+```
+
+## Poststratifying sample estimates
+
+
+
+## Fitting Individual-level Regression Model
 
 Now we are ready to fit a regression model for an individual survey responses on gay marriage rights given demographics and geography, i.e. each individual's response will be a function of their demographics and state. We'll denote each individual as *i* with indices for race-gender combination, age-education combination, region, state, and poll. We denote $y_i$ as 1 for supporters of same-sex marriage and 0 for opponents and those with no opinion. 
 

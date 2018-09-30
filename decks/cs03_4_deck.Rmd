@@ -54,11 +54,13 @@ The response rate for my recent poll on usefulness of STA 440 is 75\% (you all a
 
 ## Multilevel logistic regression
 
-Multilevel models can be used for binary outcomes (and those on other scales) using a similar approach to that used for normal data: we group coefficients into batches, and a probability distribution is assigned to each batch. Recall our normal data model:  $$y_i \sim N(\alpha_{j[i]}+\beta x_i, \sigma_y^2), ~~~ \alpha_j \sim N\left(\gamma_0,\sigma_\alpha^2 \right).$$  In this case we grouped the county-level intercepts and assigned them a normal distribution. This method is a compromise between complete pooling across counties (same intercept for each county) and no pooling (estimating a separate intercept for each county without borrowing information).
+Multilevel models can be used for binary outcomes (and those on other scales) using a similar approach to that used for normal data: we group coefficients into batches, and a probability distribution is assigned to each batch. Recall our normal data model:  $$y_i \sim N(\alpha_{j[i]}+\beta x_i, \sigma_y^2), ~~~ \alpha_j \sim N\left(\gamma_0,\sigma_\alpha^2 \right).$$  In this case we grouped the county-level intercepts and assigned them a normal distribution. This method is a compromise between complete pooling across counties (same intercept for each county) and no pooling (estimating a separate intercept for each county without borrowing information), where the degree of pooling is determined by the amount of information within and between counties.
 
 ## Multilevel linear regression
 
 Another way to think of this model is as a way of handling *correlated* responses -- due to geography (in the radon case), we expect homes closer together to have more similar radon levels than homes further apart. One rough way to account for this spatial correlation is by including a *random effect*, $\alpha_j$, for county. The model under each motivation (adjusting for correlation within counties, or borrowing information across counties) is the same.
+
+If you take spatial statistics, you'll learn more sophisticated ways to borrow information across geography, taking into account how close two data points are in space in borrowing information.
 
 ## Multilevel logistic regression
 
@@ -183,7 +185,10 @@ summary(m2)
 Because of the number of categories, the inference in the frequentist model is not entirely reliable as it does not fully account for uncertainty in the estimated variance parameters, and it uses an approximation for inference. We can fit the model in a Bayesian framework using mildly informative priors and quantify uncertainty based on the posterior samples.
 ```{r brms, eval=FALSE}
 library(brms) #nice function for Bayes MLM using HMC
-m3=brm(bush ~ black + female + v.prev.full+ (1|state.lab)+(1|age.edu.lab)+(1|region.full.lab), family=bernoulli(link="logit"), control = list(adapt_delta = 0.995), data=polls.subset)
+m3=brm(bush ~ black + female + v.prev.full+ (1|state.lab)+(1|age.edu.lab)+
+         (1|region.full.lab), 
+       family=bernoulli(link="logit"), control = list(adapt_delta = 0.995),
+       data=polls.subset)
 
 ```
 
