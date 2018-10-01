@@ -481,6 +481,7 @@ predict_val=predict(bayes.mod, newdata=Census, allow_new_levels=TRUE,
 ## Prediction
 
 ```{r showpred}
+dim(Census)
 dim(predict_val)
 head(predict_val)
 ```
