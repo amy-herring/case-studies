@@ -7,6 +7,7 @@ library(albersusa) #plotting
 library(cowplot) # plotting
 library(dplyr)
 library(directlabels)
+library(tidybayes)
 rstan_options(auto_write=TRUE)
 options(mc.cores=parallel::detectCores())
 
@@ -96,9 +97,6 @@ disag.point <- bind_rows(mod.disag,mod.disag.ps) %>%
   directlabels::geom_dl(aes(label=model),method='smart.grid') +
   ylab('state')
 
-disag.point
-
-
 #make a function so we don't have to type over and over
 compare_scat=function(d) {
   return(
@@ -181,7 +179,7 @@ bayes.mod=brm(yes.of.all~(1|race.female)+(1|age.edu.cat)+(1|state)+(1|region)+
 # what are advantages of a Bayesian approach? Most obvious is total accounting
 # of uncertainty -- particularly look at deviation of group-level intercepts
 
-library(tidybayes)
+
 ml_sd<- broom::tidy(ml.mod) %>%
   filter(stringr::str_detect(term,"sd_"))
 
