@@ -911,6 +911,25 @@ ml.bayes &lt;-<span class="st"> </span><span class="kw">bind_cols</span>(ps.ml.m
 <h2>Prediction</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dim</span>(Census)</code></pre></div>
 <pre><code>## [1] 4896   15</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(Census)</code></pre></div>
+<pre><code>##   state p.evang p.mormon kerry.04 crace.WBH age.cat edu.cat cfemale .freq
+## 1    AK   12.44 3.003126     35.5         1       1       1       0   467
+## 2    AK   12.44 3.003126     35.5         1       2       1       0   377
+## 3    AK   12.44 3.003126     35.5         1       3       1       0   419
+## 4    AK   12.44 3.003126     35.5         1       4       1       0   343
+## 5    AK   12.44 3.003126     35.5         1       1       2       0   958
+## 6    AK   12.44 3.003126     35.5         1       2       2       0  1359
+##   cfreq.state cpercent.state region race.female age.edu.cat  p.relig
+## 1       21222     0.02200547   west      WhMale   18-29,&lt;HS 15.44313
+## 2       21222     0.01776458   west      WhMale   30-44,&lt;HS 15.44313
+## 3       21222     0.01974366   west      WhMale   45-64,&lt;HS 15.44313
+## 4       21222     0.01616247   west      WhMale     65+,&lt;HS 15.44313
+## 5       21222     0.04514183   west      WhMale    18-29,HS 15.44313
+## 6       21222     0.06403732   west      WhMale    30-44,HS 15.44313</code></pre>
+<p>We’ll focus on the first four subgroups: white Alaskan men with <span class="math inline">\(&lt;\)</span>HS education in the 4 age groups (18-29, 30-44, 45-64, 65+).</p>
+</section>
+<section id="prediction-2" class="slide level2">
+<h2>Prediction</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dim</span>(predict_val)</code></pre></div>
 <pre><code>## [1]  500 4896</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(predict_val)</code></pre></div>
