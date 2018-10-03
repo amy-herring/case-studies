@@ -24,7 +24,7 @@ output:
 - In 20th century, Democratic Party widely viewed as the party of the "average American," representing the interests of the lower classes
 - Recently, the perception has changed to that of a party representing liberal elites
 - Patterns are complex
-    - In recent presidential election, Democrats have done better in the richer states in the Northeast and West (often colored blue on electoral maps); Republicans have dominated the poorer "red states" in the South
+    - In recent presidential elections, Democrats have done better in the richer states in the Northeast and West (often colored blue on electoral maps); Republicans have dominated the poorer "red states" in the South
     - Based on census and opinion poll data, we see that higher-income voters continue to support Repbulicans in presidential elections
 - How do we reconcile these seemingly conflicting patterns? We review the case study by [Gelman et al](https://5harad.com/mse331/papers/gelman_et_al_rich_poor.pdf) to see.
 
