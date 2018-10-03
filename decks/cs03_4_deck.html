@@ -641,7 +641,7 @@ polls.subset<span class="op">$</span>region.full.lab=<span class="kw">factor</sp
 </section>
 <section id="model-specification" class="slide level2">
 <h2>Model specification</h2>
-<p><span class="math display">\[\text{logit}(Pr(y_i=1))=\alpha_{j[i]}^{state}+\alpha_{k[i],l[i]}^{age.edu}+\beta_{female}female_i+\beta_{black}black_i,\]</span> <span class="math display">\[\alpha_j^{state}\sim N(\alpha_{m[j]}^{region}+\beta_{v.prev}v.prev_j,\sigma^2_{state})\]</span> and <span class="math display">\[\alpha_{k,l}^{age.edu} \sim N(0,\sigma^2_{age.edu})\]</span> for <span class="math inline">\(i=1,\ldots,n\)</span> <span class="math inline">\(j=1,\ldots,51\)</span></p>
+<p><span class="math display">\[\text{logit}(Pr(y_i=1))=\beta_0+\alpha_{j[i]}^{state}+\alpha_{k[i],l[i]}^{age.edu}+\beta_{f}female_i+\beta_{b}black_i,\]</span> <span class="math display">\[\alpha_j^{state}\sim N(\alpha_{m[j]}^{region}+\beta_{v.prev}v.prev_j,\sigma^2_{state}),\]</span> <span class="math display">\[\alpha_m^{region} \sim N(0,\sigma^2_{region}),\]</span> <span class="math display">\[\alpha_{k,l}^{age.edu} \sim N(0,\sigma^2_{age.edu})\]</span></p>
 <p>The reason the age by education term is treated as <em>random</em> and not <em>fixed</em> is that there are quite a few levels (4 age groups and 4 education groups), similar to the case with the state variable.</p>
 </section>
 <section id="input-data-on-prior-election-results" class="slide level2">
