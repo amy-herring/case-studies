@@ -66,7 +66,7 @@ Then we use poststratification, in which we weight (poststratify) the estimates 
 
 ## Tutorial
 
-This tutorial draws heavily on Jonathan Kastellec's [MrP primer](http://www.princeton.edu/~jkastell/mrp_primer.html) and [Tim Mastny's version using Stan](https://timmastny.rbind.io/blog/multilevel-mrp-tidybayes-brms-stan/). You may find the paper at their website useful in addition to the shorter version presented here. First, download all three datasets at the link.
+This tutorial draws heavily on Jonathan Kastellec's [MrP primer](http://www.princeton.edu/~jkastell/mrp_primer.html) and [Tim Mastny's version using Stan](https://timmastny.rbind.io/blog/multilevel-mrp-tidybayes-brms-stan/). You may find the paper at their website useful in addition to the shorter version presented here. First, download all three datasets [at this link](http://www.princeton.edu/~jkastell/mrp_primer.html).
 
 ## Analysis goal
 
@@ -366,7 +366,7 @@ Now we fit a fully Bayesian model, with same data model as the ML model but with
 bayes.mod=brm(yes.of.all~(1|race.female)+(1|age.edu.cat)+(1|state)+(1|region)+
                p.relig+kerry.04, data=marriage.data,
              family=bernoulli(),
-             prior=c(set_prior("normal(0,0.2)",class='b'),
+             prior=c(set_prior("normal(0,0.2)",class='b'), #0.2 is SD (not variance)
                      set_prior("normal(0,0.2)",class='sd',group="race.female"),
                      set_prior("normal(0,0.2)",class='sd',group="age.edu.cat"),
                      set_prior("normal(0,0.2)",class='sd',group="state"),
@@ -487,12 +487,13 @@ head(Census)
 
 We'll focus on the first four subgroups: white Alaskan men with $<$HS education in the 4 age groups (18-29, 30-44, 45-64, 65+).
 
-## <small> The first 6 sampled support values for those men are in columns 1-4 here....
+## <small> The first 6 sampled support values for those men are in columns 1-4 here.... </small>
 
 ```{r showpred2}
 dim(predict_val)
 head(predict_val)
 ```
+
 
 ## Poststratification again
 

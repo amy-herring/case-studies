@@ -61,8 +61,8 @@ Note: this schedule is approximate and is likely to be modified as the course pr
 | October 3     | CS3: Generalized Linear Multilevel Models | CS3 Interim Report 1: Infant Mortality Visualization| 
 | October 5     | CS4: Election Forecasting | Midsemester Grades Due (my deliverable)  |
 | October 10    | CS4: Election Forecasting with "Mr. P" | CS3 Interim Report 2: 2015 County-Specific Mortality by Race |
-| October 12    | Lab: Multilevel Models for CS3 and CS4 | CS4 Election Predictions |
-| October 17    | CS4: Who Votes in NC? | CS3 Final Report: Infant Mortality Trends |
+| October 12    | Lab: Multilevel Models for CS3  | CS4 Election Predictions |
+| October 17    | Lab: Who Votes in NC? | CS3 Final Report: Infant Mortality Trends |
 | October 19    | CS4: Election Modeling Workshop | CS4 Election Predictions Update|
 | October 24    | CS4: Group Presentations: Who Votes in NC? | CS4 Interim Report: Who Votes in NC? |
 | October 26    | Individual CS: Web Scraping | CS4 Election Predictions Update| 

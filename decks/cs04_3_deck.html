@@ -526,7 +526,7 @@ document.getElementsByTagName('head')[0].appendChild(style);
 </section>
 <section id="tutorial" class="slide level2">
 <h2>Tutorial</h2>
-<p>This tutorial draws heavily on Jonathan Kastellec’s <a href="http://www.princeton.edu/~jkastell/mrp_primer.html">MrP primer</a> and <a href="https://timmastny.rbind.io/blog/multilevel-mrp-tidybayes-brms-stan/">Tim Mastny’s version using Stan</a>. You may find the paper at their website useful in addition to the shorter version presented here. First, download all three datasets at the link.</p>
+<p>This tutorial draws heavily on Jonathan Kastellec’s <a href="http://www.princeton.edu/~jkastell/mrp_primer.html">MrP primer</a> and <a href="https://timmastny.rbind.io/blog/multilevel-mrp-tidybayes-brms-stan/">Tim Mastny’s version using Stan</a>. You may find the paper at their website useful in addition to the shorter version presented here. First, download all three datasets <a href="http://www.princeton.edu/~jkastell/mrp_primer.html">at this link</a>.</p>
 </section>
 <section id="analysis-goal" class="slide level2">
 <h2>Analysis goal</h2>
@@ -793,7 +793,7 @@ marriage.data <span class="op">%&gt;%</span>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bayes.mod=<span class="kw">brm</span>(yes.of.all<span class="op">~</span>(<span class="dv">1</span><span class="op">|</span>race.female)<span class="op">+</span>(<span class="dv">1</span><span class="op">|</span>age.edu.cat)<span class="op">+</span>(<span class="dv">1</span><span class="op">|</span>state)<span class="op">+</span>(<span class="dv">1</span><span class="op">|</span>region)<span class="op">+</span>
 <span class="st">               </span>p.relig<span class="op">+</span>kerry.<span class="dv">04</span>, <span class="dt">data=</span>marriage.data,
              <span class="dt">family=</span><span class="kw">bernoulli</span>(),
-             <span class="dt">prior=</span><span class="kw">c</span>(<span class="kw">set_prior</span>(<span class="st">&quot;normal(0,0.2)&quot;</span>,<span class="dt">class=</span><span class="st">'b'</span>),
+             <span class="dt">prior=</span><span class="kw">c</span>(<span class="kw">set_prior</span>(<span class="st">&quot;normal(0,0.2)&quot;</span>,<span class="dt">class=</span><span class="st">'b'</span>), <span class="co">#0.2 is SD (not variance)</span>
                      <span class="kw">set_prior</span>(<span class="st">&quot;normal(0,0.2)&quot;</span>,<span class="dt">class=</span><span class="st">'sd'</span>,<span class="dt">group=</span><span class="st">&quot;race.female&quot;</span>),
                      <span class="kw">set_prior</span>(<span class="st">&quot;normal(0,0.2)&quot;</span>,<span class="dt">class=</span><span class="st">'sd'</span>,<span class="dt">group=</span><span class="st">&quot;age.edu.cat&quot;</span>),
                      <span class="kw">set_prior</span>(<span class="st">&quot;normal(0,0.2)&quot;</span>,<span class="dt">class=</span><span class="st">'sd'</span>,<span class="dt">group=</span><span class="st">&quot;state&quot;</span>),
@@ -928,8 +928,8 @@ ml.bayes &lt;-<span class="st"> </span><span class="kw">bind_cols</span>(ps.ml.m
 ## 6       21222     0.06403732   west      WhMale    30-44,HS 15.44313</code></pre>
 <p>We’ll focus on the first four subgroups: white Alaskan men with <span class="math inline">\(&lt;\)</span>HS education in the 4 age groups (18-29, 30-44, 45-64, 65+).</p>
 </section>
-<section id="prediction-2" class="slide level2">
-<h2>Prediction</h2>
+<section id="the-first-6-sampled-support-values-for-those-men-are-in-columns-1-4-here." class="slide level2">
+<h2><small> The first 6 sampled support values for those men are in columns 1-4 here…. </small></h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dim</span>(predict_val)</code></pre></div>
 <pre><code>## [1]  500 4896</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(predict_val)</code></pre></div>
