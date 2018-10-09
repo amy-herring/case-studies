@@ -30,7 +30,7 @@ We will present predictions weekly, and the final case study grading criteria wi
 - [NC voter files](https://dl.ncsbe.gov/?prefix=data/)
 - [Other NC voter data](https://www.ncsbe.gov/data-stats/other-election-related-data)
 - [Cooperative Congressional Election Study](https://cces.gov.harvard.edu/pages/welcome-cooperative-congressional-election-study) - [Opportunity Insights Data Library](https://opportunityinsights.org/data/?geographic_level=0&topic=0&paper_id=0#resource-listing)
-- See also data on Sakai under Resources
+- See also data on Sakai under Resources in the CS4 folder
 
 
 # Reports

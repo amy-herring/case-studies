@@ -68,7 +68,7 @@ Note: this schedule is approximate and is likely to be modified as the course pr
 | October 26    | Individual CS: Web Scraping | CS4 Election Predictions Update| 
 | October 31    | Individual CS: Web Scraping |  CS4 Interim Report: Election Prediction Models |
 | November 2    | Individual CS: Web Scraping Work in Groups | CS4 Election Predictions Update; CS4 Final Report Due by Midnight Nov 5|
-| November 7    | CS4: Presentations: Post Election Diagnostics | Individual CS Interim Report: Analysis Plan  |
+| November 7    | CS4: Presentations: Post Election Diagnostics | Individual CS Interim Report: Introduction and Analysis Plan  |
 | November 9    | CS5: Missing Data: How to Survive | |
 | Movember 14   | CS5: Missing Data | |
 | November 16   | CS5: Missing Data | CS5 Interim Report: Patterns of Missing Data |
