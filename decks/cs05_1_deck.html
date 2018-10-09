@@ -521,7 +521,7 @@ doc =<span class="st"> </span><span class="kw">read_html</span>(u)</code></pre><
 <section id="words-in-job-description" class="slide level2 smaller">
 <h2>Words in Job Description</h2>
 <p>There are a few paragraphs of job description. We can inspect this web page in the browser, and move the cursor over part of the page and see the corresponding HTML elements(s). We found that those descriptions are all inside DIV nodes with a class attribute “section-data section-data-title;” we can extract them using XPath.</p>
-<p><img src="words.png" /><!-- --></p>
+<p><img src="figures/words.png" /><!-- --></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># get the corresponding html nodes</span>
 node_word =<span class="st"> </span>
 <span class="st">  </span><span class="kw">html_nodes</span>(doc,<span class="dt">xpath =</span> <span class="st">&quot;//div[@class = &#39;section-data section-data-title&#39;]&quot;</span>)

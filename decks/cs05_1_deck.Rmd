@@ -1,221 +1,81 @@
 ---
-title: Web Scraping 
+  title: Survival After Cardiac Catheterization
 output: 
   revealjs::revealjs_presentation:
-    theme: night
-    highlight: espresso
-    center: true
-    transition: none
-    css: styles.css
-    fig_caption: true
-    reveal_options:
-      progress: true
-      slideNumber: true
-    html_document:
-    self_contained: no
+  theme: night
+highlight: tango
+center: true
+transition: none
+css: styles.css
+fig_caption: true
+reveal_options:
+  progress: true
+slideNumber: true
+
+
 ---
-## Preparation{.smaller}
-- Read [W3 Schools HTML Intro](https://www.w3schools.com/html/html_intro.asp) for a brief introduction to HTML, the "markup language" for web pages
-- Read [W3 Schools XML Intro](https://www.w3schools.com/xml/xml_whatis.asp) for a brief introuction to XML
-- Read [W3 Schools XML DOM Intro](https://www.w3schools.com/xml/dom_intro.asp) and [XML DOM Nodes](https://www.w3schools.com/xml/dom_nodes.asp) to understand how to describe which node we want the data from
-- Read [W3 Schools XPath Intro](https://www.w3schools.com/xml/xpath_intro.asp), [XPath Nodes](https://www.w3schools.com/xml/xpath_nodes.asp), and [XPath Syntax](https://www.w3schools.com/xml/xpath_syntax.asp)
-
-## Scraping CyberCoders.com
-## {.smaller}
-Like many of the job posting sites, [cybercoders.com](https://www.cybercoders.com) allows us to specify a search query to find the jobs of interest. Let's investigate one of the job postings under "data scientist" and generalize our code later on. 
-```{r libs,message=FALSE}
-library(rvest)
-library(XML)
-library(RCurl)
-
-u = "https://www.cybercoders.com/data-scientist-job-431683"
-
-# parse the URL
-doc = read_html(u)
-```
-
-
-
-## Words in Job Description{.smaller}
-There are a few paragraphs of job description. We can inspect this web page in the browser, and move the cursor over part of the page and see the corresponding HTML elements(s). We found that those descriptions are all inside DIV nodes with a class attribute "section-data section-data-title;" we can extract them using XPath.
-
-
-```{r Vac, echo=FALSE}
-knitr::include_graphics("words.png")
-```
-
-
-
-```{r htmlnodes,message=FALSE}
-# get the corresponding html nodes
-node_word = 
-  html_nodes(doc,xpath = "//div[@class = 'section-data section-data-title']")
-# extract text under those html nodes
-words = html_text(node_word)
-```
-
-## Location and Salary Information{.smaller}
-The posts on cybercoders.com contain the location and salary on top of each page. For the location information, we are looking for a SPAN node under a DIV class with class attribute "location". We can see two qualified notes, but the first one is empty. We want the second note. As for the salary, we want a DIV node with class attribute "wage".
-```{r locsal, message=FALSE}
-# location information
-location_node = html_nodes(doc, xpath = "//div[@class = 'location']/span")[[2]]
-job_location = html_text(location_node)
-# salary information
-salary_node = html_nodes(doc, xpath = "//div[@class = 'wage']")
-job_money = html_text(salary_node)
-c(job_location,job_money)
-```
-
-## Skill List{.smaller}
-There are a list of preferred skills at the bottom of the post. The content of each skill is within a LI (list item) element with a class attribute "skill-item". The actual text is within a SPAN element with skill-name as the class attribute. 
-```{r skill, message=FALSE}
-skill_nodes = html_nodes(doc, xpath = "//span[@class = 'skill-name']")
-skill_list = html_text(skill_nodes)
-skill_list
-```
-
-## Date Posted{.smaller}
-The web page also shows the date of posting on top. We can get this information from the <span> element under DIV node with a class attribute "mobile-hide posted posted-text".
-```{r date, message=FALSE}
-date_nodes = html_nodes(doc, xpath = "//div[@class = 'mobile-hide posted posted-text']//span")
-date_posted = html_text(date_nodes)
-date_posted
-```
-
-## Combine these steps{.smaller}
-```{r combo,message=FALSE}
-cy.readPost <- function(u, doc = read_html(u)){
-  ans = list(Words = cy.getFreeFormWords(doc),
-             datePosted = cy.getDatePosted(doc),
-             Skills = cy.getSkillList(doc),
-             Location = cy.getLocationSalary(doc)[1],
-             Salary = cy.getLocationSalary(doc)[2])
-  ans
-}
-
-cy.getFreeFormWords <- function(doc,stopWords = StopWords){
-  words = html_text(html_nodes(doc,xpath = 
-                  "//div[@class = 'section-data section-data-title']"))
-  words
-}
-
-cy.getDatePosted <- function(doc){
-  temp = html_text(html_nodes(doc, xpath = 
-                "//div[@class = 'mobile-hide posted posted-text']//span"))
-  if (length(temp)==0){mydate = format(Sys.Date(), "%Y/%m/%d")}
-  else{mydate = strsplit(temp," ")[[1]][2]}
-  mydate
-}
-
-cy.getSkillList <- function(doc){
-  skillList = html_text(html_nodes(doc, xpath = 
-                      "//span[@class = 'skill-name']"))
-  skillList
-}
-
-cy.getLocationSalary <- function(doc){
-  Location = html_text(html_nodes(doc, xpath = 
-                      "//div[@class = 'location']/span")[[2]])
-  Salary = html_text(html_nodes(doc, xpath = "//div[@class = 'wage']"))
-  return(c(Location,Salary))
-}
-```
-
-
-
-##{.smaller}
-### Finding the Links to Job Postings in the Search Results{.smaller}
-```{r links, message=FALSE, cache=TRUE}
-# HTML when we type "Data Scientist" into the query textfield
-u = "https://www.cybercoders.com/search/?searchterms=Data+Scientist&searchlocation=&newsearch=true&originalsearch=true&sorttype="
-# get named parameters and their values
-p = getFormParams(u)
-p
-# submit the query with getForm(), allowing us to vary the search query
-txt = getForm("https://www.cybercoders.com/search/",
-              searchterms = "Data Scientist",
-              searchlocation = "",  newsearch = "true",
-              originalsearch = "true", sorttype = "")
-doc = read_html(txt)
-```
-
-##{.smaller}
-### Cont.{.smaller}
-For the links to each job posting, we are looking for the *href* attribute value in the *a* element within the DIV with a class attribute with a value "job-title". Those links looks something like "/data-scientist-job-426052". This is a relative URL, relative to the base URL of our query, i.e.,  http://www.cybercoders. com/search/. We need to merge these links with this URL to get the full URL of the posts we want to scrape.
-```{r links2, message=FALSE, cache=TRUE}
-# get the links on the search page
-job_lists = html_text(html_nodes(doc,xpath = "//div[@class = 'job-title']/a/@href"))
-
-# merge with the base URL
-links = getRelativeURL(as.character(job_lists), "http://www.cybercoders.com/search/")
-```
-
-##{.smaller}
-### Cont.{.smaller}
-Then we can write a function to get the post links, and combine it with cy.readPost to have a function which can read all the posts on a search page.
-```{r links3, message=FALSE, cache=TRUE}
-cy.getPostLinks <- function(doc, baseURL = "http://www.cybercoders.com/search/"){
-  if(is.character(doc)) doc = read_html(doc)
-  links = html_text(html_nodes(doc,xpath = "//div[@class = 'job-title']/a/@href"))
-  getRelativeURL(as.character(links), baseURL)
-}
-
-cy.readPagePosts <- function(doc,links = cy.getPostLinks(doc,baseURL),
-                             baseURL = "http://www.cybercoders.com/search/")
-{
-  if(is.character(doc)) doc = read_html(doc)
-  lapply(links,cy.readPost)
-}
-
-# Try out
-posts = cy.readPagePosts(doc)
-head(sapply(posts, `[[`, "Location"))
-```
-
-##{.smaller}
-### Finding the Next Page of Job Post Search Results{.smaller}
-In order to find the link to next page, we look for an *a* node with a *rel* attribute containing the word "next". There are actually tow of these, but they have identical *href* attributes, which is what we want.
-```{r links4, message=FALSE, cache=TRUE}
-cy.getNextPageLink <- function(u, baseURL, doc = read_html(u)){
-  if (is.na(baseURL)) baseURL = "http://www.cybercoders.com/search/"
-  link = html_text(html_nodes(doc,xpath = "//a[@rel='next']/@href"))
   
-  # return an empty character vector if there is no next page link
-  if (length(link)==0) return(character())
   
-  # get one of the href if there is a next page link
-  link = html_text(html_nodes(doc,xpath = "//a[@rel='next']/@href")[[1]])
+  ## Case Study 5: Survival After Cardiac Catheterization
   
-  # combine the relative URL with our base URL
-  return(paste(baseURL,substring(link,3),sep = ""))
-}
+  *Cardiac catheterization* is a procedure used to provide information on how well the heart is working. A hollow tube, called a catheter, is inserted into the circulatory system, usually through the groin, and is passed into the heart and coronary arteries using X-ray images as a guide. These procedures are used when heart conditions are suspected in symptomatic individuals.
 
-# test it
-tmp = cy.getNextPageLink(doc = doc,baseURL = "http://www.cybercoders.com/search/")
-tmp
-```
+## Cardiac Catheterization
 
-## Putting It All Together {.smaller}
-```{r final,message=FALSE, cache=TRUE}
-cyberCoders <- function(query){
-  txt = getForm("https://www.cybercoders.com/search/", searchterms = query, searchlocation = "", newsearch = "true", originalsearch = "true", sorttype = "")
-  doc = read_html(txt)
-  
-  posts = list()
-  while(TRUE){
-    posts = c(posts,cy.readPagePosts(doc))
-    nextPage <- cy.getNextPageLink(baseURL = NA, doc = doc)
-    if (length(nextPage) == 0) break
-    
-    # nextPage = getURLContent(nextPage)
-    doc = read_html(nextPage)
-  }
-  invisible(posts)
-}
+![Cardiac Catheterization, Figure Courtesy of David Darling](figures/cardiac_catheterization.jpg)
 
-# Test it
-dataSciPosts = cyberCoders("Data Scientist")
-tt = sort(table(unlist(lapply(dataSciPosts,`[[`,"Skills"))),decreasing = TRUE)
-tt[tt >= 2]
+## Survival After Cardiac Catheterization
 
-```
+In this case study, we will examine factors related to survival in a group of Duke patients, all of whom have undergone cardiac catheterization. While cardiac catheterization itself would not be expected to lead to death, the group of individuals undergoing the procedure represent more generally a high-risk group of individuals.
+
+
+
+## Case Study Data
+
+You will analyze data on survival in XXX individuals undergoing cardiac catheterization at Duke from YEAR to YEAR. Relevant variables include the following.
+
+- Year of catheterization procedure (proxy for standards of medical care at the time)
+- Age group (categorized to prevent disclosure of individual identities)
+- Gender (average survival is longer in women than in men)
+- Race (classified as black, white, or other, based on demographics in Durham during much of the period under study)
+
+## Case Study Data
+
+- Smoking status (ever or never)
+- Body mass index (weight in kg divided by height in m squared; normal weight is considered a BMI of [18.5,25); overweight a BMI of [25,30), and obese a BMI>=30)
+- Medical history including history of cerebrovascular disease (e.g., stroke), congestive heart failure, chronic obstructive pulmonary disease, diabetes, hypertension, myocardial infarction, or hyperlipidemiak
+
+
+## Case Study Data
+
+Heart health indicated by findings upon examination, including
+
+- severity of congestive heart failure
+- S3 gallop (normal in people under 40 and in some athletes, in others it may indicate congestive heart failure)
+- maximum percent stenosis of the left main coronary artery (stenosis is narrowing of the artery, usually the result of build-up of plaque)
+- left ventricular ejection fraction (amount of blood pumped out of left ventricle each time it contracts; normal is 55-70%; lower values indicate poorer heart function)
+- number of diseased vessels (missing if no arteriograms were performed during catheterization, it represents the number of significantly blocked major vessels, ranging from 0-3)
+
+## Case Study Data
+
+The outcome of survival time is defined by two variables: whether death occurred (DEATH) and the time to either death or the end of follow-up (DAYS2LKA).
+
+
+## Case Study Goals
+
+- determining which factors are associated with survival
+
+- characterizing the relationship between each factor and survival
+
+- exploring whether missing data are informative and affect analysis results and determining how to proceed with analysis in light of missing data
+
+## Task for Case Study 5 Interim Report
+
+- Produce a 5 page (maximum) report in R markdown that explores the missing data patterns and mechanisms to the extent possible based on the data provided. Comment on the potential for missing data to bias analysis results.
+
+## Task for Case Study 5 Final Report
+
+- Produce a 5 page (maximum) report in R markdown that explores factors related to survival in this cohort. Your analysis should account for missing data in a principled manner designed to limit potential bias in results.
+
+
+

@@ -44,6 +44,7 @@ We will present predictions weekly, and the final case study grading criteria wi
 # Resources
 
 + [Andy Gelman Interview on Election Forecasting](https://www.datacamp.com/community/blog/election-forecasting-polling)
+(This is a very interesting interview overall. I suggest listening to it all, but the polling/election modeling component starts about 30 minutes into the interview.)
 + [Who is running for office, and which districts are viewed as competitive?](https://www.270towin.com/2018-house-election/)
 + [Nate Silver says this is going to be easy!](https://www.newsobserver.com/news/politics-government/article216882230.html)
 + [ASA 2016 Election Contest](http://thisisstatistics.org/demystifying-the-election-prediction-2016-contest/)
@@ -71,7 +72,7 @@ We will present predictions weekly, and the final case study grading criteria wi
 
 Prizes may be awarded in the following categories:
 
-(1) best prediction (who wins each NC house seat + House control + tiebreak of exact number of seats won by Democrats, Republicans, and others in US House of Representatives)
+(1) best prediction (who wins each NC house seat + House control + tiebreak of exact number of seats won by Democrats, Republicans, and others in US House of Representatives + second tiebreak of \% of vote share by winning candidate in NC 9th district)
 (2) most creative data source useful for prediction (e.g., Yeti sales, number of nail salons per capita, tweets)
 (3) most easily accessibile new data source useful for prediction
 (4) best interactive visualization
