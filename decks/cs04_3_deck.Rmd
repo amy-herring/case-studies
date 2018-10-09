@@ -497,5 +497,5 @@ head(predict_val)
 
 ## Poststratification again
 
-We could then use these predicted probabilities to estimate public opinion under a variety of assumptions (opinion of all residents, or applying other data on how frequently people in each demographic group vote to get opinions of likely voters).
+We could then use these predicted probabilities to estimate public opinion under a variety of assumptions (opinion of all residents, or applying other data on how frequently people in each demographic group vote, to get opinions of likely voters).
 
