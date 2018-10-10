@@ -140,8 +140,7 @@ doc = read_html(txt)
 ```
 
 ##{.smaller}
-### Cont.{.smaller}
-For the links to each job posting, we are looking for the *href* attribute value in the *a* element within the DIV with a class attribute with a value "job-title". Those links looks something like "/data-scientist-job-426052". This is a relative URL, relative to the base URL of our query, i.e.,  http://www.cybercoders. com/search/. We need to merge these links with this URL to get the full URL of the posts we want to scrape.
+For the links to each job posting, we are looking for the *href* attribute value in the *a* element within the DIV with a class attribute with a value "job-title". Those links looks something like "/data-scientist-job-426052". This is a relative URL, relative to the base URL of our query, i.e.,  [http://www.cybercoders.com/search/](http://www.cybercoders.com/search/). We need to merge these links with this URL to get the full URL of the posts we want to scrape.
 ```{r links2, message=FALSE, cache=TRUE}
 # get the links on the search page
 job_lists = html_text(html_nodes(doc,xpath = "//div[@class = 'job-title']/a/@href"))
@@ -151,7 +150,7 @@ links = getRelativeURL(as.character(job_lists), "http://www.cybercoders.com/sear
 ```
 
 ##{.smaller}
-### Cont.{.smaller}
+
 Then we can write a function to get the post links, and combine it with cy.readPost to have a function which can read all the posts on a search page.
 ```{r links3, message=FALSE, cache=TRUE}
 cy.getPostLinks <- function(doc, baseURL = "http://www.cybercoders.com/search/"){
