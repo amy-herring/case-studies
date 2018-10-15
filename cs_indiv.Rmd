@@ -44,7 +44,7 @@ Nolan and Temple Lang, Chapter 12 (some of this chapter is now outdated)
 # Slides (coming soon)
 
 <!---
-[Exploratory Web Scraping: Jiurui based on sections through 12.3](decks/cs_indiv_2_deck.html)
+[Web Scraping: Jiurui based on sections through 12.3](decks/cs_06_1_deck.html)
 
 [Web Scraping and Analysis: Jiurui based on 12.4-12.9](decks/cs_indiv_3_deck.html)
 
