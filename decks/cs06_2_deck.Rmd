@@ -75,7 +75,8 @@ We could define a site-specific function using searchJobs() for CareerBuilder.
 ```{r,message=FALSE}
 # Since the query string is not a value of a parameter on the right of the ? in the URL, we could not use getForm() to determine the first page of our search results
 cb.searchURL <- function(query){
-  paste("https://www.careerbuilder.com/jobs-",gsub(" ","-",query),"?pay=0&siteid=cbnsv&emp=ALL&posted=30",sep = "")
+  each_word <- strsplit(query," ")[[1]]
+  paste("https://www.careerbuilder.com/jobs-",gsub(" ","-",query),"?keywords=",paste(each_word,collapse = "+"),sep = "")
 }
 
 # Get links to the job postings 
@@ -100,7 +101,7 @@ cb.getJobDescriptions <- function(u){
 
 # Put it all together
 searchCareerBuilders <-function(query, ..., baseURL = 
-             'https://www.careerbuilder.com/jobs?pay=0&siteid=cbnsv&emp=ALL&posted=30',max = NA)
+             'https://www.careerbuilder.com/jobs?keywords=&location=',max = NA)
 {
   # make baseURL a global variable, so that we can use it in other function
   baseURL <<- baseURL  
