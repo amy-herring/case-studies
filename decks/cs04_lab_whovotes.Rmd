@@ -1,0 +1,67 @@
+---
+title: Who votes?
+output: 
+  revealjs::revealjs_presentation:
+    theme: night
+    highlight: espresso
+    center: true
+    transition: none
+    css: styles.css
+    fig_caption: true
+    reveal_options:
+      progress: true
+      slideNumber: true
+      
+  
+---
+
+```{r setupa, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(lme4)
+library(brms) #simple interface with Stan
+library(rstan)
+#devtools::install_github("hrbrmstr/albersusa")
+library(albersusa) #plotting
+library(cowplot) # plotting
+library(dplyr)
+library(directlabels)
+library(tidybayes) #work easily with posterior samples
+rstan_options(auto_write=TRUE)
+options(mc.cores=parallel::detectCores())
+```
+
+## Who votes in NC?
+
+When predicting election outcomes, it is important to take into account the demographic profile (with respect to demographics that vary in support of candidates) of voters. Today you'll begin to outline your strategy for predicting who votes in North Carolina.
+
+## 2010 Census
+
+The 2010 Census data are available under Resources on Sakai. The Census presents information on the following variables.
+
+- County
+- Age (18-25, 26-40, 41-65, 66+)
+- Gender (Female, Male)
+- Hispanic ethnicity (Yes, No)
+- Race (Only American Indian/Alaska Native, Only Asian, Only Black, Only Native Hawaiian or Other Pacific Islander, Only White, Only Some Other Race, Multiracial)
+- Population counts for each combination of the above variables
+
+## Voting Data
+
+Sakai also contains the data from NC on who voted in the November 8, 2016 election. (Note: other voting data are available from NC at the links provided in the case study description.)  These variables include the following.
+
+- County, Voting District, and Precinct (where someone voted)
+- Party Identification (membership only, not how they voted, coded as Democrat, Libertarian, Republican, or Unaffiliated)
+- Race (Black, American Indian/Alaska Native, Other, White, Undesignated, Asian, Multiracial)
+- Ethnicity (Hispanic/Latino, Not Hispanic/Latino, Undesignated)
+- Gender (Female, Male, Undesignated)
+- Age (18-25, 26-40, 41-65, 66+)
+- Number of voters for each combination of the above variables
+
+## Your job!
+
+Describe an approach to combine the data and then to determine (a) factors predictive of voting in NC, and (b) best predictions of the probability of voting in each combination of the groupings above.
+
+
+
+
