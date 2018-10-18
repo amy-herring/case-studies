@@ -1,4 +1,4 @@
-amat---
+---
 title: " "
 output: 
   html_document:
@@ -11,6 +11,8 @@ title: "STA 440: Case Studies in the Practice of Statistics"
 description: "Students apply statistical analysis skills to in-depth data analysis projects ranging across diverse application areas including politics, information and culture, the environment, social science, global health, and health disparities. Students practice cutting-edge statistical methods and communicate their results both technically and non-technically via presentations and written reports. Prerequisite: STA360 or instructor permission. QS, R, W"
 markup: "mmark"
 ---
+
+
 
 #Welcome to STA440!
 
