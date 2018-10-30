@@ -41,7 +41,7 @@ Grades are based on the final report; the purpose of the interim reports is to p
 Nolan and Temple Lang, Chapter 12 (some of this chapter is now outdated)
 
 
-# Slides (coming soon)
+# Slides 
 
 
 [Web Scraping](decks/cs06_1_deck.html)
