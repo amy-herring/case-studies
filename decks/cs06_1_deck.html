@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <title>Web Scraping</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="cs06_1_deck_files/reveal.js-3.3.0.1/css/reveal.css"/>
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; background-color: #2a211c; color: #bdae9d; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; background-color: #2a211c; color: #bdae9d; border-right: 1px solid #bdae9d; }
+td.sourceCode { padding-left: 5px; }
+pre, code { color: #bdae9d; background-color: #2a211c; }
+code > span.kw { color: #43a8ed; font-weight: bold; } /* Keyword */
+code > span.dt { text-decoration: underline; } /* DataType */
+code > span.dv { color: #44aa43; } /* DecVal */
+code > span.bn { color: #44aa43; } /* BaseN */
+code > span.fl { color: #44aa43; } /* Float */
+code > span.ch { color: #049b0a; } /* Char */
+code > span.st { color: #049b0a; } /* String */
+code > span.co { color: #0066ff; font-style: italic; } /* Comment */
+code > span.al { color: #ffff00; } /* Alert */
+code > span.fu { color: #ff9358; font-weight: bold; } /* Function */
+code > span.er { color: #ffff00; font-weight: bold; } /* Error */
+code > span.wa { color: #ffff00; font-weight: bold; } /* Warning */
+code > span.cn { } /* Constant */
+code > span.sc { color: #049b0a; } /* SpecialChar */
+code > span.vs { color: #049b0a; } /* VerbatimString */
+code > span.ss { color: #049b0a; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { } /* Variable */
+code > span.cf { color: #43a8ed; font-weight: bold; } /* ControlFlow */
+code > span.op { } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { font-weight: bold; } /* Preprocessor */
+code > span.at { } /* Attribute */
+code > span.do { color: #0066ff; font-style: italic; } /* Documentation */
+code > span.an { color: #0066ff; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.co { color: #0066ff; font-weight: bold; font-style: italic; } /* Comment */
+code > span.in { color: #0066ff; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="cs06_1_deck_files/reveal.js-3.3.0.1/css/theme/night.css" id="theme">
+
+<style type="text/css">
+.reveal section img {
+  background: rgba(255, 255, 255, 0.85);
+}
+</style>
+
+  <!-- some tweaks to reveal css -->
+  <style type="text/css">
+    .reveal h1 { font-size: 2.0em; }
+    .reveal h2 { font-size: 1.5em;  }
+    .reveal h3 { font-size: 1.25em;	}
+    .reveal h4 { font-size: 1em;	}
+
+    .reveal .slides>section,
+    .reveal .slides>section>section {
+      padding: 0px 0px;
+    }
+
+
+
+    .reveal table {
+      border-width: 1px;
+      border-spacing: 2px;
+      border-style: dotted;
+      border-color: gray;
+      border-collapse: collapse;
+      font-size: 0.7em;
+    }
+
+    .reveal table th {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      font-weight: bold;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+    .reveal table td {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+
+  </style>
+
+    <style type="text/css">code{white-space: pre;}</style>
+
+    <link rel="stylesheet" href="styles.css"/>
+
+<!-- Printing and PDF exports -->
+<script id="paper-css" type="application/dynamic-css">
+
+/* Default Print Stylesheet Template
+   by Rob Glazebrook of CSSnewbie.com
+   Last Updated: June 4, 2008
+
+   Feel free (nay, compelled) to edit, append, and
+   manipulate this file as you see fit. */
+
+
+@media print {
+
+	/* SECTION 1: Set default width, margin, float, and
+	   background. This prevents elements from extending
+	   beyond the edge of the printed page, and prevents
+	   unnecessary background images from printing */
+	html {
+		background: #fff;
+		width: auto;
+		height: auto;
+		overflow: visible;
+	}
+	body {
+		background: #fff;
+		font-size: 20pt;
+		width: auto;
+		height: auto;
+		border: 0;
+		margin: 0 5%;
+		padding: 0;
+		overflow: visible;
+		float: none !important;
+	}
+
+	/* SECTION 2: Remove any elements not needed in print.
+	   This would include navigation, ads, sidebars, etc. */
+	.nestedarrow,
+	.controls,
+	.fork-reveal,
+	.share-reveal,
+	.state-background,
+	.reveal .progress,
+	.reveal .backgrounds {
+		display: none !important;
+	}
+
+	/* SECTION 3: Set body font face, size, and color.
+	   Consider using a serif font for readability. */
+	body, p, td, li, div {
+		font-size: 20pt!important;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		color: #000;
+	}
+
+	/* SECTION 4: Set heading font face, sizes, and color.
+	   Differentiate your headings from your body text.
+	   Perhaps use a large sans-serif for distinction. */
+	h1,h2,h3,h4,h5,h6 {
+		color: #000!important;
+		height: auto;
+		line-height: normal;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		text-shadow: 0 0 0 #000 !important;
+		text-align: left;
+		letter-spacing: normal;
+	}
+	/* Need to reduce the size of the fonts for printing */
+	h1 { font-size: 28pt !important;  }
+	h2 { font-size: 24pt !important; }
+	h3 { font-size: 22pt !important; }
+	h4 { font-size: 22pt !important; font-variant: small-caps; }
+	h5 { font-size: 21pt !important; }
+	h6 { font-size: 20pt !important; font-style: italic; }
+
+	/* SECTION 5: Make hyperlinks more usable.
+	   Ensure links are underlined, and consider appending
+	   the URL to the end of the link for usability. */
+	a:link,
+	a:visited {
+		color: #000 !important;
+		font-weight: bold;
+		text-decoration: underline;
+	}
+	/*
+	.reveal a:link:after,
+	.reveal a:visited:after {
+		content: " (" attr(href) ") ";
+		color: #222 !important;
+		font-size: 90%;
+	}
+	*/
+
+
+	/* SECTION 6: more reveal.js specific additions by @skypanther */
+	ul, ol, div, p {
+		visibility: visible;
+		position: static;
+		width: auto;
+		height: auto;
+		display: block;
+		overflow: visible;
+		margin: 0;
+		text-align: left !important;
+	}
+	.reveal pre,
+	.reveal table {
+		margin-left: 0;
+		margin-right: 0;
+	}
+	.reveal pre code {
+		padding: 20px;
+		border: 1px solid #ddd;
+	}
+	.reveal blockquote {
+		margin: 20px 0;
+	}
+	.reveal .slides {
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 0 !important;
+		zoom: 1 !important;
+
+		overflow: visible !important;
+		display: block !important;
+
+		text-align: left !important;
+		-webkit-perspective: none;
+		   -moz-perspective: none;
+		    -ms-perspective: none;
+		        perspective: none;
+
+		-webkit-perspective-origin: 50% 50%;
+		   -moz-perspective-origin: 50% 50%;
+		    -ms-perspective-origin: 50% 50%;
+		        perspective-origin: 50% 50%;
+	}
+	.reveal .slides section {
+		visibility: visible !important;
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+		display: block !important;
+		overflow: visible !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 60px 20px !important;
+		z-index: auto !important;
+
+		opacity: 1 !important;
+
+		page-break-after: always !important;
+
+		-webkit-transform-style: flat !important;
+		   -moz-transform-style: flat !important;
+		    -ms-transform-style: flat !important;
+		        transform-style: flat !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+
+		-webkit-transition: none !important;
+		   -moz-transition: none !important;
+		    -ms-transition: none !important;
+		        transition: none !important;
+	}
+	.reveal .slides section.stack {
+		padding: 0 !important;
+	}
+	.reveal section:last-of-type {
+		page-break-after: avoid !important;
+	}
+	.reveal section .fragment {
+		opacity: 1 !important;
+		visibility: visible !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+	}
+	.reveal section img {
+		display: block;
+		margin: 15px 0px;
+		background: rgba(255,255,255,1);
+		border: 1px solid #666;
+		box-shadow: none;
+	}
+
+	.reveal section small {
+		font-size: 0.8em;
+	}
+
+}  
+</script>
+
+
+<script id="pdf-css" type="application/dynamic-css">
+    
+/**
+ * This stylesheet is used to print reveal.js
+ * presentations to PDF.
+ *
+ * https://github.com/hakimel/reveal.js#pdf-export
+ */
+
+* {
+	-webkit-print-color-adjust: exact;
+}
+
+body {
+	margin: 0 auto !important;
+	border: 0;
+	padding: 0;
+	float: none !important;
+	overflow: visible;
+}
+
+html {
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+}
+
+/* Remove any elements not needed in print. */
+.nestedarrow,
+.reveal .controls,
+.reveal .progress,
+.reveal .playback,
+.reveal.overview,
+.fork-reveal,
+.share-reveal,
+.state-background {
+	display: none !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	text-shadow: 0 0 0 #000 !important;
+}
+
+.reveal pre code {
+	overflow: hidden !important;
+	font-family: Courier, 'Courier New', monospace !important;
+}
+
+ul, ol, div, p {
+	visibility: visible;
+	position: static;
+	width: auto;
+	height: auto;
+	display: block;
+	overflow: visible;
+	margin: auto;
+}
+.reveal {
+	width: auto !important;
+	height: auto !important;
+	overflow: hidden !important;
+}
+.reveal .slides {
+	position: static;
+	width: 100%;
+	height: auto;
+
+	left: auto;
+	top: auto;
+	margin: 0 !important;
+	padding: 0 !important;
+
+	overflow: visible;
+	display: block;
+
+	-webkit-perspective: none;
+	   -moz-perspective: none;
+	    -ms-perspective: none;
+	        perspective: none;
+
+	-webkit-perspective-origin: 50% 50%; /* there isn't a none/auto value but 50-50 is the default */
+	   -moz-perspective-origin: 50% 50%;
+	    -ms-perspective-origin: 50% 50%;
+	        perspective-origin: 50% 50%;
+}
+
+.reveal .slides section {
+	page-break-after: always !important;
+
+	visibility: visible !important;
+	position: relative !important;
+	display: block !important;
+	position: relative !important;
+
+	margin: 0 !important;
+	padding: 0 !important;
+	box-sizing: border-box !important;
+	min-height: 1px;
+
+	opacity: 1 !important;
+
+	-webkit-transform-style: flat !important;
+	   -moz-transform-style: flat !important;
+	    -ms-transform-style: flat !important;
+	        transform-style: flat !important;
+
+	-webkit-transform: none !important;
+	   -moz-transform: none !important;
+	    -ms-transform: none !important;
+	        transform: none !important;
+}
+
+.reveal section.stack {
+	margin: 0 !important;
+	padding: 0 !important;
+	page-break-after: avoid !important;
+	height: auto !important;
+	min-height: auto !important;
+}
+
+.reveal img {
+	box-shadow: none;
+}
+
+.reveal .roll {
+	overflow: visible;
+	line-height: 1em;
+}
+
+/* Slide backgrounds are placed inside of their slide when exporting to PDF */
+.reveal section .slide-background {
+	display: block !important;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: -1;
+}
+
+/* All elements should be above the slide-background */
+.reveal section>* {
+	position: relative;
+	z-index: 1;
+}
+
+/* Display slide speaker notes when 'showNotes' is enabled */
+.reveal .speaker-notes-pdf {
+	display: block;
+	width: 100%;
+	max-height: none;
+	left: auto;
+	top: auto;
+	z-index: 100;
+}
+
+/* Display slide numbers when 'slideNumber' is enabled */
+.reveal .slide-number-pdf {
+	display: block;
+	position: absolute;
+	font-size: 14px;
+}
+
+</script>
+
+
+<script>
+var style = document.createElement( 'style' );
+style.type = 'text/css';
+var style_script_id = window.location.search.match( /print-pdf/gi ) ? 'pdf-css' : 'paper-css';
+var style_script = document.getElementById(style_script_id).text;
+style.innerHTML = style_script;
+document.getElementsByTagName('head')[0].appendChild(style);
+</script>
+
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section>
+    <h1 class="title">Web Scraping</h1>
+</section>
+
+<section id="preparation" class="slide level2 smaller">
+<h2>Preparation</h2>
+<ul>
+<li>Read <a href="https://www.w3schools.com/html/html_intro.asp">W3 Schools HTML Intro</a> for a brief introduction to HTML, the “markup language” for web pages</li>
+<li>Read <a href="https://www.w3schools.com/xml/xml_whatis.asp">W3 Schools XML Intro</a> for a brief introuction to XML</li>
+<li>Read <a href="https://www.w3schools.com/xml/dom_intro.asp">W3 Schools XML DOM Intro</a> and <a href="https://www.w3schools.com/xml/dom_nodes.asp">XML DOM Nodes</a> to understand how to describe which node we want the data from</li>
+<li>Read <a href="https://www.w3schools.com/xml/xpath_intro.asp">W3 Schools XPath Intro</a>, <a href="https://www.w3schools.com/xml/xpath_nodes.asp">XPath Nodes</a>, and <a href="https://www.w3schools.com/xml/xpath_syntax.asp">XPath Syntax</a></li>
+</ul>
+</section>
+<section id="scraping-cybercoders.com" class="slide level2">
+<h2>Scraping CyberCoders.com</h2>
+</section>
+<section id="section" class="slide level2 smaller">
+<h2></h2>
+<p>Like many of the job posting sites, <a href="https://www.cybercoders.com">cybercoders.com</a> allows us to specify a search query to find the jobs of interest. Let’s investigate one of the job postings under “data scientist” and generalize our code later on.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(rvest)
+<span class="kw">library</span>(XML)
+<span class="kw">library</span>(RCurl)
+
+u =<span class="st"> &quot;https://www.cybercoders.com/data-scientist-job-431683&quot;</span>
+
+<span class="co"># parse the URL</span>
+doc =<span class="st"> </span><span class="kw">read_html</span>(u)</code></pre></div>
+</section>
+<section id="words-in-job-description" class="slide level2 smaller">
+<h2>Words in Job Description</h2>
+<p>There are a few paragraphs of job description. We can inspect this web page in the browser, and move the cursor over part of the page and see the corresponding HTML elements(s). We found that those descriptions are all inside DIV nodes with a class attribute “section-data section-data-title;” we can extract them using XPath.</p>
+<p><img src="figures/words.png" /><!-- --></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># get the corresponding html nodes</span>
+node_word =<span class="st"> </span>
+<span class="st">  </span><span class="kw">html_nodes</span>(doc,<span class="dt">xpath =</span> <span class="st">&quot;//div[@class = &#39;section-data section-data-title&#39;]&quot;</span>)
+<span class="co"># extract text under those html nodes</span>
+words =<span class="st"> </span><span class="kw">html_text</span>(node_word)</code></pre></div>
+</section>
+<section id="location-and-salary-information" class="slide level2 smaller">
+<h2>Location and Salary Information</h2>
+<p>The posts on cybercoders.com contain the location and salary on top of each page. For the location information, we are looking for a SPAN node under a DIV class with class attribute “location”. We can see two qualified notes, but the first one is empty. We want the second note. As for the salary, we want a DIV node with class attribute “wage”.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># location information</span>
+location_node =<span class="st"> </span><span class="kw">html_nodes</span>(doc, <span class="dt">xpath =</span> <span class="st">&quot;//div[@class = &#39;location&#39;]/span&quot;</span>)[[<span class="dv">2</span>]]
+job_location =<span class="st"> </span><span class="kw">html_text</span>(location_node)
+<span class="co"># salary information</span>
+salary_node =<span class="st"> </span><span class="kw">html_nodes</span>(doc, <span class="dt">xpath =</span> <span class="st">&quot;//div[@class = &#39;wage&#39;]&quot;</span>)
+job_money =<span class="st"> </span><span class="kw">html_text</span>(salary_node)
+<span class="kw">c</span>(job_location,job_money)</code></pre></div>
+<pre><code>## [1] &quot;Santa Monica, CA&quot;         &quot; Full-time $150k - $200k&quot;</code></pre>
+</section>
+<section id="skill-list" class="slide level2 smaller">
+<h2>Skill List</h2>
+<p>There are a list of preferred skills at the bottom of the post. The content of each skill is within a LI (list item) element with a class attribute “skill-item”. The actual text is within a SPAN element with skill-name as the class attribute.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">skill_nodes =<span class="st"> </span><span class="kw">html_nodes</span>(doc, <span class="dt">xpath =</span> <span class="st">&quot;//span[@class = &#39;skill-name&#39;]&quot;</span>)
+skill_list =<span class="st"> </span><span class="kw">html_text</span>(skill_nodes)
+skill_list</code></pre></div>
+<pre><code>## [1] &quot;Python&quot;           &quot;R&quot;                &quot;SQL&quot;             
+## [4] &quot;Machine Learning&quot; &quot;Julia&quot;            &quot;Apache Spark&quot;</code></pre>
+</section>
+<section id="date-posted" class="slide level2 smaller">
+<h2>Date Posted</h2>
+<p>The web page also shows the date of posting on top. We can get this information from the <span> element under DIV node with a class attribute “mobile-hide posted posted-text”.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">date_nodes =<span class="st"> </span><span class="kw">html_nodes</span>(doc, <span class="dt">xpath =</span> <span class="st">&quot;//div[@class = &#39;mobile-hide posted posted-text&#39;]//span&quot;</span>)
+date_posted =<span class="st"> </span><span class="kw">html_text</span>(date_nodes)
+date_posted</code></pre></div>
+<pre><code>## [1] &quot;Posted 08/08/2018&quot;</code></pre>
+</section>
+<section id="combine-these-steps" class="slide level2 smaller">
+<h2>Combine these steps</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cy.readPost &lt;-<span class="st"> </span><span class="cf">function</span>(u, <span class="dt">doc =</span> <span class="kw">read_html</span>(u)){
+  ans =<span class="st"> </span><span class="kw">list</span>(<span class="dt">Words =</span> <span class="kw">cy.getFreeFormWords</span>(doc),
+             <span class="dt">datePosted =</span> <span class="kw">cy.getDatePosted</span>(doc),
+             <span class="dt">Skills =</span> <span class="kw">cy.getSkillList</span>(doc),
+             <span class="dt">Location =</span> <span class="kw">cy.getLocationSalary</span>(doc)[<span class="dv">1</span>],
+             <span class="dt">Salary =</span> <span class="kw">cy.getLocationSalary</span>(doc)[<span class="dv">2</span>])
+  ans
+}
+
+cy.getFreeFormWords &lt;-<span class="st"> </span><span class="cf">function</span>(doc,<span class="dt">stopWords =</span> StopWords){
+  words =<span class="st"> </span><span class="kw">html_text</span>(<span class="kw">html_nodes</span>(doc,<span class="dt">xpath =</span> 
+                  <span class="st">&quot;//div[@class = &#39;section-data section-data-title&#39;]&quot;</span>))
+  words
+}
+
+cy.getDatePosted &lt;-<span class="st"> </span><span class="cf">function</span>(doc){
+  temp =<span class="st"> </span><span class="kw">html_text</span>(<span class="kw">html_nodes</span>(doc, <span class="dt">xpath =</span> 
+                <span class="st">&quot;//div[@class = &#39;mobile-hide posted posted-text&#39;]//span&quot;</span>))
+  <span class="cf">if</span> (<span class="kw">length</span>(temp)<span class="op">==</span><span class="dv">0</span>){mydate =<span class="st"> </span><span class="kw">format</span>(<span class="kw">Sys.Date</span>(), <span class="st">&quot;%Y/%m/%d&quot;</span>)}
+  <span class="cf">else</span>{mydate =<span class="st"> </span><span class="kw">strsplit</span>(temp,<span class="st">&quot; &quot;</span>)[[<span class="dv">1</span>]][<span class="dv">2</span>]}
+  mydate
+}
+
+cy.getSkillList &lt;-<span class="st"> </span><span class="cf">function</span>(doc){
+  skillList =<span class="st"> </span><span class="kw">html_text</span>(<span class="kw">html_nodes</span>(doc, <span class="dt">xpath =</span> 
+                      <span class="st">&quot;//span[@class = &#39;skill-name&#39;]&quot;</span>))
+  skillList
+}
+
+cy.getLocationSalary &lt;-<span class="st"> </span><span class="cf">function</span>(doc){
+  Location =<span class="st"> </span><span class="kw">html_text</span>(<span class="kw">html_nodes</span>(doc, <span class="dt">xpath =</span> 
+                      <span class="st">&quot;//div[@class = &#39;location&#39;]/span&quot;</span>)[[<span class="dv">2</span>]])
+  Salary =<span class="st"> </span><span class="kw">html_text</span>(<span class="kw">html_nodes</span>(doc, <span class="dt">xpath =</span> <span class="st">&quot;//div[@class = &#39;wage&#39;]&quot;</span>))
+  <span class="kw">return</span>(<span class="kw">c</span>(Location,Salary))
+}</code></pre></div>
+</section>
+<section id="section-1" class="slide level2 smaller">
+<h2></h2>
+<h3 id="finding-the-links-to-job-postings-in-the-search-results" class="smaller">Finding the Links to Job Postings in the Search Results</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># HTML when we type &quot;Data Scientist&quot; into the query textfield</span>
+u =<span class="st"> &quot;https://www.cybercoders.com/search/?searchterms=Data+Scientist&amp;searchlocation=&amp;newsearch=true&amp;originalsearch=true&amp;sorttype=&quot;</span>
+<span class="co"># get named parameters and their values</span>
+p =<span class="st"> </span><span class="kw">getFormParams</span>(u)
+p</code></pre></div>
+<pre><code>##      searchterms   searchlocation        newsearch   originalsearch 
+## &quot;Data+Scientist&quot;               &quot;&quot;           &quot;true&quot;           &quot;true&quot; 
+##         sorttype 
+##               &quot;&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># submit the query with getForm(), allowing us to vary the search query</span>
+txt =<span class="st"> </span><span class="kw">getForm</span>(<span class="st">&quot;https://www.cybercoders.com/search/&quot;</span>,
+              <span class="dt">searchterms =</span> <span class="st">&quot;Data Scientist&quot;</span>,
+              <span class="dt">searchlocation =</span> <span class="st">&quot;&quot;</span>,  <span class="dt">newsearch =</span> <span class="st">&quot;true&quot;</span>,
+              <span class="dt">originalsearch =</span> <span class="st">&quot;true&quot;</span>, <span class="dt">sorttype =</span> <span class="st">&quot;&quot;</span>)
+doc =<span class="st"> </span><span class="kw">read_html</span>(txt)</code></pre></div>
+</section>
+<section id="section-2" class="slide level2 smaller">
+<h2></h2>
+<p>For the links to each job posting, we are looking for the <em>href</em> attribute value in the <em>a</em> element within the DIV with a class attribute with a value “job-title”. Those links looks something like “/data-scientist-job-426052”. This is a relative URL, relative to the base URL of our query, i.e., <a href="http://www.cybercoders.com/search/" class="uri">http://www.cybercoders.com/search/</a>. We need to merge these links with this URL to get the full URL of the posts we want to scrape.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># get the links on the search page</span>
+job_lists =<span class="st"> </span><span class="kw">html_text</span>(<span class="kw">html_nodes</span>(doc,<span class="dt">xpath =</span> <span class="st">&quot;//div[@class = &#39;job-title&#39;]/a/@href&quot;</span>))
+
+<span class="co"># merge with the base URL</span>
+links =<span class="st"> </span><span class="kw">getRelativeURL</span>(<span class="kw">as.character</span>(job_lists), <span class="st">&quot;http://www.cybercoders.com/search/&quot;</span>)</code></pre></div>
+</section>
+<section id="section-3" class="slide level2 smaller">
+<h2></h2>
+<p>Then we can write a function to get the post links, and combine it with cy.readPost to have a function which can read all the posts on a search page.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cy.getPostLinks &lt;-<span class="st"> </span><span class="cf">function</span>(doc, <span class="dt">baseURL =</span> <span class="st">&quot;http://www.cybercoders.com/search/&quot;</span>){
+  <span class="cf">if</span>(<span class="kw">is.character</span>(doc)) doc =<span class="st"> </span><span class="kw">read_html</span>(doc)
+  links =<span class="st"> </span><span class="kw">html_text</span>(<span class="kw">html_nodes</span>(doc,<span class="dt">xpath =</span> <span class="st">&quot;//div[@class = &#39;job-title&#39;]/a/@href&quot;</span>))
+  <span class="kw">getRelativeURL</span>(<span class="kw">as.character</span>(links), baseURL)
+}
+
+cy.readPagePosts &lt;-<span class="st"> </span><span class="cf">function</span>(doc,<span class="dt">links =</span> <span class="kw">cy.getPostLinks</span>(doc,baseURL),
+                             <span class="dt">baseURL =</span> <span class="st">&quot;http://www.cybercoders.com/search/&quot;</span>)
+{
+  <span class="cf">if</span>(<span class="kw">is.character</span>(doc)) doc =<span class="st"> </span><span class="kw">read_html</span>(doc)
+  <span class="kw">lapply</span>(links,cy.readPost)
+}
+
+<span class="co"># Try out</span>
+posts =<span class="st"> </span><span class="kw">cy.readPagePosts</span>(doc)
+<span class="kw">head</span>(<span class="kw">sapply</span>(posts, <span class="st">`</span><span class="dt">[[</span><span class="st">`</span>, <span class="st">&quot;Location&quot;</span>))</code></pre></div>
+<pre><code>## /data-scientist-job-431683 /data-scientist-job-434372 
+##         &quot;Santa Monica, CA&quot;            &quot;Nashville, TN&quot; 
+## /data-scientist-job-432325 /data-scientist-job-443219 
+##          &quot;Los Angeles, CA&quot;              &quot;Alberta, AB&quot; 
+## /data-scientist-job-447256 /data-scientist-job-447149 
+##             &quot;Bethesda, MD&quot;        &quot;San Francisco, CA&quot;</code></pre>
+</section>
+<section id="section-4" class="slide level2 smaller">
+<h2></h2>
+<h3 id="finding-the-next-page-of-job-post-search-results" class="smaller">Finding the Next Page of Job Post Search Results</h3>
+<p>In order to find the link to next page, we look for an <em>a</em> node with a <em>rel</em> attribute containing the word “next”. There are actually two of these, but they have identical <em>href</em> attributes, which is what we want.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cy.getNextPageLink &lt;-<span class="st"> </span><span class="cf">function</span>(u, baseURL, <span class="dt">doc =</span> <span class="kw">read_html</span>(u)){
+  <span class="cf">if</span> (<span class="kw">is.na</span>(baseURL)) baseURL =<span class="st"> &quot;http://www.cybercoders.com/search/&quot;</span>
+  link =<span class="st"> </span><span class="kw">html_text</span>(<span class="kw">html_nodes</span>(doc,<span class="dt">xpath =</span> <span class="st">&quot;//a[@rel=&#39;next&#39;]/@href&quot;</span>))
+  
+  <span class="co"># return an empty character vector if there is no next page link</span>
+  <span class="cf">if</span> (<span class="kw">length</span>(link)<span class="op">==</span><span class="dv">0</span>) <span class="kw">return</span>(<span class="kw">character</span>())
+  
+  <span class="co"># get one of the href if there is a next page link</span>
+  link =<span class="st"> </span><span class="kw">html_text</span>(<span class="kw">html_nodes</span>(doc,<span class="dt">xpath =</span> <span class="st">&quot;//a[@rel=&#39;next&#39;]/@href&quot;</span>)[[<span class="dv">1</span>]])
+  
+  <span class="co"># combine the relative URL with our base URL</span>
+  <span class="kw">return</span>(<span class="kw">paste</span>(baseURL,<span class="kw">substring</span>(link,<span class="dv">3</span>),<span class="dt">sep =</span> <span class="st">&quot;&quot;</span>))
+}
+
+<span class="co"># test it</span>
+tmp =<span class="st"> </span><span class="kw">cy.getNextPageLink</span>(<span class="dt">doc =</span> doc,<span class="dt">baseURL =</span> <span class="st">&quot;http://www.cybercoders.com/search/&quot;</span>)
+tmp</code></pre></div>
+<pre><code>## [1] &quot;http://www.cybercoders.com/search/?page=2&amp;searchterms=Data%20Scientist&amp;searchlocation=&amp;newsearch=true&amp;originalsearch=true&amp;sorttype=&quot;</code></pre>
+</section>
+<section id="putting-it-all-together" class="slide level2 smaller">
+<h2>Putting It All Together</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cyberCoders &lt;-<span class="st"> </span><span class="cf">function</span>(query){
+  txt =<span class="st"> </span><span class="kw">getForm</span>(<span class="st">&quot;https://www.cybercoders.com/search/&quot;</span>, <span class="dt">searchterms =</span> query, <span class="dt">searchlocation =</span> <span class="st">&quot;&quot;</span>, <span class="dt">newsearch =</span> <span class="st">&quot;true&quot;</span>, <span class="dt">originalsearch =</span> <span class="st">&quot;true&quot;</span>, <span class="dt">sorttype =</span> <span class="st">&quot;&quot;</span>)
+  doc =<span class="st"> </span><span class="kw">read_html</span>(txt)
+  
+  posts =<span class="st"> </span><span class="kw">list</span>()
+  <span class="cf">while</span>(<span class="ot">TRUE</span>){
+    posts =<span class="st"> </span><span class="kw">c</span>(posts,<span class="kw">cy.readPagePosts</span>(doc))
+    nextPage &lt;-<span class="st"> </span><span class="kw">cy.getNextPageLink</span>(<span class="dt">baseURL =</span> <span class="ot">NA</span>, <span class="dt">doc =</span> doc)
+    <span class="cf">if</span> (<span class="kw">length</span>(nextPage) <span class="op">==</span><span class="st"> </span><span class="dv">0</span>) <span class="cf">break</span>
+    
+    <span class="co"># nextPage = getURLContent(nextPage)</span>
+    doc =<span class="st"> </span><span class="kw">read_html</span>(nextPage)
+  }
+  <span class="kw">invisible</span>(posts)
+}
+
+<span class="co"># Test it</span>
+dataSciPosts =<span class="st"> </span><span class="kw">cyberCoders</span>(<span class="st">&quot;Data Scientist&quot;</span>)
+tt =<span class="st"> </span><span class="kw">sort</span>(<span class="kw">table</span>(<span class="kw">unlist</span>(<span class="kw">lapply</span>(dataSciPosts,<span class="st">`</span><span class="dt">[[</span><span class="st">`</span>,<span class="st">&quot;Skills&quot;</span>))),<span class="dt">decreasing =</span> <span class="ot">TRUE</span>)
+tt[tt <span class="op">&gt;=</span><span class="st"> </span><span class="dv">2</span>]</code></pre></div>
+<pre><code>## 
+##                                    Python 
+##                                        84 
+##                          Machine Learning 
+##                                        46 
+##                                         R 
+##                                        40 
+##                                       SQL 
+##                                        36 
+##                              Data Science 
+##                                        24 
+##                                    Hadoop 
+##                                        16 
+##               Machine Learning Algorithms 
+##                                        12 
+##                                     SPARK 
+##                                        12 
+##                                Statistics 
+##                                        12 
+##                                        AI 
+##                                        10 
+##                                  Big Data 
+##                                        10 
+##                               Data Mining 
+##                                        10 
+##                                      Java 
+##                                        10 
+##                                       NLP 
+##                                        10 
+##                                       AWS 
+##                                         9 
+##                            Data Scientist 
+##                                         8 
+##                                     Julia 
+##                                         8 
+##                        Bayesian Inference 
+##                                         7 
+##                             Data Analysis 
+##                                         7 
+##                              scikit.learn 
+##                                         7 
+##                                   Tableau 
+##                                         7 
+##                      Virtual Environments 
+##                                         7 
+##                              Apache Spark 
+##                                         6 
+##                                Tensorflow 
+##                                         6 
+##                                       C++ 
+##                                         5 
+##                                 Analytics 
+##                                         4 
+##                             Deep Learning 
+##                                         4 
+##                                      Hive 
+##                                         4 
+##                                       NGS 
+##                                         4 
+##                                     NoSQL 
+##                                         4 
+##                      Predictive Analytics 
+##                                         4 
+##                       teaching experience 
+##                                         4 
+##                       Airline Contracting 
+##                                         3 
+##                                Algorithms 
+##                                         3 
+##                   Artificial Intelligence 
+##                                         3 
+##                            Bioinformatics 
+##                                         3 
+##                          Direct Analytics 
+##                                         3 
+##                              Econometrics 
+##                                         3 
+##                                       ETL 
+##                                         3 
+##                                     Kafka 
+##                                         3 
+##                           Large Data Sets 
+##                                         3 
+##                          Network Planning 
+##                                         3 
+##                                       PhD 
+##                                         3 
+## Prior teaching experience (not essential) 
+##                                         3 
+##                                       SAS 
+##                                         3 
+##                                     Scala 
+##                                         3 
+##               Teaching technical concepts 
+##                                         3 
+##                              U.S. Airline 
+##                                         3 
+##                        U.S. Travel Agency 
+##                                         3 
+##                          yield management 
+##                                         3 
+##                       Applied Mathematics 
+##                                         2 
+##            Bayesian Hierarchical Modeling 
+##                                         2 
+##                        Big Data analytics 
+##                                         2 
+##                     Computational Biology 
+##                                         2 
+##               Data Science or Engineering 
+##                                         2 
+##                       Experimental Design 
+##                                         2 
+##                                  Genomics 
+##                                         2 
+##                                       GLM 
+##                                         2 
+##                        Hypothesis Testing 
+##                                         2 
+##                                Leadership 
+##                                         2 
+##                                 Marketing 
+##                                         2 
+##                                    Matlab 
+##                                         2 
+##               Natural Language Processing 
+##                                         2 
+##                           neural networks 
+##                                         2 
+##                            NLP Frameworks 
+##                                         2 
+##                       Operations Research 
+##                                         2 
+##                                    pandas 
+##                                         2 
+##                                      Perl 
+##                                         2 
+##                                       Pig 
+##                                         2 
+##                       Predictive Modeling 
+##                                         2 
+##                                   PyTorch 
+##                                         2 
+##                                  Redshift 
+##                                         2 
+##                               Regressions 
+##                                         2 
+##                      Statistical Modeling 
+##                                         2 
+##                    Statistical regression 
+##                                         2</code></pre>
+</section>
+    </div>
+  </div>
+
+  <script src="cs06_1_deck_files/reveal.js-3.3.0.1/lib/js/head.min.js"></script>
+  <script src="cs06_1_deck_files/reveal.js-3.3.0.1/js/reveal.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Vertical centering of slides
+        center: true,
+        // Transition style
+        transition: 'none', // none/fade/slide/convex/concave/zoom
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
+
+
+
+        // Optional reveal.js plugins
+        dependencies: [
+        ]
+      });
+    </script>
+  <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+
+<script>
+  (function() {
+    if (window.jQuery) {
+      Reveal.addEventListener( 'slidechanged', function(event) {  
+        window.jQuery(event.previousSlide).trigger('hidden');
+        window.jQuery(event.currentSlide).trigger('shown');
+      });
+    }
+  })();
+</script>
+
+
+  </body>
+</html>
