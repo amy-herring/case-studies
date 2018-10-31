@@ -72,7 +72,7 @@ Note: this schedule is approximate and is likely to be modified as the course pr
 | November 2    | Individual CS: Web Scraping  | CS4 Election Predictions Update; CS4 Final Report Due by Midnight Nov 5|
 | November 7    | CS4: Presentations: Post Election Diagnostics |  |
 | November 9    | CS5: Missing Data |Individual CS Interim Report: Introduction and Analysis Plan  |
-| Movember 14   | CS5: Survival Analysis | |
+| November 14   | CS5: Survival Analysis | |
 | November 16   | Hands on: Missing Data and Survival | CS5 Interim Report: Patterns of Missing Data |
 | November 28   | Lab: CS5 and Individual CS Help | Individual CS Draft Report | 
 | November 30   | Lab: Individual CS Practice Presentations to Groups | CS5: Final Report |
