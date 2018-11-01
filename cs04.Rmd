@@ -38,7 +38,12 @@ We will present predictions weekly, and the final case study grading criteria wi
 - Weekly predictions of the NC Congressional races and whether the House of Representatives will flip to Democratic control starting October 12
 - Interim report 1: who votes in NC? Using the NC voter files, identify who votes in NC so that these data can be used with election surveys in order to predict outcomes of NC congressional elections. Present results in short in-class presentation and in accompanying report not to exceed 5 pages.  Results should be fully reproducible. 
 - Interim report 2: in 5 pages (maximum), outline your models and general strategy for predicting the outcome of the 2018 elections.
-- Final report: provide point and interval estimates of the % of votes won by each NC Congressional candidate, predicting the winner of each race. Provide point and interval estimates of the probability that the US House of Representatives remains under Republican control after the 2018 election. Include a description of your modeling and prediction strategy if any changes were made after the 10/31 report.
+- Final report: Items for Final Report
+     + The final report itself should be structured with an introduction, description of methods (e.g., modeling and prediction strategy along with the models themselves), results (point and interval estimates of the % of votes won by each Congressional candidate, predicting the winner of each race; point and interval estimates of the probability the US House remains under Republican control). Discussion should include some evaluation of the relative predictive ability of variables in your models (e.g., maybe you predicted voter turnout as a function of pet ownership rates, but maybe pet ownership rates are not at all predictive – so we want to know which data sources you felt were most useful) as well as discussion of strengths and weaknesses of your strategy. Any visualizations should be included (or linked, if they are interactive) in the final report. The final report should contain two appendices, described below.
+     + Appendix A: Numbered list of all models/modeling procedures, with explicit details about model purpose, model structure, and resulting estimates from each model (raw output is fine for this appendix). Reproducible code and data should also be uploaded to Sakai.
+     + Appendix B: List of all data sets/data sources used, along with an explicit mapping from the models in Appendix A to the variables used from Appendix B in each model.
+
+
 - Presentation after election: discuss what went right and wrong with your modeling and assumptions based on election outcomes (e.g., winners, who voted, etc.)
 
 
