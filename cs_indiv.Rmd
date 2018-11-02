@@ -45,9 +45,11 @@ Nolan and Temple Lang, Chapter 12 (some of this chapter is now outdated)
 
 
 [Web Scraping](decks/cs06_1_deck.html)
-<!---
-[Web Scraping and Analysis: Jiurui based on 12.4-12.9](decks/cs_indiv_3_deck.html)
 
---->
+[Web Scraping - dplyr](decks/cs06_1_dplyr.html)
+
+[Web Scraping Generalizations](decks/cs06_2_deck.html)
+
+[Web Scraping Generalizations - dplyr](decks/cs06_2_dplyr.html)
 
 
