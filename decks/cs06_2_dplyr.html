@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <title>Web Scraping Generalizations - dplyr</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="cs06_2_dplyr_files/reveal.js-3.3.0.1/css/reveal.css"/>
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; background-color: #2a211c; color: #bdae9d; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; background-color: #2a211c; color: #bdae9d; border-right: 1px solid #bdae9d; }
+td.sourceCode { padding-left: 5px; }
+pre, code { color: #bdae9d; background-color: #2a211c; }
+code > span.kw { color: #43a8ed; font-weight: bold; } /* Keyword */
+code > span.dt { text-decoration: underline; } /* DataType */
+code > span.dv { color: #44aa43; } /* DecVal */
+code > span.bn { color: #44aa43; } /* BaseN */
+code > span.fl { color: #44aa43; } /* Float */
+code > span.ch { color: #049b0a; } /* Char */
+code > span.st { color: #049b0a; } /* String */
+code > span.co { color: #0066ff; font-style: italic; } /* Comment */
+code > span.al { color: #ffff00; } /* Alert */
+code > span.fu { color: #ff9358; font-weight: bold; } /* Function */
+code > span.er { color: #ffff00; font-weight: bold; } /* Error */
+code > span.wa { color: #ffff00; font-weight: bold; } /* Warning */
+code > span.cn { } /* Constant */
+code > span.sc { color: #049b0a; } /* SpecialChar */
+code > span.vs { color: #049b0a; } /* VerbatimString */
+code > span.ss { color: #049b0a; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { } /* Variable */
+code > span.cf { color: #43a8ed; font-weight: bold; } /* ControlFlow */
+code > span.op { } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { font-weight: bold; } /* Preprocessor */
+code > span.at { } /* Attribute */
+code > span.do { color: #0066ff; font-style: italic; } /* Documentation */
+code > span.an { color: #0066ff; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.co { color: #0066ff; font-weight: bold; font-style: italic; } /* Comment */
+code > span.in { color: #0066ff; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="cs06_2_dplyr_files/reveal.js-3.3.0.1/css/theme/night.css" id="theme">
+
+<style type="text/css">
+.reveal section img {
+  background: rgba(255, 255, 255, 0.85);
+}
+</style>
+
+  <!-- some tweaks to reveal css -->
+  <style type="text/css">
+    .reveal h1 { font-size: 2.0em; }
+    .reveal h2 { font-size: 1.5em;  }
+    .reveal h3 { font-size: 1.25em;	}
+    .reveal h4 { font-size: 1em;	}
+
+    .reveal .slides>section,
+    .reveal .slides>section>section {
+      padding: 0px 0px;
+    }
+
+
+
+    .reveal table {
+      border-width: 1px;
+      border-spacing: 2px;
+      border-style: dotted;
+      border-color: gray;
+      border-collapse: collapse;
+      font-size: 0.7em;
+    }
+
+    .reveal table th {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      font-weight: bold;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+    .reveal table td {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+
+  </style>
+
+    <style type="text/css">code{white-space: pre;}</style>
+
+    <link rel="stylesheet" href="styles.css"/>
+
+<!-- Printing and PDF exports -->
+<script id="paper-css" type="application/dynamic-css">
+
+/* Default Print Stylesheet Template
+   by Rob Glazebrook of CSSnewbie.com
+   Last Updated: June 4, 2008
+
+   Feel free (nay, compelled) to edit, append, and
+   manipulate this file as you see fit. */
+
+
+@media print {
+
+	/* SECTION 1: Set default width, margin, float, and
+	   background. This prevents elements from extending
+	   beyond the edge of the printed page, and prevents
+	   unnecessary background images from printing */
+	html {
+		background: #fff;
+		width: auto;
+		height: auto;
+		overflow: visible;
+	}
+	body {
+		background: #fff;
+		font-size: 20pt;
+		width: auto;
+		height: auto;
+		border: 0;
+		margin: 0 5%;
+		padding: 0;
+		overflow: visible;
+		float: none !important;
+	}
+
+	/* SECTION 2: Remove any elements not needed in print.
+	   This would include navigation, ads, sidebars, etc. */
+	.nestedarrow,
+	.controls,
+	.fork-reveal,
+	.share-reveal,
+	.state-background,
+	.reveal .progress,
+	.reveal .backgrounds {
+		display: none !important;
+	}
+
+	/* SECTION 3: Set body font face, size, and color.
+	   Consider using a serif font for readability. */
+	body, p, td, li, div {
+		font-size: 20pt!important;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		color: #000;
+	}
+
+	/* SECTION 4: Set heading font face, sizes, and color.
+	   Differentiate your headings from your body text.
+	   Perhaps use a large sans-serif for distinction. */
+	h1,h2,h3,h4,h5,h6 {
+		color: #000!important;
+		height: auto;
+		line-height: normal;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		text-shadow: 0 0 0 #000 !important;
+		text-align: left;
+		letter-spacing: normal;
+	}
+	/* Need to reduce the size of the fonts for printing */
+	h1 { font-size: 28pt !important;  }
+	h2 { font-size: 24pt !important; }
+	h3 { font-size: 22pt !important; }
+	h4 { font-size: 22pt !important; font-variant: small-caps; }
+	h5 { font-size: 21pt !important; }
+	h6 { font-size: 20pt !important; font-style: italic; }
+
+	/* SECTION 5: Make hyperlinks more usable.
+	   Ensure links are underlined, and consider appending
+	   the URL to the end of the link for usability. */
+	a:link,
+	a:visited {
+		color: #000 !important;
+		font-weight: bold;
+		text-decoration: underline;
+	}
+	/*
+	.reveal a:link:after,
+	.reveal a:visited:after {
+		content: " (" attr(href) ") ";
+		color: #222 !important;
+		font-size: 90%;
+	}
+	*/
+
+
+	/* SECTION 6: more reveal.js specific additions by @skypanther */
+	ul, ol, div, p {
+		visibility: visible;
+		position: static;
+		width: auto;
+		height: auto;
+		display: block;
+		overflow: visible;
+		margin: 0;
+		text-align: left !important;
+	}
+	.reveal pre,
+	.reveal table {
+		margin-left: 0;
+		margin-right: 0;
+	}
+	.reveal pre code {
+		padding: 20px;
+		border: 1px solid #ddd;
+	}
+	.reveal blockquote {
+		margin: 20px 0;
+	}
+	.reveal .slides {
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 0 !important;
+		zoom: 1 !important;
+
+		overflow: visible !important;
+		display: block !important;
+
+		text-align: left !important;
+		-webkit-perspective: none;
+		   -moz-perspective: none;
+		    -ms-perspective: none;
+		        perspective: none;
+
+		-webkit-perspective-origin: 50% 50%;
+		   -moz-perspective-origin: 50% 50%;
+		    -ms-perspective-origin: 50% 50%;
+		        perspective-origin: 50% 50%;
+	}
+	.reveal .slides section {
+		visibility: visible !important;
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+		display: block !important;
+		overflow: visible !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 60px 20px !important;
+		z-index: auto !important;
+
+		opacity: 1 !important;
+
+		page-break-after: always !important;
+
+		-webkit-transform-style: flat !important;
+		   -moz-transform-style: flat !important;
+		    -ms-transform-style: flat !important;
+		        transform-style: flat !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+
+		-webkit-transition: none !important;
+		   -moz-transition: none !important;
+		    -ms-transition: none !important;
+		        transition: none !important;
+	}
+	.reveal .slides section.stack {
+		padding: 0 !important;
+	}
+	.reveal section:last-of-type {
+		page-break-after: avoid !important;
+	}
+	.reveal section .fragment {
+		opacity: 1 !important;
+		visibility: visible !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+	}
+	.reveal section img {
+		display: block;
+		margin: 15px 0px;
+		background: rgba(255,255,255,1);
+		border: 1px solid #666;
+		box-shadow: none;
+	}
+
+	.reveal section small {
+		font-size: 0.8em;
+	}
+
+}  
+</script>
+
+
+<script id="pdf-css" type="application/dynamic-css">
+    
+/**
+ * This stylesheet is used to print reveal.js
+ * presentations to PDF.
+ *
+ * https://github.com/hakimel/reveal.js#pdf-export
+ */
+
+* {
+	-webkit-print-color-adjust: exact;
+}
+
+body {
+	margin: 0 auto !important;
+	border: 0;
+	padding: 0;
+	float: none !important;
+	overflow: visible;
+}
+
+html {
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+}
+
+/* Remove any elements not needed in print. */
+.nestedarrow,
+.reveal .controls,
+.reveal .progress,
+.reveal .playback,
+.reveal.overview,
+.fork-reveal,
+.share-reveal,
+.state-background {
+	display: none !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	text-shadow: 0 0 0 #000 !important;
+}
+
+.reveal pre code {
+	overflow: hidden !important;
+	font-family: Courier, 'Courier New', monospace !important;
+}
+
+ul, ol, div, p {
+	visibility: visible;
+	position: static;
+	width: auto;
+	height: auto;
+	display: block;
+	overflow: visible;
+	margin: auto;
+}
+.reveal {
+	width: auto !important;
+	height: auto !important;
+	overflow: hidden !important;
+}
+.reveal .slides {
+	position: static;
+	width: 100%;
+	height: auto;
+
+	left: auto;
+	top: auto;
+	margin: 0 !important;
+	padding: 0 !important;
+
+	overflow: visible;
+	display: block;
+
+	-webkit-perspective: none;
+	   -moz-perspective: none;
+	    -ms-perspective: none;
+	        perspective: none;
+
+	-webkit-perspective-origin: 50% 50%; /* there isn't a none/auto value but 50-50 is the default */
+	   -moz-perspective-origin: 50% 50%;
+	    -ms-perspective-origin: 50% 50%;
+	        perspective-origin: 50% 50%;
+}
+
+.reveal .slides section {
+	page-break-after: always !important;
+
+	visibility: visible !important;
+	position: relative !important;
+	display: block !important;
+	position: relative !important;
+
+	margin: 0 !important;
+	padding: 0 !important;
+	box-sizing: border-box !important;
+	min-height: 1px;
+
+	opacity: 1 !important;
+
+	-webkit-transform-style: flat !important;
+	   -moz-transform-style: flat !important;
+	    -ms-transform-style: flat !important;
+	        transform-style: flat !important;
+
+	-webkit-transform: none !important;
+	   -moz-transform: none !important;
+	    -ms-transform: none !important;
+	        transform: none !important;
+}
+
+.reveal section.stack {
+	margin: 0 !important;
+	padding: 0 !important;
+	page-break-after: avoid !important;
+	height: auto !important;
+	min-height: auto !important;
+}
+
+.reveal img {
+	box-shadow: none;
+}
+
+.reveal .roll {
+	overflow: visible;
+	line-height: 1em;
+}
+
+/* Slide backgrounds are placed inside of their slide when exporting to PDF */
+.reveal section .slide-background {
+	display: block !important;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: -1;
+}
+
+/* All elements should be above the slide-background */
+.reveal section>* {
+	position: relative;
+	z-index: 1;
+}
+
+/* Display slide speaker notes when 'showNotes' is enabled */
+.reveal .speaker-notes-pdf {
+	display: block;
+	width: 100%;
+	max-height: none;
+	left: auto;
+	top: auto;
+	z-index: 100;
+}
+
+/* Display slide numbers when 'slideNumber' is enabled */
+.reveal .slide-number-pdf {
+	display: block;
+	position: absolute;
+	font-size: 14px;
+}
+
+</script>
+
+
+<script>
+var style = document.createElement( 'style' );
+style.type = 'text/css';
+var style_script_id = window.location.search.match( /print-pdf/gi ) ? 'pdf-css' : 'paper-css';
+var style_script = document.getElementById(style_script_id).text;
+style.innerHTML = style_script;
+document.getElementsByTagName('head')[0].appendChild(style);
+</script>
+
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section>
+    <h1 class="title">Web Scraping Generalizations - dplyr</h1>
+</section>
+
+<section id="a-reusable-generic-framework-for-arbitrary-sites" class="slide level2">
+<h2>A Reusable Generic Framework for Arbitrary Sites</h2>
+</section>
+<section id="section" class="slide level2 smaller">
+<h2></h2>
+<p>There are 4 components to get the information from all of the job posts for a given query:</p>
+<ol type="1">
+<li>A mechanism to submit the search query and get the first page of results.</li>
+<li>A means to extract the links to the individual job posts from a page of results.</li>
+<li>A function to read the contents of an individual job post.</li>
+<li>A way to find the next page of results, relative to the current page.</li>
+</ol>
+</section>
+<section id="section-1" class="slide level2 smaller">
+<h2></h2>
+<p>General Framework</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(rvest)
+<span class="kw">library</span>(XML)
+<span class="kw">library</span>(RCurl)
+
+<span class="co"># Given a search query, get the pages listing the jobs.</span>
+<span class="co"># we loop over these pages and harvest the </span>
+<span class="co"># individual jobs in each.</span>
+
+searchJobs &lt;-<span class="st"> </span><span class="cf">function</span>(firstPage, getNextPage_f, getJobDescriptionLinks_f, getJobDescription_f,
+           <span class="dt">max =</span> <span class="ot">NA</span>, <span class="dt">curl =</span> <span class="kw">getCurlHandle</span>(<span class="dt">followlocation =</span> <span class="ot">TRUE</span>)){
+  
+    curPage =<span class="st"> </span>firstPage
+    jobs =<span class="st"> </span><span class="kw">list</span>()
+    
+    pageNum =<span class="st"> </span><span class="dv">1</span>
+    
+    <span class="cf">while</span>(<span class="kw">is.na</span>(max) <span class="op">||</span><span class="st"> </span><span class="kw">length</span>(jobs) <span class="op">&lt;</span><span class="st"> </span>max) {
+      listings_page =<span class="st"> </span><span class="kw">read_html</span>(curPage)
+      
+      <span class="co"># extract the links to the individual job posts</span>
+      links =<span class="st"> </span><span class="kw">getJobDescriptionLinks_f</span>(listings_page)
+      
+      <span class="co"># try(): if getJobDescription_f() raises an error for any reason for a particular post, we will catch the error here and continue on to the next post</span>
+      posts =<span class="st"> </span><span class="kw">structure</span>(<span class="kw">lapply</span>(links, <span class="cf">function</span>(l) <span class="kw">try</span>(<span class="kw">getJobDescription_f</span>(<span class="kw">getURLContent</span>(l)))), 
+                        <span class="dt">names =</span> links)
+      
+      jobs =<span class="st"> </span><span class="kw">c</span>(jobs, posts)
+      
+      <span class="co"># determines the next page of results</span>
+      curPage =<span class="st"> </span><span class="kw">getNextPage_f</span>(listings_page)
+      
+      <span class="co"># if we cannot parse curPage, exit while loop</span>
+      t &lt;-<span class="st"> </span><span class="kw">try</span>(<span class="kw">read_html</span>(curPage))
+      <span class="cf">if</span>(<span class="kw">inherits</span>(t,<span class="st">&quot;try-error&quot;</span>)){
+        <span class="cf">break</span>
+      } 
+      pageNum =<span class="st"> </span>pageNum <span class="op">+</span><span class="st"> </span><span class="dv">1</span>
+      <span class="co">#print(pageNum)</span>
+    }
+    
+    <span class="kw">invisible</span>(jobs[<span class="op">!</span><span class="kw">sapply</span>(jobs, inherits, <span class="st">&quot;try-error&quot;</span>)])
+    <span class="kw">return</span>(jobs)
+}</code></pre></div>
+</section>
+<section id="scraping-careerbuilder" class="slide level2">
+<h2>Scraping CareerBuilder</h2>
+</section>
+<section id="section-2" class="slide level2 smaller">
+<h2></h2>
+<p>We could define a site-specific function using searchJobs() for CareerBuilder.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Since the query string is not a value of a parameter on the right of the ? in the URL, we could not use getForm() to determine the first page of our search results</span>
+cb.searchURL &lt;-<span class="st"> </span><span class="cf">function</span>(query){
+  each_word &lt;-<span class="st"> </span><span class="kw">strsplit</span>(query,<span class="st">&quot; &quot;</span>)[[<span class="dv">1</span>]]
+  
+  <span class="kw">paste</span>(<span class="st">&quot;https://www.careerbuilder.com/jobs-&quot;</span>, 
+        <span class="kw">gsub</span>(<span class="st">&quot; &quot;</span>,<span class="st">&quot;-&quot;</span>,query),
+        <span class="st">&quot;?keywords=&quot;</span>,
+        <span class="kw">paste</span>(each_word,<span class="dt">collapse =</span> <span class="st">&quot;+&quot;</span>),<span class="dt">sep =</span> <span class="st">&quot;&quot;</span>)
+}
+
+
+<span class="co"># Get links to the job postings </span>
+cb.getJobLinks &lt;-<span class="st"> </span><span class="cf">function</span>(page, <span class="dt">base =</span> baseURL){
+  links =<span class="st"> </span>page <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">html_nodes</span>(<span class="st">&quot;.show-for-medium-up a&quot;</span>) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">html_attr</span>(<span class="st">&#39;href&#39;</span>)
+    
+  <span class="kw">getRelativeURL</span>(links, base)
+} 
+  
+<span class="co"># Get the link to next page</span>
+cb.getNextPage &lt;-<span class="st"> </span><span class="cf">function</span>(page){
+  nxt =<span class="st"> </span>page <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">html_nodes</span>(<span class="st">&#39;#next-button&#39;</span>) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">html_attr</span>(<span class="st">&#39;href&#39;</span>)
+  
+  <span class="cf">if</span>(<span class="kw">length</span>(nxt) <span class="op">==</span><span class="st"> </span><span class="dv">0</span>)
+    <span class="kw">return</span>(<span class="kw">character</span>())
+  <span class="kw">return</span>(nxt)
+}
+
+<span class="co"># get job descriptions</span>
+cb.getJobDescriptions &lt;-<span class="st"> </span><span class="cf">function</span>(job_url){
+  job_post =<span class="st"> </span><span class="kw">read_html</span>(job_url)
+  descrip =<span class="st"> </span>job_post <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">html_node</span>(<span class="st">&quot;.description&quot;</span>) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">html_text</span>()
+  
+  <span class="kw">return</span>(descrip)
+}
+
+<span class="co"># Put it all together</span>
+searchCareerBuilders &lt;-<span class="cf">function</span>(query, ..., <span class="dt">baseURL =</span> 
+             <span class="st">&#39;https://www.careerbuilder.com/jobs?keywords=&amp;location=&#39;</span>,<span class="dt">max =</span> <span class="ot">NA</span>)
+{
+  <span class="co"># make baseURL a global variable, so that we can use it in other function</span>
+  baseURL &lt;&lt;-<span class="st"> </span>baseURL  
+  
+  <span class="co"># Determine the first page of search results</span>
+  txt =<span class="st"> </span><span class="kw">cb.searchURL</span>(query)
+    
+  <span class="kw">searchJobs</span>(<span class="dt">firstPage =</span> txt, <span class="dt">getNextPage_f =</span> cb.getNextPage, 
+               <span class="dt">getJobDescriptionLinks_f =</span> cb.getJobLinks, 
+               <span class="dt">getJobDescription_f =</span> cb.getJobDescriptions, <span class="dt">max =</span> max)
+}
+
+allposts =<span class="st"> </span><span class="kw">searchCareerBuilders</span>(<span class="dt">query =</span> <span class="st">&quot;Data Scientist&quot;</span>, <span class="dt">max =</span> <span class="dv">100</span>)
+<span class="kw">length</span>(allposts)</code></pre></div>
+<pre><code>## [1] 100</code></pre>
+</section>
+<section id="scraping-simplyhired.com" class="slide level2">
+<h2>Scraping SimplyHired.com</h2>
+</section>
+<section id="section-3" class="slide level2 smaller">
+<h2></h2>
+<p>We can follow the same recipe to scrapy SimplyHired.com</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Get links to the job postings </span>
+sh.getJobLinks &lt;-<span class="st"> </span><span class="cf">function</span>(page, <span class="dt">base =</span> baseURL){
+  links =<span class="st"> </span>page <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">html_nodes</span>(<span class="st">&quot;.js-job-link&quot;</span>) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">html_attr</span>(<span class="st">&#39;href&#39;</span>)
+  
+  <span class="kw">getRelativeURL</span>(links, base)
+} 
+
+<span class="co"># Get the link to next page</span>
+sh.getNextPage &lt;-<span class="st"> </span><span class="cf">function</span>(page, <span class="dt">base =</span> baseURL){
+  nxt =<span class="st"> </span>page <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">html_nodes</span>(<span class="st">&#39;.next-pagination a&#39;</span>) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">html_attr</span>(<span class="st">&#39;href&#39;</span>)
+  
+  nxt =<span class="st"> </span><span class="kw">getRelativeURL</span>(nxt, base)
+  
+  <span class="cf">if</span>(<span class="kw">length</span>(nxt) <span class="op">==</span><span class="st"> </span><span class="dv">0</span>)
+    <span class="kw">return</span>(<span class="kw">character</span>())
+  <span class="kw">return</span>(nxt)
+}
+
+<span class="co"># get job descriptions</span>
+sh.getJobDescriptions &lt;-<span class="st"> </span><span class="cf">function</span>(job_url){
+  <span class="kw">Sys.sleep</span>(<span class="dv">8</span>)
+  job_post =<span class="st"> </span><span class="kw">read_html</span>(job_url)
+  descrip =<span class="st"> </span>job_post <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">html_nodes</span>(<span class="st">&#39;.viewjob-description&#39;</span>) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">html_text</span>()
+  
+  <span class="kw">return</span>(descrip)
+}
+
+
+<span class="co"># Put it all together</span>
+searchSH &lt;-<span class="cf">function</span>(query, ..., <span class="dt">baseURL =</span> 
+             <span class="st">&#39;https://www.simplyhired.com/search&#39;</span>,<span class="dt">max =</span> <span class="ot">NA</span>)
+{ 
+  <span class="co"># Determine the first page of search results</span>
+  baseURL &lt;&lt;-<span class="st"> </span>baseURL
+  txt =<span class="st"> </span><span class="kw">getForm</span>(baseURL, <span class="dt">q =</span> query)
+  
+  <span class="kw">searchJobs</span>(<span class="dt">firstPage =</span> txt, <span class="dt">getNextPage_f =</span> sh.getNextPage, 
+               <span class="dt">getJobDescriptionLinks_f =</span> sh.getJobLinks, 
+               <span class="dt">getJobDescription_f =</span> sh.getJobDescriptions, <span class="dt">max =</span> max)
+}
+
+alljobs =<span class="st"> </span><span class="kw">searchSH</span>(<span class="dt">query =</span> <span class="st">&quot;data scientist&quot;</span>, <span class="dt">max =</span> <span class="dv">1</span>)
+alljobs[[<span class="dv">1</span>]]</code></pre></div>
+<pre><code>## [1] &quot;What you&#39;ll do\nDesign, develop and deliver actionable insights to drive growth, improve retention, develop products and increase profitability. Use statistical analysis, data mining and predictive analytics techniques to understand business behavior and identify trends in digital procurement.\nEssential Duties and Responsibilities:\nIdentify appropriate analytical tools and methods. Use advanced knowledge of business analysis to perform basic to highly complex quantitative analyses and modeling in order to help our stakeholders make the right buying decision either in terms of the pricing or supplier choice.\nLeverage tools, existing data, and new data to develop robust quantitative models. These models would help us detect anomalies and possibly prevent fraudulent activities across payments data. Using these models we intend to identify buying patterns and behaviors of consumers and optimize buying channels to streamline Source-to-Pay operations.\nInterpret the results of analyses to drive insight. Communicate and explain the results of analyses to business partners in a way that is actionable and is aligned to their primary goals and business outcomes.\nCore Operations with an emphasis in the business of procurement including Forecasting and setting goals; Monitoring key service metrics, understanding root causes of changes in metrics; Building and analyzing dashboards and reports; Building key data sets to empower operational and exploratory analysis\nExploratory Analysis by Understanding ecosystems, user behaviors, and long-term trends o Identifying new levers to help move key metrics; Building models of user behaviors for deeper analysis\nService Leadership by Influencing service owners through the presentation of data-based recommendations; Communicating state of business, experiment results, etc. to stakeholders\nData Infrastructure by Working in Hadoop and Hive primarily, sometimes MySQL, Oracle, Tableau and Teradata; Automating analyses and authoring pipelines via SQL and python based ETL framework\nWho You&#39;ll Work With\nGlobal Procurement Services (GPS) serves the Cisco business functions as the supply chain manager and procurement arm for all non-production, indirect and services spend. GPS is dedicated to strong supplier development and category management capabilities spend management, procurement operations, supplier diversity and procurement risk management. GPS provides an exceptional working and learning environment in which to build careers.\n\nWho You Are\nThe perfect candidate will have a background in a quantitative or technical field, will have experience working with large data sets, and will have some experience in data-driven decision making. You are focused on results, a self-starter, and have demonstrated success in using analytics to drive the understanding, growth, and success of a product. The ideal candidate is passionate about solving real-world problems. We are looking for you to thrive in a dynamic environment, have big ideas and goals, and believe in experimenting with ideas rather than talking about them.\nOur Minimum requirements for this role:\n4-6 years&#39; experience in the field of analytics and data science.\n8-10 years&#39; experience within the overall BI/Data Architecture field\nBachelors Degree; Preferably have a degree in a quantitative discipline such as Statistics, Physics, Economics, Applied Math, Computer Science, Operations Research, or Computational Sciences, with coursework and projects in machine learning and data analysis.\nDeep skills in one or more areas mentioned below,\nPlatforms: R, MATLAB, H2O, SPSS or SAS.\nDatabases/DW: Hadoop, Oracle, and Teradata\nMachine Learning packages - Caffe, Theano\nProgramming Languages: SQL, Python, Java, Scala or C/C++\nOur Desired Skills for this role are:\nYou are curious, have a research mindset, love bringing logic and structure to loosely defined unstructured problems and ideas.\nYou have an understanding of statistical and predictive modeling concepts, machine-learning approaches, clustering and classification techniques, and recommendation and optimization algorithms.\nWhy Cisco\nAt Cisco, each person brings their unique talents to work as a team and make a difference.\n\nYes, our technology changes the way the world works, lives, plays and learns, but our edge comes from our people.\n\nWe connect everything – people, process, data and things – and we use those connections to change our world for the better.\nWe innovate everywhere - From launching a new era of networking that adapts, learns and protects, to building Cisco Services that accelerate businesses and business results. Our technology powers entertainment, retail, healthcare, education and more – from Smart Cities to your everyday devices.\nWe benefit everyone - We do all of this while striving for a culture that empowers every person to be the difference, at work and in our communities.\nColorful hair? Don’t care. Tattoos? Show off your ink. Like polka dots? That’s cool. Pop culture geek? Many of us are. Be you, with us! #WeAreCisco&quot;</code></pre>
+</section>
+<section id="some-advice" class="slide level2">
+<h2>Some advice</h2>
+</section>
+<section id="section-4" class="slide level2 smaller">
+<h2></h2>
+<p>Download the html/json files you aim to scrape (e.g. locally or cached using HTTrack). Ideally this is should be done once, otherwise you are risking getting your IP banned or blacklisted.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Optional commands to download htmls locally</span>
+<span class="kw">library</span>(purrr)
+possibly_download_file =<span class="st"> </span><span class="kw">possibly</span>(download.file, <span class="dt">otherwise =</span> <span class="ot">NA</span>, <span class="dt">quiet =</span> <span class="ot">TRUE</span>)
+safely_download_file =<span class="st"> </span><span class="kw">safely</span>(download.file, <span class="dt">otherwise =</span> <span class="ot">NA</span>, <span class="dt">quiet =</span> <span class="ot">TRUE</span>)</code></pre></div>
+</section>
+    </div>
+  </div>
+
+  <script src="cs06_2_dplyr_files/reveal.js-3.3.0.1/lib/js/head.min.js"></script>
+  <script src="cs06_2_dplyr_files/reveal.js-3.3.0.1/js/reveal.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Vertical centering of slides
+        center: true,
+        // Transition style
+        transition: 'none', // none/fade/slide/convex/concave/zoom
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
+
+
+
+        // Optional reveal.js plugins
+        dependencies: [
+        ]
+      });
+    </script>
+  <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+
+<script>
+  (function() {
+    if (window.jQuery) {
+      Reveal.addEventListener( 'slidechanged', function(event) {  
+        window.jQuery(event.previousSlide).trigger('hidden');
+        window.jQuery(event.currentSlide).trigger('shown');
+      });
+    }
+  })();
+</script>
+
+
+  </body>
+</html>
