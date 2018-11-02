@@ -503,36 +503,6 @@ document.getElementsByTagName('head')[0].appendChild(style);
 <li>Read <a href="https://www.w3schools.com/xml/xpath_intro.asp">W3 Schools XPath Intro</a>, <a href="https://www.w3schools.com/xml/xpath_nodes.asp">XPath Nodes</a>, and <a href="https://www.w3schools.com/xml/xpath_syntax.asp">XPath Syntax</a></li>
 </ul>
 </section>
-<section id="hypertext-markup-language" class="slide level2">
-<h2>Hypertext Markup Language</h2>
-<h6 id="citation-colin-rundell-sta-523">citation: Colin Rundell STA 523</h6>
-<p>Most of the data on the web is still largely available as HTML. Some pages are moving to JavaScript</p>
-<div class="sourceCode"><pre class="sourceCode html"><code class="sourceCode html"><span class="kw">&lt;html&gt;</span>
-  <span class="kw">&lt;head&gt;</span>
-    <span class="kw">&lt;title&gt;</span>This is a title<span class="kw">&lt;/title&gt;</span>
-  <span class="kw">&lt;/head&gt;</span>
-  <span class="kw">&lt;body&gt;</span>
-    <span class="kw">&lt;p</span><span class="ot"> align=</span><span class="st">&quot;center&quot;</span><span class="kw">&gt;</span>Hello world!<span class="kw">&lt;/p&gt;</span>
-    <span class="kw">&lt;br/&gt;</span>
-    <span class="kw">&lt;div</span><span class="ot"> class=</span><span class="st">&quot;name&quot;</span><span class="ot"> id=</span><span class="st">&quot;first&quot;</span><span class="kw">&gt;</span>John<span class="kw">&lt;/div&gt;</span>
-    <span class="kw">&lt;div</span><span class="ot"> class=</span><span class="st">&quot;name&quot;</span><span class="ot"> id=</span><span class="st">&quot;last&quot;</span><span class="kw">&gt;</span>Doe<span class="kw">&lt;/div&gt;</span>
-    <span class="kw">&lt;div</span><span class="ot"> class=</span><span class="st">&quot;contact&quot;</span><span class="kw">&gt;</span>
-      <span class="kw">&lt;div</span><span class="ot"> class=</span><span class="st">&quot;home&quot;</span><span class="kw">&gt;</span>555-555-1234<span class="kw">&lt;/div&gt;</span>
-      <span class="kw">&lt;div</span><span class="ot"> class=</span><span class="st">&quot;home&quot;</span><span class="kw">&gt;</span>555-555-2345<span class="kw">&lt;/div&gt;</span>
-      <span class="kw">&lt;div</span><span class="ot"> class=</span><span class="st">&quot;work&quot;</span><span class="kw">&gt;</span>555-555-9999<span class="kw">&lt;/div&gt;</span>
-      <span class="kw">&lt;div</span><span class="ot"> class=</span><span class="st">&quot;fax&quot;</span><span class="kw">&gt;</span>555-555-8888<span class="kw">&lt;/div&gt;</span>
-    <span class="kw">&lt;/div&gt;</span>
-  <span class="kw">&lt;/body&gt;</span>
-<span class="kw">&lt;/html&gt;</span></code></pre></div>
-</section>
-<section id="selectorgadget" class="slide level2">
-<h2>SelectorGadget</h2>
-<h6 id="citation-colin-rundell-sta-523-1">citation: Colin Rundell STA 523</h6>
-<p>This is a javascript based tool that helps you interactively build an appropriate CSS selector for the content you are interested in.</p>
-<center>
-<a href='http://selectorgadget.com/'>http://selectorgadget.com/</a>
-</center>
-</section>
 <section id="scraping-cybercoders.com" class="slide level2">
 <h2>Scraping CyberCoders.com</h2>
 </section>
@@ -552,9 +522,6 @@ doc =<span class="st"> </span><span class="kw">read_html</span>(u)</code></pre><
 <h2>Words in Job Description</h2>
 <p>There are a few paragraphs of job description. We can inspect this web page in the browser, and move the cursor over part of the page and see the corresponding HTML elements(s). We found that those descriptions are all inside DIV nodes with a class attribute “section-data section-data-title;” we can extract them using XPath.</p>
 <p><img src="figures/words.png" /><!-- --></p>
-</section>
-<section class="slide level2">
-
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># get the corresponding html nodes</span>
 node_word =<span class="st"> </span>
 <span class="st">  </span><span class="kw">html_nodes</span>(doc,<span class="dt">xpath =</span> <span class="st">&quot;//div[@class = &#39;section-data section-data-title&#39;]&quot;</span>)
@@ -729,39 +696,41 @@ tt =<span class="st"> </span><span class="kw">sort</span>(<span class="kw">table
 tt[tt <span class="op">&gt;=</span><span class="st"> </span><span class="dv">2</span>]</code></pre></div>
 <pre><code>## 
 ##                                    Python 
-##                                        93 
+##                                        96 
 ##                          Machine Learning 
-##                                        55 
+##                                        56 
 ##                                       SQL 
 ##                                        43 
 ##                                         R 
-##                                        42 
+##                                        38 
 ##                              Data Science 
 ##                                        29 
-##                                    Hadoop 
-##                                        14 
+##                                     SPARK 
+##                                        13 
 ##                                Statistics 
-##                                        14 
-##                                Tensorflow 
-##                                        14 
+##                                        13 
 ##                                  Big Data 
+##                                        12 
+##                                    Hadoop 
 ##                                        12 
 ##               Machine Learning Algorithms 
 ##                                        12 
-##                                     SPARK 
-##                                        12 
-##                                      Java 
+##                                Tensorflow 
 ##                                        11 
 ##                                        AI 
 ##                                        10 
+##                                      Java 
+##                                        10 
 ##                                       AWS 
+##                                         9 
+##                               Data Mining 
 ##                                         9 
 ##                            Data Scientist 
 ##                                         9 
-##                               Data Mining 
-##                                         8 
 ##                             Deep Learning 
-##                                         8 
+##                                         9 
+##                                       NLP 
+##                                         9 
 ##                              Apache Spark 
 ##                                         7 
 ##                        Bayesian Inference 
@@ -770,57 +739,57 @@ tt[tt <span class="op">&gt;=</span><span class="st"> </span><span class="dv">2</
 ##                                         7 
 ##                             Data Analysis 
 ##                                         7 
-##                                       NLP 
+##                                    pandas 
 ##                                         7 
 ##                              scikit.learn 
 ##                                         7 
+##                                Algorithms 
+##                                         6 
 ##                                     Julia 
 ##                                         6 
 ##                                     Scala 
 ##                                         6 
-##                                   Tableau 
-##                                         6 
 ##                      Virtual Environments 
 ##                                         6 
-##                                Algorithms 
-##                                         5 
-##                                  modeling 
+##                                     Keras 
 ##                                         5 
 ##                      Predictive Analytics 
 ##                                         5 
+##                                       SAS 
+##                                         5 
 ##                   Artificial Intelligence 
-##                                         4 
-##                                     Keras 
 ##                                         4 
 ##                                    Matlab 
 ##                                         4 
+##                                  modeling 
+##                                         4 
 ##                           neural networks 
 ##                                         4 
-##                                     NoSQL 
-##                                         4 
-##                                    pandas 
+##                                     numpy 
 ##                                         4 
 ##                                       PhD 
 ##                                         4 
-##                                   PyTorch 
-##                                         4 
-##                                       SAS 
+##                                   Tableau 
 ##                                         4 
 ##                       Airline Contracting 
 ##                                         3 
-##                                 Analytics 
-##                                         3 
 ##                       Applied Mathematics 
+##                                         3 
+##                           Computer Vision 
 ##                                         3 
 ##                          Direct Analytics 
 ##                                         3 
-##                                      Hive 
+##                                        Go 
 ##                                         3 
 ##                           Large Data Sets 
 ##                                         3 
 ##                          Network Planning 
 ##                                         3 
+##                                     NoSQL 
+##                                         3 
 ## Prior teaching experience (not essential) 
+##                                         3 
+##                              scikit-learn 
 ##                                         3 
 ##                       teaching experience 
 ##                                         3 
@@ -828,8 +797,12 @@ tt[tt <span class="op">&gt;=</span><span class="st"> </span><span class="dv">2</
 ##                                         3 
 ##                        U.S. Travel Agency 
 ##                                         3 
+##                                   xgboost 
+##                                         3 
 ##                          yield management 
 ##                                         3 
+##                                 Analytics 
+##                                         2 
 ##                                AWS- Azure 
 ##                                         2 
 ##            Bayesian Hierarchical Modeling 
@@ -839,8 +812,6 @@ tt[tt <span class="op">&gt;=</span><span class="st"> </span><span class="dv">2</
 ##                     Clustering algorithms 
 ##                                         2 
 ##                     Computational Biology 
-##                                         2 
-##                           Computer Vision 
 ##                                         2 
 ##                              Data Analyst 
 ##                                         2 
@@ -854,9 +825,11 @@ tt[tt <span class="op">&gt;=</span><span class="st"> </span><span class="dv">2</
 ##                                         2 
 ##                       Experimental Design 
 ##                                         2 
+##                                   Flydhub 
+##                                         2 
 ##                                       GLM 
 ##                                         2 
-##                                        Go 
+##                                    Golang 
 ##                                         2 
 ##                        Hypothesis Testing 
 ##                                         2 
@@ -864,13 +837,13 @@ tt[tt <span class="op">&gt;=</span><span class="st"> </span><span class="dv">2</
 ##                                         2 
 ##                                Leadership 
 ##                                         2 
-##                                        ML 
+##                                      lstm 
 ##                                         2 
-##               Natural Language Processing 
+##                                        ML 
 ##                                         2 
 ##                            NLP Frameworks 
 ##                                         2 
-##                                     numpy 
+##                                    OpenCV 
 ##                                         2 
 ##                       Operations Research 
 ##                                         2 
@@ -880,6 +853,8 @@ tt[tt <span class="op">&gt;=</span><span class="st"> </span><span class="dv">2</
 ##                                         2 
 ##                       Predictive Modeling 
 ##                                         2 
+##                                   PyTorch 
+##                                         2 
 ##                                  Redshift 
 ##                                         2 
 ##                               Regressions 
@@ -888,13 +863,15 @@ tt[tt <span class="op">&gt;=</span><span class="st"> </span><span class="dv">2</
 ##                                         2 
 ##                                       RNN 
 ##                                         2 
-##                              scikit-learn 
+##                                 Sagemaker 
+##                                         2 
+##                                    SciKit 
+##                                         2 
+##                                     Scipy 
 ##                                         2 
 ##                    Statistical regression 
 ##                                         2 
 ##               Teaching technical concepts 
-##                                         2 
-##                                   xgboost 
 ##                                         2</code></pre>
 </section>
     </div>
