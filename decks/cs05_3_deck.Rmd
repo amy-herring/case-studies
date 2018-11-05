@@ -15,7 +15,6 @@ output:
   
 ---
 ## Survival Data
-##{.smaller}
 In many studies, the outcome of interest is the amount of time from an initial observation until the occurrence of some event of interest, e.g.
 
 - Time from transplant surgery until new organ failture
@@ -23,16 +22,16 @@ In many studies, the outcome of interest is the amount of time from an initial o
 - Time to first sex
 - Time to menopause
 - Time to divorce
-- Time to receipt of PhD
+- Time to receipt of degree
 
 Typically, the event of interest is called a *failure* (even if it is a good thing). The time interval between a starting point and the failure is known as the *survival time* and is often represented by $t$.
 
-##{.smaller}
+## Survival Data
 Certain aspects of survival data make data analysis particularly challenging.
 
 - Typically, not all the individuals are observed until their times of failure
     - An organ transplant recipient may die in an automobile accident before the new organ fails.
-    - A PhD student may withdraw from the program to start a multi-billion dollar health company
+    - A student may withdraw from the program to start a multi-billion dollar start-up
     - Not everyone gets divorced
     - A pancreatic cancer patient may move to Aitutaki instead of undergoing further treatment
 - In this case, an observation is said to be *censored* at the last point of contact with the patient.
@@ -92,26 +91,26 @@ before $t$ and those who were not censored before $t$)
 - $S(t)$: cumulative probability of surviving beyond time $t$, estimated as $$\hat{S}(t) = \prod_{t_i \leq t}\Big(1-\frac{d_{t_i}}{I_{t_i}}\Big)$$.
 
 ## How is that intuitive?
-At each time $t$, the probability of surviving is just 1 − Pr(failing). Before there are any failures in the data, our estimated $\hat{S}(t)=1$. At the time of the first failure, this probability falls below 1 and is simply one minus the probability of failing at that time, or $1- \frac{\# \text{failures}}{\# \text{at risk of failing}}$.
+At each time $t$, the probability of surviving is just 1 − Pr(failing). Before there are any failures in the data, our estimated $\widehat{S}(t)=1$. At the time of the first failure, this probability falls below 1 and is simply one minus the probability of failing at that time, or $1- \frac{\# \text{failures}}{\# \text{at risk of failing}}$.
 
 After the first failure, things get more complicated. At the time of
-the second failure, you can calcuate $1- \frac{\# \text{failures}}{\# \text{at risk of failing}}$, but this # at risk of failing
+the second failure, you can calcuate the conditional probability $1- \frac{\# \text{failures}}{\# \text{at risk of failing}}$, but this # at risk of failing
 doesn’t provide the whole picture, as someone else has already died. In fact, this is the conditional probability of surviving now that you’ve made it past the time of the first failure.
 
 ## How is that intuitive?
-$$\hat{S}(t) = \prod_{t_i \leq t}\Big(1-\frac{d_{t_i}}{I_{t_i}}\Big)$$
+$$\widehat{S}(t) = \prod_{t_i \leq t}\Big(1-\frac{d_{t_i}}{I_{t_i}}\Big)$$
 
-How do you then calculate the total (unconditional) probability of survival? That is just the product of the probability of surviving past the first failure times the conditional probability of surviving beyond the second failure given that you made it past the first, or
+How do you then calculate the total (unconditional) probability of survival? That is just the product of the probability of surviving past the first failure $\times$ the conditional probability of surviving beyond the second failure given that you made it past the first, or
 
 $$\scriptsize{Pr(\text{survived past 1st and 2nd times})}$$
-$$=\scriptsize{Pr(\text{survive past 1st time})Pr(\text{survive past 2nd time| survived past 1st time})} $$
+$$=\scriptsize{Pr(\text{survive past 1st time})Pr(\text{survive past 2nd time | survived past 1st time})} $$
 $$ = \scriptsize{\Big(1-\frac{\text{# failures at time 1}}{\text{# at risk of failing at failure time 1}}\Big)\Big(1-\frac{\text{# failures at time 2}}{\text{# at risk of failing at failure time 2}}\Big)}$$
 
-If someone is censored, they are no longer at risk of failing at the next failure time and are taken out of the calculation.
+If someone is censored, they are no longer at risk of failing at the next failure time and are taken out of the number at risk starting at the time of censoring.
 
-## Kaplan-Meier (KM) Esimate Example
+## Kaplan-Meier (KM) Estimate 
 ##{.smaller}
-$$\hat{S}(t) = \prod_{t_i \leq t}\Big(1-\frac{d_{t_i}}{I_{t_i}}\Big)$$
+$$\widehat{S}(t) = \prod_{t_i \leq t}\Big(1-\frac{d_{t_i}}{I_{t_i}}\Big)$$
 
 ```{r echo=FALSE, results='asis'}
 library(knitr)
@@ -123,12 +122,13 @@ Left[1] <- 10
 St <- rep("NA",11)
 St[1] <- "1"
 table_ex <- as.data.frame(cbind(t,Failed,Censored,Left,St))
-names(table_ex) <- c("t","# Failed(d[t])","# Censored",paste("# Left",expression(I[t+1])),"S(t)")
+names(table_ex) <- c("t","# Failed(d[t])","# Censored",paste("#Left",expression(I[t+1])),"S(t)")
 kable(table_ex,caption="")
 ```
 
+
 ##{.smaller}
-$$\hat{S}(t) = \prod_{t_i \leq t}\Big(1-\frac{d_{t_i}}{I_{t_i}}\Big)$$
+$$\widehat{S}(t) = \prod_{t_i \leq t}\Big(1-\frac{d_{t_i}}{I_{t_i}}\Big)$$
 
 ```{r echo=FALSE, results='asis'}
 Left[2] <- "9"
@@ -139,7 +139,21 @@ kable(table_ex,caption="")
 ```
 
 ##{.smaller}
-$$\hat{S}(t) = \prod_{t_i \leq t}\Big(1-\frac{d_{t_i}}{I_{t_i}}\Big)$$
+$$\widehat{S}(t) = \prod_{t_i \leq t}\Big(1-\frac{d_{t_i}}{I_{t_i}}\Big)$$
+
+```{r echo=FALSE, results='asis'}
+Left[2] <- "9"
+St[2] <- "0.9"
+Left[3] <- "8"
+St[3] <- "0.9*(1-1/9) = 0.8"
+table_ex <- as.data.frame(cbind(t,Failed,Censored,Left,St))
+names(table_ex) <- c("t","# Failed(d[t])","# Censored",paste("# Left",expression(I[t+1])),"S(t)")
+kable(table_ex,caption="")
+```
+
+
+##{.smaller}
+$$\widehat{S}(t) = \prod_{t_i \leq t}\Big(1-\frac{d_{t_i}}{I_{t_i}}\Big)$$
 
 ```{r echo=FALSE, results='asis'}
 Left[3] <- "8"
@@ -153,7 +167,7 @@ kable(table_ex,caption="")
 ```
 
 ##{.smaller}
-$$\hat{S}(t) = \prod_{t_i \leq t}\Big(1-\frac{d_{t_i}}{I_{t_i}}\Big)$$
+$$\widehat{S}(t) = \prod_{t_i \leq t}\Big(1-\frac{d_{t_i}}{I_{t_i}}\Big)$$
 
 ```{r echo=FALSE, results='asis'}
 Left[3] <- "8"
@@ -169,7 +183,7 @@ kable(table_ex,caption="")
 ```
 
 ##{.smaller}
-$$\hat{S}(t) = \prod_{t_i \leq t}\Big(1-\frac{d_{t_i}}{I_{t_i}}\Big)$$
+$$\widehat{S}(t) = \prod_{t_i \leq t}\Big(1-\frac{d_{t_i}}{I_{t_i}}\Big)$$
 
 ```{r echo=FALSE, results='asis'}
 Left[3] <- "8"
@@ -187,7 +201,7 @@ kable(table_ex,caption="")
 ```
 
 ##{.smaller}
-$$\hat{S}(t) = \prod_{t_i \leq t}\Big(1-\frac{d_{t_i}}{I_{t_i}}\Big)$$
+$$\widehat{S}(t) = \prod_{t_i \leq t}\Big(1-\frac{d_{t_i}}{I_{t_i}}\Big)$$
 
 ```{r echo=FALSE, results='asis'}
 Left[3] <- "8"
@@ -207,7 +221,7 @@ kable(table_ex,caption="")
 ```
 
 ##{.smaller}
-$$\hat{S}(t) = \prod_{t_i \leq t}\Big(1-\frac{d_{t_i}}{I_{t_i}}\Big)$$
+$$\widehat{S}(t) = \prod_{t_i \leq t}\Big(1-\frac{d_{t_i}}{I_{t_i}}\Big)$$
 
 ```{r echo=FALSE, results='asis'}
 Left[3] <- "8"
@@ -229,7 +243,7 @@ kable(table_ex,caption="")
 ```
 
 ##{.smaller}
-$$\hat{S}(t) = \prod_{t_i \leq t}\Big(1-\frac{d_{t_i}}{I_{t_i}}\Big)$$
+$$\widehat{S}(t) = \prod_{t_i \leq t}\Big(1-\frac{d_{t_i}}{I_{t_i}}\Big)$$
 
 ```{r echo=FALSE, results='asis'}
 Left[3] <- "8"
@@ -253,7 +267,7 @@ kable(table_ex,caption="")
 ```
 
 ##{.smaller}
-$$\hat{S}(t) = \prod_{t_i \leq t}\Big(1-\frac{d_{t_i}}{I_{t_i}}\Big)$$
+$$\widehat{S}(t) = \prod_{t_i \leq t}\Big(1-\frac{d_{t_i}}{I_{t_i}}\Big)$$
 
 ```{r echo=FALSE, results='asis'}
 Left[3] <- "8"
@@ -279,7 +293,7 @@ kable(table_ex,caption="")
 ```
 
 ##{.smaller}
-$$\hat{S}(t) = \prod_{t_i \leq t}\Big(1-\frac{d_{t_i}}{I_{t_i}}\Big)$$
+$$\widehat{S}(t) = \prod_{t_i \leq t}\Big(1-\frac{d_{t_i}}{I_{t_i}}\Big)$$
 
 ```{r echo=FALSE, results='asis'}
 Left[3] <- "8"
@@ -306,7 +320,7 @@ names(table_ex) <- c("t","# Failed(d[t])","# Censored",paste("# Left",expression
 kable(table_ex,caption="")
 ```
 
-What would $\hat{S}(21.5)$ be if the last observation were a failure instead of censored? 
+What would $\widehat{S}(21.5)$ be if the last observation were a failure instead of censored? 
 
 ## KM Estimate
 
@@ -328,12 +342,13 @@ knitr::include_graphics("figures/atct.pdf")
 
 ## Survival Analysis in R
 ##{.smaller}
-We use the "ovarian" data set, which comprises a cohort of ovarian cander patients and respective clinical information. 
+We use the "ovarian" data set, which comprises a cohort of ovarian cancer patients and respective clinical information. 
 
 - The response variable is `futime`, the survival time. 
-- `fustat` tells if an individual patients' survival time is censored. 
-- Patients in this study received either one of two therapy regimens (`rx`) 
-- The attending physician assessed the regression of tumors (`resid.ds`) and patients' performance (according to the standardized ECOG criteria; `ecog.ps`) at some point.
+- `fustat` tells if an individual patients' survival time is censored (0=censor, 1=death). 
+- Patients in this study received either one of two therapy regimens (`rx`), coded 1 and 2
+- The attending physician assessed the health condition after chemotherapy (`resid.ds`=1 if residual disease is absent and 2 if present) as well as ovarian function (`ecog.ps`).
+
 ```{r,message=FALSE}
 library(survival)
 library(survminer)
@@ -350,21 +365,21 @@ summary(fit1)
 ```
 
 ##{.smaller}
-Examining the corresponding survival curve using the `ggsurvplot` function. Vertical lines indicate censored data, their corresponding x values at the time which censoring occurred.
+Examine the corresponding survival curve using the `ggsurvplot` function. Vertical lines indicate censored data, their corresponding x values at the time which censoring occurred.
 ```{r,message=FALSE,out.width='60%'}
 ggsurvplot(fit1, data = ovarian, pval = TRUE)
 ```
 
 ##{.smaller}
 ```{r,message=FALSE,out.width='60%'}
-# Examine prdictive value of residual disease status
+# Examine predictive value of residual disease
 fit2 <- survfit(surv_object ~ resid.ds, data = ovarian)
 ggsurvplot(fit2, data = ovarian, pval = TRUE)
 ```
 
 ##Log-Rank Test
 ##{.smaller}
-How do we determine whether the difference in survival curves is statistically significant?
+How do we determine whether the difference in survival curves is statistically significant (i.e., how was that p-value calculated)?
 
 The log-rank test is quite intuitive. The idea behind it is to construct a $2 \times 2$ contigency table by group (therapy regimens or residual disease status) at each time $t$ at which a failure occurs. Then, the Mantel-Haenszel test statistic is used to test for differences between the two groups. For this test, the null hypothesis is that the survival curves in the two groups are the same, e.g.
 $$ H_0: S_{\text{regimen 1}}(t) = S_{\text{regimen 2}}(t)$$

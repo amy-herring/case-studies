@@ -29,24 +29,31 @@ Based on data from the Duke Databank for Cardiovascular Diseases, we will explor
 
 # Reports
 
-- Interim report 1: investigate patterns of missing data and comment on potential for bias in analysis results in a report not to exceed 3 pages. Reproducible code should be provided in an appendix.
-- Final report: prepare a report, not to exceed 5 pages and accompanied by useful visualizations, describing survival as a function of predictor variables of interest. Reproducible code should be provided in an appendix.
+- Interim report: Produce a 5 page (maximum) report in R markdown that explores the missing data patterns and mechanisms to the extent possible based on the data provided. Comment on the potential for missing data to bias analysis results.
 
-
-# Resources (coming soon)
-
+- Final report: Produce a 5 page (maximum) report in R markdown that explores factors related to survival in this cohort. Your analysis should account for missing data in a principled manner designed to limit potential bias in results.
 
 
 
-# Slides (coming soon)
-<!---
+# Resources 
+
+-For more on missing data, check out [Michael Akande's talk (dated 11/5)](https://trinity.capture.duke.edu/Panopto/Pages/Sessions/List.aspx?folderID=2952f554-d9c8-4749-b8c4-a949013da84e)
+
+
+
+
+# Slides 
+
 [Duke Databank for Cardiovascular Disease](decks/cs05_1_deck.html)
 
 
-[Missing data Tutorial: Jiurui](decks/cs05_2_deck.html)
+[Missing Data Tutorial](decks/cs05_2_deck.html)
 
 
-[Survival analysis tutorial: Jiurui ](decks/cs05_3_deck.html)
+[Survival analysis tutorial](decks/cs05_3_deck.html)
+
+<!--- Missing data in survival; how to handle?
+
 --->
 
 

@@ -1,22 +1,23 @@
 ---
-  title: Survival After Cardiac Catheterization
+title: Survival After Cardiac Catheterization
 output: 
   revealjs::revealjs_presentation:
-  theme: night
-highlight: tango
-center: true
-transition: none
-css: styles.css
-fig_caption: true
-reveal_options:
-  progress: true
-slideNumber: true
+    theme: night
+    highlight: espresso
+    center: true
+    transition: none
+    css: styles.css
+    fig_caption: true
+    reveal_options:
+      progress: true
+      slideNumber: true
+      
 
 
 ---
   
   
-  ## Case Study 5: Survival After Cardiac Catheterization
+## Case Study 5: Survival After Cardiac Catheterization
   
   *Cardiac catheterization* is a procedure used to provide information on how well the heart is working. A hollow tube, called a catheter, is inserted into the circulatory system, usually through the groin, and is passed into the heart and coronary arteries using X-ray images as a guide. These procedures are used when heart conditions are suspected in symptomatic individuals.
 
@@ -32,9 +33,9 @@ In this case study, we will examine factors related to survival in a group of Du
 
 ## Case Study Data
 
-You will analyze data on survival in XXX individuals undergoing cardiac catheterization at Duke from YEAR to YEAR. Relevant variables include the following.
+You will analyze data on survival in tens of thousands of individuals undergoing cardiac catheterization at Duke from 1985 to 2013. Relevant variables include the following.
 
-- Year of catheterization procedure (proxy for standards of medical care at the time)
+- Year of catheterization procedure (proxy for standards of medical care at the time; for example, coronary stents were approved by the FDA in 1994, and the first drug-eluting stents were approved in 2003)
 - Age group (categorized to prevent disclosure of individual identities)
 - Gender (average survival is longer in women than in men)
 - Race (classified as black, white, or other, based on demographics in Durham during much of the period under study)
@@ -43,7 +44,7 @@ You will analyze data on survival in XXX individuals undergoing cardiac catheter
 
 - Smoking status (ever or never)
 - Body mass index (weight in kg divided by height in m squared; normal weight is considered a BMI of [18.5,25); overweight a BMI of [25,30), and obese a BMI>=30)
-- Medical history including history of cerebrovascular disease (e.g., stroke), congestive heart failure, chronic obstructive pulmonary disease, diabetes, hypertension, myocardial infarction, or hyperlipidemiak
+- Medical history including history of cerebrovascular disease (e.g., stroke), congestive heart failure, chronic obstructive pulmonary disease, diabetes, hypertension, myocardial infarction, or hyperlipidemia
 
 
 ## Case Study Data
@@ -51,10 +52,10 @@ You will analyze data on survival in XXX individuals undergoing cardiac catheter
 Heart health indicated by findings upon examination, including
 
 - severity of congestive heart failure
-- S3 gallop (normal in people under 40 and in some athletes, in others it may indicate congestive heart failure)
-- maximum percent stenosis of the left main coronary artery (stenosis is narrowing of the artery, usually the result of build-up of plaque)
+- S3 gallop (while normal in people under 40 and in some athletes, in others it may indicate congestive heart failure)
+- maximum percent stenosis of the left main coronary artery (stenosis is narrowing of the artery, usually the result of build-up of plaque; 0 is normal)
 - left ventricular ejection fraction (amount of blood pumped out of left ventricle each time it contracts; normal is 55-70%; lower values indicate poorer heart function)
-- number of diseased vessels (missing if no arteriograms were performed during catheterization, it represents the number of significantly blocked major vessels, ranging from 0-3)
+- number of diseased vessels (missing when no arteriograms were performed during catheterization, it represents the number of significantly blocked major vessels, ranging from 0-3)
 
 ## Case Study Data
 
