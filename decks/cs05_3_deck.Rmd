@@ -424,7 +424,7 @@ ovarian$age10=ovarian$age/10 #10-year difference for better interpretability
 ## Fitting the Cox model to the ovarian data
 
 ```{r fitcox}
-fit.coxph <- coxph(surv_object ~ rx + resid.ds + age10 + ecog.ps, 
+fit.coxph <- coxph(surv_object ~ trt1 + residyes + age10 + ecog1, 
                    data = ovarian)
 ```
 

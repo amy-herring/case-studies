@@ -1,5 +1,5 @@
 ---
-title: Survival Analysis
+title: Cox Model and Missing Data
 output: 
   revealjs::revealjs_presentation:
     theme: night
@@ -14,4 +14,47 @@ output:
       
   
 ---
+
+
+## Ovarian data
+
+Recall the ovarian data: we will create a new dataset just with our redefined predictors for simplicity.
+
+```{r ovarian2}
+data(ovarian); library(mice); library(survival)
+ovarian$residyes=ovarian$resid.ds-1 #2=yes goes to 1 and 1=no to 0
+ovarian$trt1=2-ovarian$rx #1 stays 1 and 2 goes to 0
+ovarian$ecog1=2-ovarian$ecog.ps
+ovarian$age10=ovarian$age/10 #10-year difference for better interpretability
+ovarian2=ovarian[,c(1:2,7:10)] #pick off just vars of interest
+```
+
+
 ## Missing data in survival analysis
+
+Suppose some of the variables in the ovarian data were subject to missing values. For example, perhaps the residual disease indicator has some missing values generated at random.
+
+```{r genmissing}
+set.seed=1213  #for reproducibility
+#randomly sample 5 indices to set to missing (MCAR)
+msng=round(runif(5,min=1,max=length(ovarian$residyes)))
+#set residyes values corresponding to those indices to missing
+ovarian2$residyes[msng]=NA
+```
+
+## Multiple imputation
+
+```{r mi}
+imp=mice(ovarian2,m=20)
+coximpute=with(imp,coxph(Surv(futime,fustat)~age10+residyes+trt1+ecog1))
+```
+
+## Results
+```{r pooling}
+#note the pool function assumes infinite error df; not appropriate in small samples
+#(this is a small sample!)
+summary(pool(coximpute))
+```
+
+You can see only age is statistically significant using $p<0.05$ as a criterion in this analysis.
+
