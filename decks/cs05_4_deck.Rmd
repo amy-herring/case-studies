@@ -1,0 +1,17 @@
+---
+title: Survival Analysis
+output: 
+  revealjs::revealjs_presentation:
+    theme: night
+    highlight: espresso
+    center: true
+    transition: none
+    css: styles.css
+    fig_caption: true
+    reveal_options:
+      progress: true
+      slideNumber: true
+      
+  
+---
+## Missing data in survival analysis

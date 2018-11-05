@@ -395,3 +395,49 @@ Also notice that, the `pval = TRUE` argument in `ggsurvplot` function plots the 
 
 ##{.smaller}
 Reference: https://www.datacamp.com/community/tutorials/survival-analysis-R
+
+## Cox Proportional Hazards Model
+
+How do we extend inference beyond single variable comparisons from the log-rank test? The *Cox Proportional Hazards Model* (Cox, 1972) was proposed in one of the most highly-cited papers in biostatistical science (nearing 50,000, and the model is so popular it is often not cited any more)
+
+In this framework, we model the hazard at time $t$, $h(t)$, as a function of both a baseline hazard rate, $h_0(t)$, and changes to that rate as a function of covariates $z_i$. 
+
+## Cox Proportional Hazards Model
+
+The Cox model is given by
+
+$$h(t)=h_0(t)e^{\beta z_i}$$
+
+We interpret $e^\beta$ as the hazard ratio comparing two participants in a study who have $z_i$ values one unit apart (in the same flavor as an interpretation of an OR in logistic regression). This is a semi-parametric model, as the baseline hazard $h_0(t)$, often considered a nuisance, is estimated nonparametrically. (Parametric alternatives are available if you can specify a distribution for $h_0(t)$.)
+
+## Fitting the Cox model to the ovarian data
+
+Let's fit a Cox model to the ovarian data. First, we'll recode the predictors resid.ds, rx, and ecog.ps to be 0-1 variables
+
+```{r predrecode}
+ovarian$residyes=ovarian$resid.ds-1 #2=yes goes to 1 and 1=no to 0
+ovarian$trt1=2-ovarian$rx #1 stays 1 and 2 goes to 0
+ovarian$ecog1=2-ovarian$ecog.ps
+ovarian$age10=ovarian$age/10 #10-year difference for better interpretability
+```
+
+## Fitting the Cox model to the ovarian data
+
+```{r fitcox}
+fit.coxph <- coxph(surv_object ~ rx + resid.ds + age10 + ecog.ps, 
+                   data = ovarian)
+```
+
+## Interpreting results
+
+```{r plot, out.width="80%"}
+ggforest(fit.coxph, data=ovarian)
+```
+
+## Interpreting results
+
+```{r replot, echo=FALSE, out.width="60%"}
+ggforest(fit.coxph, data=ovarian)
+```
+
+Most of the predictors are not strongly related to survival (see interval estimates and p-values). However, we see that each 10-year increase in age is associated with 3.5 times the hazard of death (95% CI=1.4-8.7).
