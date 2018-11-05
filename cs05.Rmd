@@ -19,13 +19,9 @@ library(tidyverse)
 
 Based on data from the Duke Databank for Cardiovascular Diseases, we will explore biological and sociodemographic factors related to survival. The goal is to describe both modifiable and non-modifiable risk factors for death, accounting as much as possible for potential biases due to missing data.
 
-# Data (coming soon)
-<!---
--Jiurui post data on Sakai with data dictionary linked here; variables to include in dataset include the following:  AGE_G, GENDER, RACE_G, YRCATH_G, CHFSEV, HXCEREB, HXCHF, HXCOPD, HXDIAB, HXHTN, HXMI, HXHYL, HXSMOKE, HEIGHT_R, WEIGHT_R, (calculate BMI from height and weight),  S3, LMST, LVEF_R, NUMDZV, DEATH, DAYS2LKA
--Jiurui let me know % with missing data for each variable. Also subset to one observation per person (repeat events are included, but there should be only one death)
--NOtes: look at race by gender interaction, 
-- outcome should be time to death. Have Jiurui construct this bearing in mind the censoring variable
---->
+# Data 
+
+The Duke data are available on Sakai. Please do not distribute these data beyond the class.
 
 # Reports
 
@@ -52,9 +48,7 @@ Based on data from the Duke Databank for Cardiovascular Diseases, we will explor
 
 [Survival analysis tutorial](decks/cs05_3_deck.html)
 
-<!--- Missing data in survival; how to handle?
-
---->
+[Survival with missing data](decks/cs05_4_deck.html)
 
 
 
