@@ -16,6 +16,8 @@ On to fish modeling!
 
 - gain experience modeling data independently of any team members
 
+- note this is an INDIVIDUAL case study, and any discussion of the project with others while you are working on it will be considered a violation of the honor code. Absolutely no consultation with others is permitted.
+
 # Case Study Goals
 
 The goals of this case study are to explore factors (including year, location, bottom depth, bottom temperature, surface temperature) that are related to species abundance (measured by kg/hectare in the variable `WTCPUE` and \#/hectare in the variable `NUMCPUE`). A particular interest is in exploring whether there are any trends in time, temperature, or other factors in the data. Species to investigate will be assigned on an individual basis, upon request to the instructor.
