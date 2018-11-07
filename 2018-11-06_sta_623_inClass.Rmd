@@ -1,0 +1,28 @@
+
+---
+title: "In-Class Assignment, Group 3"
+author: Peter Mikhael, Minye Ouyang, Kaigi Hu, Paul-Julien Giraud, Jake Epstein, Daniel
+  Truver
+date: "11/6/2018"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+For a prediction $p$, truth $\theta$, and confidence interval $CI$ with bounds $p_\min, p_\max$:
+
+$$
+\begin{aligned}
+L(p, \theta) &=
+100\cdot|p-\theta| + I\{\theta\notin CI\}\cdot200\min\{|p-p_\min|,|p-p_\max|\} + 10\cdot|p_\max-p_\min|\\& + I\{0.5\notin CI\}\cdot\big(10\cdot I\{wrong\} - 3\cdot I\{right\}\big)  \\
+S &= -\sum_{i=1}^{13} L(p_i, \theta_i)
+\end{aligned}
+$$
+
+We chose the weights so that wrong point estimates within the $CI$ are penalized linearly and outside the $CI$ are penalized linearly with a higher slope. There is an additional penalty for wide confidence intervals, but only at 1/10th (or less) the cost of missing the point estimate. 
+
+The term on the second line of the loss function only comes into play when a confidence interval did not include 0.5. That is, the predictor was very certain of calling the race for one side or the other. Being very certain and wrong incurs an additional loss. Being very certain and right incurs utility, but with lower magnitude than being wrong. The idea behind this choice is some races should be easy to call and being unambiguously wrong with the confidence interval should hurt more.

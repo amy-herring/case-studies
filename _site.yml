@@ -20,6 +20,8 @@ navbar:
     href: cs05.html
   - text: Individual Case Study
     href: cs_indiv.html
+  - text: Something is fishy
+    href: fishy.html
 output:
   html_document:
     theme: yeti
