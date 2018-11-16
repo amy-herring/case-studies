@@ -42,6 +42,20 @@ msng=round(runif(5,min=1,max=length(ovarian$residyes)))
 ovarian2$residyes[msng]=NA
 ```
 
+## Look at data
+
+See how many NA values we have....
+
+```{r seedata}
+table(ovarian2$residyes,useNA="always")
+```
+
+## Just for comparison: complete case analysis
+
+```{r ccase}
+coxph(Surv(futime,fustat)~age10+residyes+trt1+ecog1,data=ovarian2)
+```
+
 ## Multiple imputation
 
 ```{r mi}

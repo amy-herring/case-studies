@@ -80,7 +80,7 @@ kable(table_df,caption="")
 How do we estimate the survival curve for these data?
 
 ## Kaplan-Meier Estimate{.smaller}
-Perhaps the most popular estimate of a survival curve is the *Kaplan-Meier* or *product-limit* estimate. This method is actually fairly intuitive.
+Perhaps the most popular estimate of a survival curve is the *Kaplan-Meier* or *product-limit* estimate. This method is fairly intuitive.
 
 First, define the following quantities.
 
