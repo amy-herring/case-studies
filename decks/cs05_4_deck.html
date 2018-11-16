@@ -526,7 +526,7 @@ ovarian2<span class="op">$</span>residyes[msng]=<span class="ot">NA</span></code
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">table</span>(ovarian2<span class="op">$</span>residyes,<span class="dt">useNA=</span><span class="st">&quot;always&quot;</span>)</code></pre></div>
 <pre><code>## 
 ##    0    1 &lt;NA&gt; 
-##    8   13    5</code></pre>
+##   10   13    3</code></pre>
 </section>
 <section id="just-for-comparison-complete-case-analysis" class="slide level2">
 <h2>Just for comparison: complete case analysis</h2>
@@ -535,15 +535,15 @@ ovarian2<span class="op">$</span>residyes[msng]=<span class="ot">NA</span></code
 ## coxph(formula = Surv(futime, fustat) ~ age10 + residyes + trt1 + 
 ##     ecog1, data = ovarian2)
 ## 
-##             coef exp(coef) se(coef)     z      p
-## age10     2.6198   13.7336   0.9989  2.62 0.0087
-## residyes -0.0809    0.9223   1.0127 -0.08 0.9364
-## trt1     -0.0751    0.9277   0.9716 -0.08 0.9384
-## ecog1    -0.3739    0.6880   0.8137 -0.46 0.6459
+##            coef exp(coef) se(coef)     z     p
+## age10     1.154     3.172    0.468  2.47 0.014
+## residyes  0.601     1.823    0.848  0.71 0.479
+## trt1      1.268     3.555    0.751  1.69 0.091
+## ecog1    -0.219     0.803    0.729 -0.30 0.764
 ## 
-## Likelihood ratio test=19.95  on 4 df, p=5e-04
-## n= 21, number of events= 9 
-##    (5 observations deleted due to missingness)</code></pre>
+## Likelihood ratio test=14.58  on 4 df, p=0.006
+## n= 23, number of events= 10 
+##    (3 observations deleted due to missingness)</code></pre>
 </section>
 <section id="multiple-imputation" class="slide level2">
 <h2>Multiple imputation</h2>
@@ -660,11 +660,11 @@ ovarian2<span class="op">$</span>residyes[msng]=<span class="ot">NA</span></code
 <pre><code>## Warning: Unknown or uninitialised column: 'df.residual'.</code></pre>
 <pre><code>## Warning in pool.fitlist(getfit(object), dfcom = dfcom): Large sample
 ## assumed.</code></pre>
-<pre><code>##            estimate std.error  statistic         df     p.value
-## age10     1.3468818 0.5102978  2.6394034  3120.9430 0.008307998
-## residyes  0.5848562 1.0108025  0.5786058   181.5636 0.562858010
-## trt1      0.9228845 0.6676879  1.3822094 46184.3825 0.166914085
-## ecog1    -0.2605988 0.6772698 -0.3847783  4884.9907 0.700403420</code></pre>
+<pre><code>##            estimate std.error  statistic          df     p.value
+## age10     1.3489030 0.4879946  2.7641761  26239.0293 0.005706898
+## residyes  0.4726947 0.8223105  0.5748373    960.2493 0.565401638
+## trt1      0.8501472 0.6456585  1.3167133 463608.1790 0.187935392
+## ecog1    -0.2485919 0.6572984 -0.3782026  51372.9554 0.705280298</code></pre>
 <p>You can see only age is statistically significant using <span class="math inline">\(p&lt;0.05\)</span> as a criterion in this analysis.</p>
 </section>
     </div>

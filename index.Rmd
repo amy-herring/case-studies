@@ -74,7 +74,7 @@ Note: this schedule is approximate and is likely to be modified as the course pr
 | November 9    | CS5: Missing Data |Individual CS Interim Report: Introduction and Analysis Plan  |
 | November 14   | CS5: Survival Analysis | |
 | November 16   | Hands on: Missing Data and Survival | CS5 Interim Report: Patterns of Missing Data |
-| November 28   | Lab: CS5 and Individual CS Help | Individual CS Draft Report | 
+| November 28   | Lab: CS5 and Individual CS Help |  | 
 | November 30   | Lab: Individual CS Practice Presentations to Groups | CS5: Final Report |
 | December 5    | Individual Presentations | Individual Reports Due (Draft) |
 | December 7    | Individual Presentations | Individual Reports Due (Draft) |
