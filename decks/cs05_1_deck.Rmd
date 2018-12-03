@@ -59,7 +59,7 @@ Heart health indicated by findings upon examination, including
 
 ## Case Study Data
 
-The outcome of survival time is defined by two variables: whether death occurred (DEATH) and the time to either death or the end of follow-up (DAYS2LKA).
+The outcome of survival time is defined by two variables: a censoring indicator (DEATH=1 if death observed and DEATH=0 if censored before death) and the time to either death or the end of follow-up (DAYS2LKA).
 
 
 ## Case Study Goals
