@@ -1,0 +1,286 @@
+---
+title: "Something’s Fishy"
+author: "Carolyn Chen"
+date: "11/12/2018"
+output: html_document
+---
+The goals of this case study are to explore factors (including year, location, bottom depth, bottom temperature, surface temperature) that are related to species abundance (measured by kg/hectare in the variable WTCPUE and #/hectare in the variable NUMCPUE). A particular interest is in exploring whether there are any trends in time, temperature, or other factors in the data. 
+
+Fish:Pacific Herring (Clupea pallasii) 
+Load in data files
+```{r}
+library(data.table)
+library(magrittr)
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library("naniar") #
+library(shiny)
+library(leaflet) #
+library(randomForest) #
+library(rworldxtra) #
+library(rworldmap) #
+library(gam) #
+library(mgcv)
+
+aisland8320 = fread("aleutianislands1983_2000.csv", fill=TRUE)
+aisland1416 = fread("aleutianislands2014_2016.csv", fill=TRUE)
+aisland0212 = fread("aleutianislands2002_2012.csv", fill=TRUE)
+ebs0216 = fread("beringseaslope2002_2016.csv", fill=TRUE)
+eb0508 = fread("easternberingseashelf2005_2008.csv", fill=TRUE)
+eb0912 = fread("easternberingseashelf2009_2012.csv", fill=TRUE)
+eb1316 = fread("easternberingseashelf2013_2016.csv", fill=TRUE)
+eb17 = fread("easternberingseashelf2017.csv", fill=TRUE)
+goa9099 = fread("goa1990_1999.csv", fill=TRUE)
+goa0105 = fread("goa2001_2005.csv", fill=TRUE)
+goa0713 = fread("goa2007_2013.csv", fill=TRUE)
+goa1517 = fread("goa2015_2017.csv", fill=TRUE)
+nbs8217 = fread("northberingseashelf1982_2017.csv", fill=TRUE)
+goa8487 = fread("goa1984_1987.csv", fill=TRUE)
+
+```
+
+Combining Dataframes and Filtering for Pacific Herring. Look at missing values.
+```{r}
+#Eastern Bering Shelf
+herring0508 = eb0508 %>% filter(SCIENTIFIC== "Clupea pallasii")
+herring0912 = eb0912 %>% filter(SCIENTIFIC == "Clupea pallasii")
+herring1316 = eb1316 %>% filter(SCIENTIFIC == "Clupea pallasii") 
+herring17 = eb17 %>% filter(SCIENTIFIC == "Clupea pallasii")  
+
+herringeb = rbind(herring0508, herring0912, herring1316, herring17)
+herringeb$LATITUDE=as.numeric(herringeb$LATITUDE)
+herringeb$LONGITUDE=as.numeric(herringeb$LONGITUDE)
+herringeb$STRATUM=as.numeric(herringeb$STRATUM)
+herringeb$YEAR=as.numeric(herringeb$YEAR)
+herringeb$WTCPUE=as.numeric(herringeb$WTCPUE)
+herringeb$NUMCPUE=as.numeric(herringeb$NUMCPUE)
+herringeb$SID=as.numeric(herringeb$SID)
+herringeb$BOT_DEPTH=as.numeric(herringeb$BOT_DEPTH)
+herringeb$BOT_TEMP=as.numeric(herringeb$BOT_TEMP)
+herringeb$SURF_TEMP=as.numeric(herringeb$SURF_TEMP)
+herringeb$VESSEL=as.numeric(herringeb$VESSEL)
+herringeb$CRUISE=as.numeric(herringeb$CRUISE)
+herringeb$HAUL=as.numeric(herringeb$HAUL)
+
+
+herringeb[herringeb == -9999.0] <- NA
+gg_miss_upset(herringeb) 
+
+herringeb[] <- lapply(herringeb, function(x) as.numeric(as.character(x)))
+herringeb = herringeb %>% mutate(Location = "Eastern Bering Shelf") %>% as.data.frame()
+summary(herringeb) 
+#Autitean Islands data
+herring8320 = aisland8320 %>% filter(SCIENTIFIC== "Clupea pallasii")
+herring1416 = aisland1416 %>% filter(SCIENTIFIC== "Clupea pallasii")
+herring1416=select(herring1416,-V18)
+herring0212 = aisland0212 %>% filter(SCIENTIFIC== "Clupea pallasii")
+##coming in as all characters
+herringai = rbind(herring8320, herring1416, herring0212) %>% as.data.frame()
+
+#Look at missing values
+herringai[herringai == -9999.0] <-NA
+gg_miss_upset(herringai)
+
+herringai[] <- lapply(herringai, function(x) as.numeric(x))
+herringai = herringai %>% mutate(Location = "Aleutian Islands") %>% as.data.frame()
+summary(herringai) 
+
+#Look at GOA data
+herring8487 = goa8487 %>% filter(SCIENTIFIC== "Clupea pallasii") 
+herring9099 = goa9099 %>% filter(SCIENTIFIC== "Clupea pallasii") 
+herring9099$LATITUDE=as.numeric(herring9099$LATITUDE)
+herring9099$LONGITUDE=as.numeric(herring9099$LONGITUDE)
+herring9099$STRATUM=as.numeric(herring9099$STRATUM)
+herring9099$YEAR=as.numeric(herring9099$YEAR)
+herring9099$WTCPUE=as.numeric(herring9099$WTCPUE)
+herring9099$NUMCPUE=as.numeric(herring9099$NUMCPUE)
+herring9099$SID=as.numeric(herring9099$SID)
+herring9099$BOT_DEPTH=as.numeric(herring9099$BOT_DEPTH)
+herring9099$BOT_TEMP=as.numeric(herring9099$BOT_TEMP)
+herring9099$SURF_TEMP=as.numeric(herring9099$SURF_TEMP)
+herring9099$VESSEL=as.numeric(herring9099$VESSEL)
+herring9099$CRUISE=as.numeric(herring9099$CRUISE)
+herring9099$HAUL=as.numeric(herring9099$HAUL)
+herring0105 = goa0105 %>% filter(SCIENTIFIC== "Clupea pallasii")
+herring0713 = goa0713 %>% filter(SCIENTIFIC== "Clupea pallasii") 
+herring0713$LATITUDE=as.numeric(herring0713$LATITUDE)
+herring0713$LONGITUDE=as.numeric(herring0713$LONGITUDE)
+herring0713$STRATUM=as.numeric(herring0713$STRATUM)
+herring0713$YEAR=as.numeric(herring0713$YEAR)
+herring0713$WTCPUE=as.numeric(herring0713$WTCPUE)
+herring0713$NUMCPUE=as.numeric(herring0713$NUMCPUE)
+herring0713$SID=as.numeric(herring0713$SID)
+herring0713$BOT_DEPTH=as.numeric(herring0713$BOT_DEPTH)
+herring0713$BOT_TEMP=as.numeric(herring0713$BOT_TEMP)
+herring0713$SURF_TEMP=as.numeric(herring0713$SURF_TEMP)
+herring0713$VESSEL=as.numeric(herring0713$VESSEL)
+herring0713$CRUISE=as.numeric(herring0713$CRUISE)
+herring0713$HAUL=as.numeric(herring0713$HAUL)
+herring1517 = goa1517 %>% filter(SCIENTIFIC== "Clupea pallasii") 
+
+herringgoa= rbind(herring8487, herring9099, herring0105,herring0713,herring1517) %>% as.data.frame()
+
+
+#Look at missing values
+herringgoa[herringgoa == -9999.0] <- NA
+gg_miss_upset(herringgoa)
+
+herringgoa[] <- lapply(herringgoa, function(x) as.numeric(as.character(x)))
+herringgoa = herringgoa %>% mutate(Location = "GOA") %>% as.data.frame()
+summary(herringgoa)
+        
+#North Bering Sea
+herring8217 = nbs8217 %>% filter(SCIENTIFIC== "Clupea pallasii") %>% mutate(Location = "North Bering Shelf")  %>% as.data.frame()
+
+#Look at missing values
+herring8217[herring8217 == -9999.0] <- NA
+gg_miss_upset(herring8217)
+
+summary(herring8217)
+
+#East Bering Sea Slope
+ebs0216 = ebs0216 %>% filter(SCIENTIFIC== "Clupea pallasii") %>% mutate(Location = "East Bering Sea Slope") %>% as.data.frame()
+
+#Look at missing values
+ebs0216[ebs0216 == -9999.0] <- NA
+gg_miss_upset(ebs0216)
+
+summary(ebs0216)
+
+
+```
+
+
+EDA:
+```{r}
+#Total Herring from Eastern Bering Shelf, GOA, Aleutian Islands, East Bering Sea Slope, North Bering Shelf
+totalherring = rbind(herringeb, herringgoa,herringai,herring8217,ebs0216)
+totalherring$Location[totalherring$Location == "Aleutian Islands"] <- 1
+totalherring$Location[totalherring$Location == "Eastern Bering Shelf"] <- 2
+totalherring$Location[totalherring$Location == "GOA"] <- 3
+totalherring$Location[totalherring$Location == "North Bering Shelf"] <- 4
+totalherring$Location[totalherring$Location == "East Bering Sea Slope"] <- 5
+
+totalherring=select(totalherring,-SID)
+pacificherring=data.frame(totalherring)
+
+
+totalherring[] <- lapply(totalherring, function(x) as.numeric(as.character(x)))
+#Trends in time
+#First look at number of entries by year for all herring sites
+aggregate(cbind(count = NUMCPUE) ~ YEAR, 
+          data = totalherring, 
+          FUN = function(x){NROW(x)})
+
+
+#Look at catch size across years for a given location. 
+#First look at example without treating outliers.
+p = ggplot(herringeb, aes(x=as.factor(YEAR), y=as.numeric(NUMCPUE))) + geom_boxplot() +ylab("NUMCPUE") +xlab("Year") 
+p
+
+#Use outlier method to remove extreme values. We will assume these are due to improper imputation.
+#NUMCPUE with Tukey's Outliers removed
+remove_outliers1 <- function(x) {
+lowerq = quantile(as.numeric(x$NUMCPUE),na.rm=TRUE)[2]
+upperq = quantile(as.numeric(x$NUMCPUE),na.rm=TRUE)[4]
+iqr = as.numeric(upperq - lowerq)
+extreme.threshold.upper = (iqr * 3) + upperq
+extreme.threshold.lower = lowerq - (iqr * 3)
+upbound = x[x$NUMCPUE < as.numeric(extreme.threshold.upper),]
+outlierrem = upbound[upbound$NUMCPUE > as.numeric(extreme.threshold.lower),]
+p1 = ggplot(outlierrem, aes(x=as.factor(YEAR), y=as.numeric(NUMCPUE))) + geom_boxplot() +ylab("NUMCPUE") +xlab("Year") 
+p1
+}
+
+remove_outliers1(herringeb)
+remove_outliers1(herringgoa)
+remove_outliers1(herringai)
+remove_outliers1(herring8217)
+remove_outliers1(ebs0216)
+
+#WTCPUE graph with Tukey's outliers removed
+remove_outliers2 <- function(x) {
+lowerq = quantile(as.numeric(x$WTCPUE),na.rm=TRUE)[2]
+upperq = quantile(as.numeric(x$WTCPUE),na.rm=TRUE)[4]
+iqr = as.numeric(upperq - lowerq)
+extreme.threshold.upper = (iqr * 3) + upperq
+extreme.threshold.lower = lowerq - (iqr * 3)
+upbound = x[x$WTCPUE < as.numeric(extreme.threshold.upper),]
+outlierrem = upbound[upbound$WTCPUE > as.numeric(extreme.threshold.lower),]
+p1 = ggplot(outlierrem, aes(x=as.factor(YEAR), y=as.numeric(WTCPUE))) + geom_boxplot() +ylab("WTCPUE") +xlab("Year") 
+p1
+}
+
+remove_outliers2(herringeb)
+remove_outliers2(herringgoa)
+remove_outliers2(herringai)
+remove_outliers2(herring8217)
+remove_outliers2(ebs0216)
+
+remove_outliers3 <- function(x) {
+lowerq = quantile(as.numeric(x$NUMCPUE),na.rm=TRUE)[2]
+upperq = quantile(as.numeric(x$NUMCPUE),na.rm=TRUE)[4]
+iqr = as.numeric(upperq - lowerq)
+extreme.threshold.upper = (iqr * 3) + upperq
+extreme.threshold.lower = lowerq - (iqr * 3)
+upbound = x[x$NUMCPUE < as.numeric(extreme.threshold.upper),]
+outlierrem = upbound[upbound$NUMCPUE > as.numeric(extreme.threshold.lower),]
+return(outlierrem)
+}
+
+herringebR = remove_outliers3(herringeb)
+herringgoaR = remove_outliers3(herringgoa)
+herringaiR = remove_outliers3(herringai)
+herringnbsR = remove_outliers3(herring8217)
+herringebsR = remove_outliers3(ebs0216)
+
+totalherringR = rbind(herringebR,herringgoaR,herringaiR,herringnbsR,herringebsR)
+#Bottom Temperature
+p4= ggplot(herringeb, aes(x=as.factor(YEAR), y=as.numeric(BOT_TEMP))) + geom_boxplot() +ylab("Bottom Temperature") +xlab("Year") + ggtitle("Bottom Temperature of East Bering Shelf")
+p4 
+p51= ggplot(herring8217, aes(x=as.factor(YEAR), y=as.numeric(BOT_TEMP))) + geom_boxplot() +ylab("Bottom Temperature") +xlab("Year") + ggtitle("Bottom Temperature of North Bering Sea")
+p51 
+p52 = ggplot(herringgoa, aes(x=as.factor(YEAR), y=as.numeric(BOT_TEMP))) + geom_boxplot() +ylab("Bottom Temperature") +xlab("Year") + ggtitle("Bottom Temperature of GOA")
+p52
+p53 = ggplot(herringai, aes(x=as.factor(YEAR), y=as.numeric(BOT_TEMP))) + geom_boxplot() +ylab("Bottom Temperature") +xlab("Year") + ggtitle("Bottom Temperature of Aleutian Islands")
+p53
+p54 = ggplot(ebs0216, aes(x=as.factor(YEAR), y=as.numeric(BOT_TEMP))) + geom_boxplot() +ylab("Bottom Temperature") +xlab("Year") + ggtitle("Bottom Temperature of East Bering Sea Slope")
+p54
+
+
+#Location of fish
+newmap <- getMap(resolution = "high")
+plot(newmap)
+points(totalherring$LONGITUDE, totalherring$LATITUDE, col = "blue", cex = .8)
+
+```
+
+
+Model for Species Abundance
+```{r, warnings=FALSE}
+
+#Generalized Additive Model
+gam1<-gam(NUMCPUE~LATITUDE + LONGITUDE + s(STRATUM) + s(YEAR) + s(BOT_DEPTH) + s(BOT_TEMP) + s(SURF_TEMP) + Location ,data = totalherringR)
+summary(gam1)
+
+gam1<-gam(WTCPUE~LATITUDE + LONGITUDE + s(STRATUM) + s(YEAR) + s(BOT_DEPTH) + s(BOT_TEMP) + s(SURF_TEMP) + Location ,data = totalherringR)
+summary(gam1)
+
+#Generalized Linear Models
+#First look at normal model
+fit <- glm(NUMCPUE~LATITUDE + LONGITUDE + STRATUM + YEAR + BOT_DEPTH + BOT_TEMP + SURF_TEMP + Location, data=totalherringR, family=gaussian(link="identity"))
+summary(fit)
+
+fit <- glm(WTCPUE~LATITUDE + LONGITUDE + STRATUM + YEAR + BOT_DEPTH + BOT_TEMP + SURF_TEMP + Location, data=totalherringR, family=gaussian(link="identity"))
+summary(fit)
+
+#Then look at a Gamma model
+fit <- glm(NUMCPUE~LATITUDE + LONGITUDE + STRATUM + YEAR + BOT_DEPTH + BOT_TEMP + SURF_TEMP + Location, data=totalherringR, family=Gamma(link="inverse"))
+summary(fit)
+
+fit <- glm(WTCPUE~LATITUDE + LONGITUDE + STRATUM + YEAR + BOT_DEPTH + BOT_TEMP + SURF_TEMP + Location, data=totalherringR, family=Gamma(link="inverse"))
+summary(fit)
+
+
+```
